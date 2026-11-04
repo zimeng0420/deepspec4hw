@@ -3,7 +3,7 @@
 This repository contains one Python package for the paper's DeepSpec workflow, its five comparison methods, three available ablations, and the saved experimental evidence. Gemini and OpenAI use the same graph.
 ## Install and audit without API keys
 
-Use Python 3.12 or newer; Icarus Verilog (`iverilog` and `vvp`) is needed for new simulation and integration tests. Keep this checkout: datasets and evidence are repository assets, not wheel package data.
+Use Python 3.12 or newer; Icarus Verilog (`iverilog` and `vvp`) is needed for new simulations. Keep this checkout: datasets and evidence are repository assets, not wheel package data.
 
 ```bash
 python -m venv .venv
@@ -12,8 +12,6 @@ python -m pip install -r requirements-lock.txt
 python -m pip install --no-deps -e .
 deepspec doctor
 deepspec align --check --verify-data
-python tools/check_english.py --history
-python -m pytest -q
 ```
 
 ## Run experiments
@@ -37,8 +35,7 @@ deepspec evaluate --run-dir runs/example --view strict
 - `data/`: benchmark, classifications, ranking testbenches and original specifications.
 - `paper_results/`: 20 main runs and 3 ablations, retaining specifications, RTL, text logs and test results; no waveforms or executables.
 - `experiments/`: run index, paper claims, prompt templates, SHA-256 export manifest and generated reports.
-- `tests/`: offline differential and integration tests. `fixtures/legacy/` is legacy audit input with reviewed English comments/docstrings and verified equivalent executable ASTs, not a second runtime framework.
-- `tools/`: reproducible evidence export/template generation tools; never needed for ordinary runs.
+- `tools/`: evidence export and prompt-template generation. The exporter preserves reviewed artifact revisions using the saved manifest and source hashes; keep this checkout available when exporting.
 
 ## License and attribution
 

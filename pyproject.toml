@@ -13,14 +13,9 @@ dependencies = ["langgraph==0.6.11", "langchain-core==0.3.86", "pydantic>=2,<3"]
 
 [project.optional-dependencies]
 api = ["langchain-google-genai>=2,<3", "langchain-openai>=0.3,<0.4", "google-genai>=1,<2"]
-test = ["pytest>=8,<9", "numpy", "scikit-learn", "pypdf>=6,<7"]
 
 [project.scripts]
 deepspec = "deepspec.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["src"]

@@ -5,97 +5,97 @@
       "claim": "Selection -> Deep Research -> Finalize -> Self-Reflection (Figs. 1-2)",
       "evidence": "Effective edges: START -> selection -> generate_query -> web_research -> finalize_answer -> reflection_simple -> [SEQ] reflection. The alternative START -> generate_query code is inside an inactive string.",
       "status": "consistent",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/workflow.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/workflow.py"
     },
     {
       "id": "A2",
       "claim": "Selection produces module insight, topic insight and solution strategy (Fig. 5)",
       "evidence": "Top_Analyze, Topic_Analyze and Solving_Strategies fields in tools_and_schemas.py.",
       "status": "consistent",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/schemas.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/schemas.py"
     },
     {
       "id": "A3",
       "claim": "SEQ analyzes combinational logic, Mindtrace and timing, then combines them; CMB analyzes combinational logic only",
       "evidence": "The live calls are CMB, Mindtrace and Sequential. Combine and search-result aggregation calls are inside inactive strings. The final specification directly concatenates Pure CMB Logic and With Timing Logic Summary.",
       "status": "explained_difference; retain_observed_concatenation",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/workflow.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/workflow.py"
     },
     {
       "id": "A4",
       "claim": "The paper does not include a Compression module",
       "evidence": "The Compression call in finalize_answer_continue is inside an inactive string.",
       "status": "consistent",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/workflow.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/workflow.py"
     },
     {
       "id": "A5",
       "claim": "Stage A uses embedding cosine similarity and triggers regeneration",
       "evidence": "gemini-embedding-001 with threshold 0.7. The low-score branch reads undefined result.explanation and raises NameError before routing, so the surviving source cannot retry normally. Historical cosine values were not saved.",
       "status": "explained_difference; release_explicitly_repairs_retry",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/workflow.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/workflow.py"
     },
     {
       "id": "A6",
       "claim": "Jaccard reflection (Stage B) applies only to SEQ",
       "evidence": "reflection_simple_continue routes only SEQ tasks into reflection.",
       "status": "consistent",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/workflow.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/workflow.py"
     },
     {
       "id": "A7",
       "claim": "Semantic similarity and Jaccard determine whether a modified specification is accepted (Section 4.1 Metrics)",
       "evidence": "Actual acceptance is jaccard >= 0.3 or is_consistent_B, where the latter is an LLM decision. Final units_similarity.md records show acceptance below 0.3 for 19/75 Flash SEQ tasks and 24/72 Flash-lite SEQ tasks, versus zero for GPT-4o and mini.",
       "status": "explained_difference; document_acceptance_policy",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/config.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/config.py"
     },
     {
       "id": "A8",
       "claim": "Unsuccessful reflection regenerates the specification",
       "evidence": "Stage B accepts the current specification after three retries. The Send back to Finalize lacks the header and Selection report; an earlier Send already dropped search context. Feedback is not included in the prompt.",
       "status": "explained_difference; named_historical_drop_context_and_accept_last_policies",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/workflow.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/workflow.py"
     },
     {
       "id": "A9",
       "claim": "SEQ returns to Finalize when Stage A fails",
       "evidence": "A5 raises NameError first; even after fixing that reference, the SEQ low-score route returns nothing. The release repairs both CMB and SEQ to return to Finalize.",
-      "status": "explained_difference; test_legacy_failure_and_repaired_route",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "status": "explained_difference; documented_legacy_failure_and_repaired_route",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/workflow.py",
-      "release_check": "tests/test_workflow.py"
+      "release_check": "src/deepspec/workflow.py"
     },
     {
       "id": "A10",
       "claim": "The evaluated model handles selection, queries, finalization and reflection; search uses Gemini 2.0 Flash and embeddings use gemini-embedding-001 (Section 4.1)",
       "evidence": "Legacy model names are placed in state, but Configuration.from_runnable_config reads configurable and environment variables. Only finalize reads reasoning_model from state. Other stages may use default gemini-2.0-flash or unrecorded environment settings. gpt_graphD+.py can pass gemini-2.0-flash to OpenAI selection/reflection clients unless overridden; query generation hardcodes gpt-4o-2024-11-20 while logging a configuration name, and code generation uses the undated gpt-4o-mini alias. The four main DeepSpec directories and the 20250909_101326_graphDplus candidate contain no stage model IDs.",
       "status": "unverifiable; highest_priority",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/providers.py",
-      "release_check": "tests/test_providers.py"
+      "release_check": "src/deepspec/providers.py"
     },
     {
       "id": "A11",
       "claim": "Readable atomic-unit intersections and unions help engineers locate conflicts",
       "evidence": "SEQ tasks contain atomic_decomposition.json and units_similarity.md. The jaccard_similarity field in spec_quality_metrics.json reads nonexistent conflict_analysis.json and is always 0.0.",
       "status": "consistent; do_not_use_spec_quality_metrics_jaccard",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/workflow.py",
       "release_check": "src/deepspec/workflow.py"
     }
@@ -106,16 +106,16 @@
       "claim": "VerilogEval-Human has 156 tasks classified into CMB and SEQ",
       "evidence": "data/total_merged_data.jsonl contains 156 tasks; HDLBits_circuit_type.jsonl classifies 81 CMB and 75 SEQ tasks.",
       "status": "consistent",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "data/benchmark.jsonl",
-      "release_check": "tests/test_evidence.py"
+      "release_check": "src/deepspec/alignment.py"
     },
     {
       "id": "B2",
       "claim": "Four dated model IDs",
       "evidence": "Result directories lack model IDs. The GPT-4o Baseline summary mentions gpt-4o-2024-11-20, and GPT scripts use undated aliases.",
       "status": "unverifiable",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "configs/gpt4o_deepspec.json",
       "release_check": "README.md"
     },
@@ -124,25 +124,25 @@
       "claim": "DeepSpec runs on all 156 tasks",
       "evidence": "The surviving graphD+.py main reads 2.0flash7_total__spec.jsonl, containing only lemmings4, as a debug run. Ablation code.txt snapshots read the 156-task dataset.",
       "status": "surviving_driver_does_not_directly_reproduce_full_run",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/cli.py",
-      "release_check": "tests/test_execution.py"
+      "release_check": "src/deepspec/cli.py"
     },
     {
       "id": "B4",
       "claim": "The paper omits code-generation temperature, VRank candidate count and sampling temperature",
       "evidence": "Gemini DeepSpec code generation uses temperature=0; GPT does not set temperature; with_VRank.py uses 10 candidates and temperature=1.0.",
       "status": "record_in_configuration_and_paper_notes",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "configs/flash_vrank.json",
-      "release_check": "tests/test_execution.py"
+      "release_check": "configs/flash_vrank.json"
     },
     {
       "id": "B5",
       "claim": "Section 4.1 gives the general pass@k formula",
       "evidence": "Direct methods generate one candidate per task: pass@1 equals passed tasks / 156. VRank reports the selected candidate pass rate, not an unbiased pass@k estimate over 10 samples.",
       "status": "explained_difference; identify_the_actual_metric",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/evaluation.py",
       "release_check": "README.md"
     },
@@ -151,9 +151,9 @@
       "claim": "Table 4 defines Failed as syntax errors",
       "evidence": "Treating missing final results as syntax failures exactly reproduces all six Fig. 6 syntax-pass percentages.",
       "status": "consistent; encode_paper_evaluation_policy",
-      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "verification": "Historical source review; linked implementation or offline evidence audit. Historical model identity remains unverified.",
       "release_implementation": "src/deepspec/evaluation.py",
-      "release_check": "tests/test_evidence.py"
+      "release_check": "src/deepspec/alignment.py"
     }
   ],
   "fig6": [

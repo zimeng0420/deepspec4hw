@@ -80,7 +80,6 @@ def run(
             "configs",
             "experiments",
             "src",
-            "tests",
         ]
     ):
         raise ValueError(

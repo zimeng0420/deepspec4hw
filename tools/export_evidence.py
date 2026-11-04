@@ -1,6 +1,5 @@
 import argparse, ast, hashlib, json, subprocess, tarfile
 from pathlib import Path
-from normalize_english import normalize_export
 
 parser = argparse.ArgumentParser(
     description="Export immutable source artifacts; output must be empty"
@@ -115,7 +114,6 @@ for key, path in [
     )
 for d in [
     "src/deepspec",
-    "tests/fixtures/legacy",
     "experiments/reports",
     "configs",
     "data",
@@ -131,14 +129,16 @@ small = {
     "data/HDLBits_circuit_type.jsonl": "data/circuit_types.jsonl",
     "data/all_testbench.jsonl": "data/ranking_testbenches.jsonl",
     "data/origi156_extracted.jsonl": "data/original_specs.jsonl",
-    "backend/src/agent/graph/graphD+.py": "tests/fixtures/legacy/graphDplus.py",
-    "backend/src/agent/graph/gpt_graphD+.py": "tests/fixtures/legacy/gpt_graphDplus.py",
-    "backend/src/agent/promptsB.py": "tests/fixtures/legacy/prompts.py",
-    "backend/src/agent/tools_and_schemas.py": "tests/fixtures/legacy/schemas.py",
-    "backend/src/agent/state.py": "tests/fixtures/legacy/state.py",
-    "backend/src/agent/utils_copy.py": "tests/fixtures/legacy/utils.py",
-    "backend/src/agent/with_VRank_multispec.py": "tests/fixtures/legacy/vrank_multispec.py",
-    "backend/src/agent/geminibaseline copy.py": "tests/fixtures/legacy/llmgen.py",
+}
+# Preserve reviewed artifact revisions and their original source provenance.
+release_root = Path(__file__).resolve().parents[1]
+overrides = {
+    item["path"]: item
+    for item in map(
+        json.loads,
+        (release_root / "experiments/artifacts.sha256.jsonl").read_text().splitlines(),
+    )
+    if "source_sha256" in item
 }
 allowed = {".v", ".sv", ".txt", ".md", ".json", ".jsonl", ".log"}
 p = subprocess.Popen(
@@ -165,7 +165,23 @@ with tarfile.open(fileobj=p.stdout, mode="r|") as tar:
         if target is None:
             continue
         data = tar.extractfile(item).read()
-        data, normalization = normalize_export(target, data)
+        provenance = {}
+        if record := overrides.get(target):
+            if hashlib.sha256(data).hexdigest() != record["source_sha256"]:
+                raise ValueError(f"Source differs from the reviewed artifact: {target}")
+            data = (release_root / target).read_bytes()
+            if hashlib.sha256(data).hexdigest() != record["sha256"]:
+                raise ValueError(f"Reviewed artifact checksum mismatch: {target}")
+            provenance = {
+                key: record[key]
+                for key in [
+                    "source_sha256",
+                    "source_bytes",
+                    "transformation",
+                    "executable_ast_sha256",
+                ]
+                if key in record
+            }
         dst = OUT / target
         if dst.exists():
             raise RuntimeError(f"destination collision: {target}")
@@ -177,7 +193,7 @@ with tarfile.open(fileobj=p.stdout, mode="r|") as tar:
                 source_path=item.name,
                 sha256=hashlib.sha256(data).hexdigest(),
                 bytes=len(data),
-                **normalization,
+                **provenance,
             )
         )
         total += len(data)
@@ -202,8 +218,16 @@ assert p.wait() == 0
     )
     + "\n"
 )
-# Only live prompt constants; original files remain immutable offline test fixtures.
-prompts = ast.parse((OUT / "tests/fixtures/legacy/prompts.py").read_text())
+
+
+# Extract runtime definitions directly from the committed source revision.
+def source_ast(path):
+    return ast.parse(
+        subprocess.check_output(["git", "show", f"{REV}:{path}"], cwd=SRC, text=True)
+    )
+
+
+prompts = source_ast("backend/src/agent/promptsB.py")
 keep = {
     "query_writer_instructions",
     "selection_instructions",
@@ -224,7 +248,7 @@ keep = {
     )
     + "\n"
 )
-schemas = ast.parse((OUT / "tests/fixtures/legacy/schemas.py").read_text())
+schemas = source_ast("backend/src/agent/tools_and_schemas.py")
 keep = {
     "SearchQueryList",
     "AnalyzeReport",
