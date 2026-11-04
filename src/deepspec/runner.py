@@ -81,7 +81,6 @@ def run(
             "experiments",
             "src",
             "tests",
-            "docs",
         ]
     ):
         raise ValueError(

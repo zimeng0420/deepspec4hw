@@ -118,7 +118,6 @@ for d in [
     "tests/fixtures/legacy",
     "experiments/reports",
     "configs",
-    "docs",
     "data",
     "tools",
     "licenses",
