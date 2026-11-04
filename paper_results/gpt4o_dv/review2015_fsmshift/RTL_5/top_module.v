@@ -1,0 +1,23 @@
+module top_module(
+    input clk,
+    input reset,
+    output reg shift_ena
+);
+
+    reg [2:0] counter;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            counter <= 0;
+            shift_ena <= 1;
+        end else begin
+            if (counter < 3'd4) begin
+                counter <= counter + 1;
+                shift_ena <= 1;
+            end else begin
+                shift_ena <= 0;
+            end
+        end
+    end
+
+endmodule

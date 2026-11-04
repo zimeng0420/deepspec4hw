@@ -1,0 +1,22 @@
+# Messages for Task: ece241_2013_q8
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate only a technical specification for the given task. I will tip you $200 if you can fulfill the tasks I give you.Implement a Mealy-type finite state machine that recognizes the sequence "101" on an input signal named x. Your FSM should have an output signal, z, that is asserted to logic-1 when the "101" sequence is detected. Your FSM should also have a negative edge triggered asynchronous reset. You may only have 3 states in your state machine. Your FSM should recognize overlapping sequences.
+
+
+```
+
+## User Message
+
+```
+The header you have already known is:module top_module (
+	input clk,
+	input aresetn,
+	input x,
+	output reg z
+);
+
+```
+

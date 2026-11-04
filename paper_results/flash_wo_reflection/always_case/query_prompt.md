@@ -1,0 +1,57 @@
+# Task: always_case
+
+## Prompt to Generate Queries
+
+Your goal is to generate sophisticated and diverse search queries. These queries are intended for an advanced automated web research tool capable of analyzing complex results, following links, and synthesizing information.
+
+Instructions:
+- Single Query First: By default, generate only one search query. Add additional queries only if the original question covers multiple distinct aspects that cannot be addressed by a single query.
+- One Focus per Query: Each query must concentrate on one specific aspect of the original question, avoiding mixed or overlapping topics in a single query.
+- Sufficiently Detailed: Queries should include enough technical detail to enable a deep understanding of the research topic and to support solving the task.
+- Relevant to Task and I/O: Each query must stay closely tied to the key technical terms in the task description and the input/output (I/O) port definitions in the context of the research topic.
+- Diversity: If the research topic is broad, generate multiple diverse queries, with each query addressing a different perspective or subtopic.
+- No Redundancy: Do not generate multiple queries that are semantically similar. One well-phrased query is sufficient for each topic.
+
+
+Format: 
+- Format your response as a JSON object with ALL three of these exact keys:
+   - "query": A list of search queries
+   - "rationale": Brief explanation of why these queries are relevant
+   
+
+Example:
+
+Topic: Determine the next-state logic expressions for outputs Y2 and Y4 in a one-hot encoded FSM. 
+
+module top_module (
+  input [6:1] y,
+  input w,
+  output Y2,
+  output Y4,
+    
+
+```json
+{
+    "query": ["What is one-hot encoding in finite state machines?", "How are next-state signals derived in a one-hot encoded FSM?", "What do the inputs y[6:1] and w represent in the FSM?"],
+
+    "rationale": "To answer this comparative growth question accurately, Understanding how one-hot encoding represents states and how inputs like y[6:1] and w influence transitions is essential for correctly deriving next-state logic in a finite state machine. These concepts form the foundation for interpreting and implementing FSM behavior in Verilog.",
+}    
+```
+
+Context: 
+- User: CMB
+Create a 6-to-1 multiplexer. When sel is between 0 and 5, choose the corresponding data input. Otherwise, output 0. The data inputs and outputs are all 4 bits wide.
+module top_module (
+	input [2:0] sel,
+	input [3:0] data0,
+	input [3:0] data1,
+	input [3:0] data2,
+	input [3:0] data3,
+	input [3:0] data4,
+	input [3:0] data5,
+	output reg [3:0] out
+);
+
+
+- Analyze Report: Top_Analyze='Analyze the module header, ports (sel, data0-data5, out), and overall behavior. The module implements a 6-to-1 multiplexer with 4-bit wide data inputs and output. The 3-bit select signal (sel) chooses one of the six data inputs (data0 to data5). When sel is out of range (0-5), the output should be zero. Highlight how each key port interacts with the specified functionality described in the task.' Topic_Analyze='Provide a structured analysis of the research topic by addressing the following queries: 1) "6-to-1 multiplexer Verilog implementation" to understand the basic structure; 2) "4-bit wide multiplexer design" to handle the data width; 3) "out-of-range select input handling in multiplexer" to manage the default output; 4) "Verilog case statement for multiplexer" to explore different implementation approaches; and 5) "synthesizable Verilog code for multiplexer" to ensure the code can be implemented in hardware. Synthesize the problem description with relevant web-researched findings, ensuring a precise and focused analysis of the research topic.' Solving_Strategies='Outline the overall reasoning strategies and detailed step-by-step methodology: (1) Understand the basic multiplexer functionality; (2) Implement the 6-to-1 multiplexer using a case statement; (3) Handle the 4-bit wide data inputs and output; (4) Implement the out-of-range condition to output zero; (5) Verify the code using test cases. Explicitly map how each reasoning step relates to the top-level module and its sub-modules. Consider the date September 12, 2025, for any latest information on Verilog standards or best practices.'
+

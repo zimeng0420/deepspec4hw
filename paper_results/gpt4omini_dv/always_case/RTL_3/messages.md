@@ -1,0 +1,38 @@
+# Messages for Task: always_case
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Create a 6-to-1 multiplexer. When sel is between 0 and 5, choose the corresponding data input. Otherwise, output 0. The data inputs and outputs are all 4 bits wide.The header you have already known is:module top_module (
+	input [2:0] sel,
+	input [3:0] data0,
+	input [3:0] data1,
+	input [3:0] data2,
+	input [3:0] data3,
+	input [3:0] data4,
+	input [3:0] data5,
+	output reg [3:0] out
+);
+
+```
+
+## User Message
+
+```
+
+
+You can use the technical specification as follows:```json
+{
+  "header": "The top module header definition from module top_module ( input [2:0] sel, input [3:0] data0, input [3:0] data1, input [3:0] data2, input [3:0] data3, input [3:0] data4, input [3:0] data5, output reg [3:0] out );, including the interface definition and their behavior.",
+  
+  "combinational_logic_function": "The output 'out' is derived from the 3-bit selector 'sel' which determines which of the six 4-bit data inputs (data0 to data5) is routed to the output. The logic can be expressed as follows: \n\n- If sel = 3'b000, out = data0 \n- If sel = 3'b001, out = data1 \n- If sel = 3'b010, out = data2 \n- If sel = 3'b011, out = data3 \n- If sel = 3'b100, out = data4 \n- If sel = 3'b101, out = data5 \n- If sel > 3'b101 (i.e., 6 or 7), out = 4'b0000 (default output) \n\nThis can be represented in a truth table format where the output is determined based on the value of 'sel'. The combinational logic structure is organized such that each data input is connected to a multiplexer controlled by the select lines. The signal flow is optimized to ensure that only the selected data input is routed to the output, minimizing unnecessary logic paths. The critical path is defined by the longest delay from any data input to the output, which is managed by ensuring that all paths are balanced in terms of logic depth. The output selection logic is organized to prioritize valid selector inputs while defaulting to a known state for invalid inputs.",
+  
+  "enhanced_combinational_description": "Comprehensive combinational logic specification derived from User: CMB Create a 6-to-1 multiplexer. When sel is between 0 and 5, choose the corresponding data input. Otherwise, output 0. The data inputs and outputs are all 4 bits wide. module top_module ( input [2:0] sel, input [3:0] data0, input [3:0] data1, input [3:0] data2, input [3:0] data3, input [3:0] data4, input [3:0] data5, output reg [3:0] out ); The multiplexer operates by interpreting the 3-bit selector 'sel' to route one of the six 4-bit data inputs to the output 'out'. The design ensures that when 'sel' is within the range of 0 to 5, the corresponding data input is selected. For any value of 'sel' greater than 5, the output is set to 0, ensuring predictable behavior in the presence of invalid selector inputs. The 4-bit data width is maintained throughout the design, allowing for consistent data handling and output representation. The multiplexer can be implemented using various logic gate configurations, ensuring that the design is robust and adheres to the principles of combinational logic."
+}
+```
+
+Please only reply with the Verilog code, no other words.
+
+Please always begin with `module top_module()`. 
+```
+

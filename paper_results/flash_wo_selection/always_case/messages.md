@@ -1,0 +1,33 @@
+# Messages for Task: always_case
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Create a 6-to-1 multiplexer. When sel is between 0 and 5, choose the corresponding data input. Otherwise, output 0. The data inputs and outputs are all 4 bits wide.
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module header definition is:\n\n```\nmodule top_module (\n    input [2:0] sel,\n    input [3:0] data0,\n    input [3:0] data1,\n    input [3:0] data2,\n    input [3:0] data3,\n    input [3:0] data4,\n    input [3:0] data5,\n    output reg [3:0] out\n);\n```\n\nThis module defines a 6-to-1 multiplexer. It has a 3-bit select input `sel`, six 4-bit data inputs (`data0` to `data5`), and a 4-bit output `out`. The `sel` input determines which of the data inputs is routed to the output. If `sel` is out of the range 0-5, the output `out` is set to 0.",
+
+  "combinational_logic_function": "The combinational logic function implemented is a 6-to-1 multiplexer with a default output. The output `out` is determined by the value of the select input `sel`. When `sel` is within the range of 0 to 5, the corresponding data input (`data0` to `data5`) is selected and assigned to `out`. If `sel` is outside this range (i.e., 6 or 7), the output `out` is set to a default value of 0. The logic organization consists of a selection mechanism that routes one of the six data inputs to the output based on the `sel` input. The selection logic can be implemented using a case statement or a series of if-else statements. The critical path involves the propagation delay through the selection logic and the assignment to the output. The output multiplexing and selection logic organization is based on a direct mapping of the `sel` input to the corresponding data input, with a default case to handle out-of-range `sel` values.",
+
+  "enhanced_combinational_description": "This specification details a 6-to-1 multiplexer implemented using combinational logic. The module `top_module` has one 3-bit input `sel` which acts as the selector, six 4-bit data inputs `data0`, `data1`, `data2`, `data3`, `data4`, and `data5`, and one 4-bit output `out`. The functionality of the module is as follows:\n\n1.  **Selection Logic:** The `sel` input, a 3-bit signal, determines which of the six data inputs is routed to the output `out`. The `sel` input can take values from 0 to 7 (3'b000 to 3'b111).\n\n2.  **Data Input Mapping:**\n    *   If `sel` is 0 (3'b000), then `out` is assigned the value of `data0`.\n    *   If `sel` is 1 (3'b001), then `out` is assigned the value of `data1`.\n    *   If `sel` is 2 (3'b010), then `out` is assigned the value of `data2`.\n    *   If `sel` is 3 (3'b011), then `out` is assigned the value of `data3`.\n    *   If `sel` is 4 (3'b100), then `out` is assigned the value of `data4`.\n    *   If `sel` is 5 (3'b101), then `out` is assigned the value of `data5`.\n\n3.  **Default Output:** If `sel` is 6 (3'b110) or 7 (3'b111), which are outside the valid selection range of 0-5, then `out` is assigned the value 0 (4'b0000). This ensures that the output is predictable even when the select input is out of range.\n\n4.  **Data Width:** All data inputs (`data0` to `data5`) and the output `out` are 4 bits wide. This means that the multiplexer selects one of the six 4-bit data inputs and routes it to the 4-bit output.\n\n5.  **Combinational Nature:** The output `out` is a direct function of the inputs `sel` and `data0` to `data5`. There is no memory or state involved; the output changes instantaneously (within the propagation delay of the logic gates) in response to changes in the inputs.\n\nThis combinational logic circuit effectively implements a 6-to-1 multiplexer with a default output, providing a robust and predictable behavior for all possible input combinations."
+}
+```
+
+The header you have already known is:module top_module (
+	input [2:0] sel,
+	input [3:0] data0,
+	input [3:0] data1,
+	input [3:0] data2,
+	input [3:0] data3,
+	input [3:0] data4,
+	input [3:0] data5,
+	output reg [3:0] out
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

@@ -1,0 +1,33 @@
+# Messages for Task: vector3
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Given several input vectors, concatenate them together then split them up into several output vectors. There are six 5-bit input vectors: a, b, c, d, e, and f, for a total of 30 bits of input. There are four 8-bit output vectors: w, x, y, and z, for 32 bits of output. The output should be a concatenation of the input vectors followed by two 1 bits (the two 1 bits should be in the LSB positions).
+
+The compressed specification is as follows: ```json
+{
+  "header": "module top_module (\n\tinput [4:0] a,\n\tinput [4:0] b,\n\tinput [4:0] c,\n\tinput [4:0] d,\n\tinput [4:0] e,\n\tinput [4:0] f,\n\toutput [7:0] w,\n\toutput [7:0] x,\n\toutput [7:0] y,\n\toutput [7:0] z\n);",
+  "combinational_logic_function": "The combinational logic function concatenates six 5-bit input vectors (a, b, c, d, e, f) into a single 30-bit vector. Then, two '1' bits are appended to the least significant bit (LSB) positions, resulting in a 32-bit vector. This 32-bit vector is then split into four 8-bit output vectors (w, x, y, z). The output 'w' represents the most significant 8 bits of the concatenated vector, followed by 'x', 'y', and 'z', with 'z' containing the two appended '1' bits in its LSB positions. The bit assignment is as follows:\n\n*   w[7:0] = {a[4:0], b[4:2]}\n*   x[7:0] = {b[1:0], c[4:0], d[4:3]}\n*   y[7:0] = {d[2:0], e[4:0], f[4]}\n*   z[7:0] = {f[3:0], 2'b11}",
+  "enhanced_combinational_description": "This combinational logic circuit takes six 5-bit input vectors (a, b, c, d, e, f) and produces four 8-bit output vectors (w, x, y, z). The core functionality involves a concatenation and splitting process. First, the six input vectors are concatenated in the order a, b, c, d, e, f, resulting in a 30-bit intermediate vector. Next, two '1' bits are appended to the LSB of this 30-bit vector, creating a 32-bit vector. Finally, this 32-bit vector is split into four 8-bit output vectors: w, x, y, and z. The bit assignment is as follows:\n\n*   Output w[7:0] consists of the most significant bits of the concatenated input vectors. Specifically, w[7:3] are assigned to a[4:0], and w[2:0] are assigned to b[4:2].\n*   Output x[7:0] continues from where w left off. x[7:6] are assigned to b[1:0], x[5:1] are assigned to c[4:0], and x[0] is assigned to d[4:3].\n*   Output y[7:0] continues from where x left off. y[7:5] are assigned to d[2:0], y[4:0] are assigned to e[4:0], and y[7] is assigned to f[4].\n*   Output z[7:0] contains the remaining bits of the input vectors and the appended '11' bits. z[7:4] are assigned to f[3:0], and z[1:0] are assigned to 2'b11. z[7:2] are assigned to 6'b000000."
+}
+```
+
+The header you have already known is:module top_module (
+	input [4:0] a,
+	input [4:0] b,
+	input [4:0] c,
+	input [4:0] d,
+	input [4:0] e,
+	input [4:0] f,
+	output [7:0] w,
+	output [7:0] x,
+	output [7:0] y,
+	output [7:0] z
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

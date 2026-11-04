@@ -1,0 +1,60 @@
+# Messages for Task: fsm_onehot
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Given the follow state machine with 1 input and 2 outputs (the outputs are given as "(out1, out2)"):
+
+// S0 (0, 0) --0--> S0
+// S0 (0, 0) --1--> S1
+// S1 (0, 0) --0--> S0
+// S1 (0, 0) --1--> S2
+// S2 (0, 0) --0--> S0
+// S2 (0, 0) --1--> S3
+// S3 (0, 0) --0--> S0
+// S3 (0, 0) --1--> S4
+// S4 (0, 0) --0--> S0
+// S4 (0, 0) --1--> S5
+// S5 (0, 0) --0--> S8
+// S5 (0, 0) --1--> S6
+// S6 (0, 0) --0--> S9
+// S6 (0, 0) --1--> S7
+// S7 (0, 1) --0--> S0
+// S7 (0, 1) --1--> S7
+// S8 (1, 0) --0--> S0
+// S8 (1, 0) --1--> S1
+// S9 (1, 1) --0--> S0
+// S9 (1, 1) --1--> S1
+
+// Suppose this state machine uses one-hot encoding, where state[0] through state[9] correspond to the states S0 though S9, respectively. The outputs are zero unless otherwise specified.
+
+// Write Verilog implementing the state transition logic and output logic portions of the state machine (but not the state flip-flops). You are given the current state in state[9:0] and must produce next_state[9:0] and the two outputs. Derive the logic equations by inspection assuming a one-hot encoding.
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+
+## User Message
+
+```
+The header you have already known is:module top_module (
+	input in,
+	input [9:0] state,
+	output [9:0] next_state,
+	output out1,
+	output out2);
+
+
+You can use the technical specification as follows:
+
+```json
+{
+  "header": "The top module header definition from module top_module ( input in, input [9:0] state, output [9:0] next_state, output out1, output out2);, including the interface definition and their behavior.",
+
+  "combinational_logic_function": "The outputs derive from the current state and the input signal according to the defined state transitions. The next state logic is determined by the current state and the input, while the outputs are activated based on specific states. The combinational logic can be organized as follows: 1) **Next State Logic**: For each state, identify the conditions under which the state transitions occur based on the input. For example, if the current state is S0 and the input is 1, the next state will be S1. This can be expressed as: next_state[1] = state[0] & in; next_state[0] = state[0] & ~in; and so forth for all states. 2) **Output Logic**: The outputs out1 and out2 are derived from specific states. For instance, out1 is high when the state is S7, S8, or S9, which can be expressed as: out1 = state[7] | state[8] | state[9]; out2 is high only when the state is S7, which can be expressed as: out2 = state[7]. This systematic breakdown ensures clarity in the logic structure, with clear functional boundaries between next state and output logic.",
+
+  "enhanced_combinational_description": "Comprehensive combinational logic specification derived from User: CMB Given the follow state machine with 1 input and 2 outputs (the outputs are given as '(out1, out2)'): // S0 (0, 0) --0--> S0 // S0 (0, 0) --1--> S1 // S1 (0, 0) --0--> S0 // S1 (0, 0) --1--> S2 // S2 (0, 0) --0--> S0 // S2 (0, 0) --1--> S3 // S3 (0, 0) --0--> S0 // S3 (0, 0) --1--> S4 // S4 (0, 0) --0--> S0 // S4 (0, 0) --1--> S5 // S5 (0, 0) --0--> S8 // S5 (0, 0) --1--> S6 // S6 (0, 0) --0--> S9 // S6 (0, 0) --1--> S7 // S7 (0, 1) --0--> S0 // S7 (0, 1) --1--> S7 // S8 (1, 0) --0--> S0 // S8 (1, 0) --1--> S1 // S9 (1, 1) --0--> S0 // S9 (1, 1) --1--> S1 // Suppose this state machine uses one-hot encoding, where state[0] through state[9] correspond to the states S0 though S9, respectively. The outputs are zero unless otherwise specified. The next state logic can be derived as follows: next_state[0] = state[0] & ~in | state[1] & ~in | state[2] & ~in | state[3] & ~in | state[4] & ~in | state[5] & ~in | state[6] & ~in | state[7] & ~in | state[8] & ~in | state[9] & ~in; next_state[1] = state[0] & in; next_state[2] = state[1] & in; next_state[3] = state[2] & in; next_state[4] = state[3] & in; next_state[5] = state[4] & in; next_state[6] = state[5] & in; next_state[7] = state[6] & in; next_state[8] = state[5] & ~in; next_state[9] = state[6] & ~in; The output logic can be expressed as: out1 = state[7] | state[8] | state[9]; out2 = state[7]; This detailed specification provides a clear understanding of the combinational logic required for the state machine's operation."
+}
+```
+```
+

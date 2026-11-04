@@ -1,0 +1,38 @@
+# Messages for Task: m2014_q4c
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Implement a simple D flip flop with active high synchronous reset (reset output to 0).
+
+The compressed specification is as follows: Pure CMB Logic :
+```json
+{
+  "header": "The top module `top_module` has the following interface:\n\n*   **Inputs:**\n    *   `clk`: Clock input.\n    *   `d`: Data input.\n    *   `r`: Synchronous reset input (active high).\n*   **Output:**\n    *   `q`: Output, representing the stored bit.",
+  "combinational_logic_function": "The combinational logic function describes the next state of the output `q` based on the current inputs `d` and `r`, and the clock `clk`. Since this is a synchronous reset D flip-flop, the clock signal is essential for the reset and data loading operations. The combinational logic can be conceptually broken down as follows:\n\n1.  **Reset Dominance:** If `r` is asserted (high) at the rising edge of `clk`, the output `q` is forced to 0. This operation takes precedence over the data input `d`.\n2.  **Data Loading:** If `r` is not asserted (low) at the rising edge of `clk`, the output `q` takes the value of the data input `d`.\n3.  **State Retention:** When the clock is not at the active edge, the output `q` retains its previous value. This aspect is not directly implemented with combinational logic but is a characteristic of the sequential element (D flip-flop) being described.\n\nWhile the flip-flop itself is a sequential element, the combinational logic aspect lies in determining the *next* value of `q` based on the *current* values of `d` and `r` at the clock edge. This can be represented conceptually as:\n\n`next_q = (r == 1) ? 0 : d`\n\nThis expression highlights the combinational logic: the next value of `q` is either 0 (if `r` is high) or the value of `d` (if `r` is low). The clock signal acts as an enable for this combinational logic to update the flip-flop's state.",
+  "enhanced_combinational_description": "This specification details the combinational logic behavior of a D flip-flop with an active-high synchronous reset. The circuit's output, `q`, is determined by the inputs `d` (data), `r` (reset), and `clk` (clock). The reset is synchronous, meaning its effect is synchronized with the clock's active edge (rising edge in this description).\n\n1.  **Reset Condition:** When the reset input `r` is asserted (logic high) at the rising edge of the clock signal `clk`, the output `q` is forced to a logic low (0). This reset operation has priority over the data input `d`. Regardless of the value of `d`, if `r` is high at the clock edge, `q` will be 0.\n\n2.  **Data Input Condition:** When the reset input `r` is de-asserted (logic low) at the rising edge of the clock signal `clk`, the output `q` takes on the value of the data input `d`. This means that the data present at input `d` is captured and stored in the flip-flop, and this value is reflected at the output `q`.\n\n3.  **Clock Dependency:** The changes to the output `q` only occur at the rising edge of the clock signal `clk`. The inputs `d` and `r` are sampled at this specific time. The combinational logic determines the *next* state of `q` based on the values of `d` and `r` at the clock edge.\n\n4.  **Boolean Representation:** The combinational logic function can be conceptually represented by the following Boolean expression:\n\n`next_q = (r) ? 0 : d`\n\nThis expression indicates that the next state of `q` is 0 if `r` is true (high), and `d` if `r` is false (low). The clock signal acts as an enable for this combinational logic to update the flip-flop's state at the rising edge.\n\nIn summary, the combinational logic dictates that the output `q` will be reset to 0 if `r` is high at the clock edge; otherwise, `q` will take the value of `d` at the clock edge. The clock signal synchronizes these operations."
+}
+```
+
+ With Timing Logic Summary:
+```json
+{
+  "header analysis": "The module `top_module` implements a D flip-flop with a synchronous, active-high reset. It has three inputs: `clk` (clock), `d` (data), and `r` (reset), and one output: `q` (the flip-flop's output).",
+  "Circuit type": "Sequential (posedge)",
+  "Timing Dependency": "The output `q` changes only on the rising edge of `clk`. If `r` is high at the rising edge of `clk`, `q` is reset to 0. Otherwise, `q` takes the value of `d` at the rising edge of `clk`.",
+  "Timing Logic Implementation": "The design contains one register, `q`, which is declared as `output logic q`. The register `q` is updated using a non-blocking assignment (`<=`) within an `always @(posedge clk)` block. This ensures that the update to `q` happens at the end of the clock cycle, preventing race conditions. The reset `r` has priority over the data input `d`."
+}
+```
+
+The header you have already known is:module top_module (
+	input clk,
+	input d,
+	input r,
+	output logic q
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

@@ -1,0 +1,15 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:40: error: Unknown module type: ff_mux
+top_module.v:48: error: Unknown module type: ff_mux
+top_module.v:56: error: Unknown module type: ff_mux
+4 error(s) during elaboration.
+*** These modules were missing:
+        ff_mux referenced 3 times.
+***
+

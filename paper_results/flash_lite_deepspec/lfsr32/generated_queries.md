@@ -1,0 +1,10 @@
+# Task: lfsr32
+
+## Analyze Report
+
+Top_Analyze="Analyze the task's header, ports, and overall behavior. The module's header defines a 32-bit Galois LFSR with specific tap positions and synchronous reset. The ports include a clock (clk), a synchronous active-high reset (reset), and a 32-bit output register (q). The overall behavior is to generate a pseudo-random sequence based on the LFSR configuration, with the reset initializing the output to 32'h1." Topic_Analyze='Provide a structured analysis of the research topic. This involves understanding Galois LFSRs, tap positions, and synchronous reset behavior. Research queries include: 1) "Galois LFSR operation" to understand the fundamental principles; 2) "Effect of tap positions on LFSR sequence" to analyze how taps influence the generated sequence; 3) "Synchronous reset in digital circuits" to understand the reset\'s role; 4) "32-bit LFSR implementation Verilog" to explore implementation details; 5) "LFSR initialization techniques" to understand the initial state setting. The analysis will synthesize findings from these queries to provide a comprehensive understanding of the LFSR design.' Solving_Strategies="Outline the overall reasoning strategies and detailed step-by-step methodology. The methodology includes: (1) Understanding the Galois LFSR structure and its state update mechanism. (2) Determining the feedback function based on the given tap positions (32, 22, 2, and 1). (3) Designing the logic for the next state calculation, incorporating XOR gates. (4) Implementing the synchronous reset logic to initialize the output q to 32'h1. (5) Integrating the clock signal to update the LFSR state on each rising edge. (6) Mapping each step to the module's components: the feedback function relates to the XOR gates, the reset logic to the reset input, and the clock signal to the clk input. The final implementation will be validated to ensure the correct pseudo-random sequence generation."
+
+## Generated Queries
+
+['Galois LFSR with taps at 32, 22, 2, and 1', 'Synchronous reset in LFSR', 'Verilog implementation of 32-bit Galois LFSR']
+

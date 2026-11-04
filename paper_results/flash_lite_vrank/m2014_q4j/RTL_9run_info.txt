@@ -1,0 +1,16 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:10: error: Unknown module type: full_adder
+top_module.v:18: error: Unknown module type: full_adder
+top_module.v:26: error: Unknown module type: full_adder
+top_module.v:34: error: Unknown module type: full_adder
+5 error(s) during elaboration.
+*** These modules were missing:
+        full_adder referenced 4 times.
+***
+

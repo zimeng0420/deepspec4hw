@@ -1,0 +1,21 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:59: error: g['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd1] is declared here as wire.
+top_module.v:60: error: g['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd2] is declared here as wire.
+top_module.v:61: error: g['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd3] is declared here as wire.
+top_module.v:63: error: g['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd1] is declared here as wire.
+top_module.v:64: error: g['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd2] is declared here as wire.
+top_module.v:65: error: g['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd3] is declared here as wire.
+6 error(s) during elaboration.
+

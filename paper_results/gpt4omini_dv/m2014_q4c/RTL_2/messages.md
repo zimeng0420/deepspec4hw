@@ -1,0 +1,45 @@
+# Messages for Task: m2014_q4c
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Implement a simple D flip flop with active high synchronous reset (reset output to 0).The header you have already known is:module top_module (
+	input clk,
+	input d,
+	input r,
+	output logic q
+);
+
+```
+
+## User Message
+
+```
+
+
+You can use the technical specification as follows:Pure CMB Logic :
+```json
+{
+  "header": "The top module header definition from module top_module ( input clk, input d, input r, output logic q );, including the interface definition and their behavior.",
+  
+  "combinational_logic_function": "The output q of the D flip-flop is derived from the inputs d and r based on the clock signal clk. The behavior can be described as follows: 1. When the reset signal r is high, the output q is set to 0, regardless of the value of d. 2. When the reset signal r is low, the output q takes the value of the data input d at the rising edge of the clock signal clk. This can be expressed in Boolean terms as: q = (r) ? 0 : (clk & d). The combinational logic structure is organized to ensure that the reset condition is prioritized over the data input. The signal flow is optimized such that the reset condition is checked first, followed by the data input sampling. The critical path is identified as the path from the inputs d and r to the output q, ensuring minimal delay through the logic gates. Operator sharing is not applicable in this simple design, as the logic is straightforward. Logic level balancing is achieved by ensuring that the reset and data paths are of similar lengths to minimize skew. The output selection logic is inherently managed by the conditional structure of the flip-flop, where the reset takes precedence over the data input.",
+  
+  "enhanced_combinational_description": "The D flip-flop with active high synchronous reset is a fundamental digital circuit that captures and holds a single bit of data. The module top_module is defined with four ports: clk (clock), d (data input), r (reset input), and q (output). The combinational logic operates as follows: 1. The reset input r is active high, meaning when r = 1, the output q is immediately set to 0 on the next rising edge of clk, regardless of the value of d. 2. When r = 0, the output q will reflect the value of d at the rising edge of clk. This behavior ensures that the flip-flop can be reset synchronously with the clock, providing reliable operation in digital systems. The truth table for this operation is as follows: | clk | r | d | q | |-----|---|---|---| | 0 | 0 | 0 | q_prev | | 0 | 0 | 1 | q_prev | | 0 | 1 | X | 0 | | 1 | 0 | 0 | 0 | | 1 | 0 | 1 | 1 | | 1 | 1 | X | 0 | The combinational logic is structured to prioritize the reset condition, ensuring that the output q is set to 0 when r is high. The design is straightforward, with a clear functional boundary between the reset logic and the data sampling logic. The signal flow is optimized to ensure that the reset condition is checked first, followed by the data input sampling, minimizing the critical path delay. The output multiplexing is inherently managed by the conditional logic, where the reset takes precedence over the data input. This design ensures that the D flip-flop operates reliably in synchronous digital systems."
+}
+```
+
+ With Timing Logic Summary:
+```json
+{
+  "header": "The module 'top_module' implements a D flip-flop with an active high synchronous reset. It has three inputs: 'clk' (clock), 'd' (data), and 'r' (reset), and one output: 'q' (the output of the flip-flop). The behavior of the flip-flop is defined such that when the reset signal 'r' is high, the output 'q' is set to 0 on the next rising edge of the clock. If 'r' is low, the output 'q' captures the value of the input 'd' on the rising edge of 'clk'.",
+  "Interface Behavior": "The output 'q' is updated on the rising edge of 'clk'. If 'r' is high at this moment, 'q' is set to 0. If 'r' is low, 'q' takes the value of 'd'. The timing characteristics are as follows: 'r' must be stable before the rising edge of 'clk' (setup time) and must remain stable for a short period after the rising edge (hold time).",
+  "Timing Dependency": "The critical paths involve the reset signal 'r' and the clock signal 'clk'. The output 'q' is dependent on the state of 'r' and 'd' at the moment of the rising edge of 'clk'. The timing values for setup and hold times must be adhered to, but specific values are not provided in the task.",
+  "Timing logic": "The D flip-flop contains one register 'q'. It is triggered on the positive edge of 'clk'. The implementation uses non-blocking assignments (<=) to ensure proper sequential behavior. The reset condition is checked within an 'always_ff' block, ensuring that the output 'q' is set to 0 if 'r' is high at the clock edge, otherwise 'q' is assigned the value of 'd'."
+}
+```
+
+Please only reply with the Verilog code, no other words.
+
+Please always begin with `module top_module()`. 
+```
+

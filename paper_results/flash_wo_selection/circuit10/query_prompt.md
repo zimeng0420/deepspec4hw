@@ -1,0 +1,97 @@
+# Task: circuit10
+
+## Prompt to Generate Queries
+
+Your goal is to generate sophisticated and diverse search queries. These queries are intended for an advanced automated web research tool capable of analyzing complex results, following links, and synthesizing information.
+
+Instructions:
+- Single Query First: By default, generate only one search query. Add additional queries only if the original question covers multiple distinct aspects that cannot be addressed by a single query.
+- One Focus per Query: Each query must concentrate on one specific aspect of the original question, avoiding mixed or overlapping topics in a single query.
+- Sufficiently Detailed: Queries should include enough technical detail to enable a deep understanding of the research topic and to support solving the task.
+- Relevant to Task and I/O: Each query must stay closely tied to the key technical terms in the task description and the input/output (I/O) port definitions in the context of the research topic.
+- Diversity: If the research topic is broad, generate multiple diverse queries, with each query addressing a different perspective or subtopic.
+- No Redundancy: Do not generate multiple queries that are semantically similar. One well-phrased query is sufficient for each topic.
+
+
+Format: 
+- Format your response as a JSON object with ALL three of these exact keys:
+   - "query": A list of search queries
+   - "rationale": Brief explanation of why these queries are relevant
+   
+
+Example:
+
+Topic: Determine the next-state logic expressions for outputs Y2 and Y4 in a one-hot encoded FSM. 
+
+module top_module (
+  input [6:1] y,
+  input w,
+  output Y2,
+  output Y4,
+    
+
+```json
+{
+    "query": ["What is one-hot encoding in finite state machines?", "How are next-state signals derived in a one-hot encoded FSM?", "What do the inputs y[6:1] and w represent in the FSM?"],
+
+    "rationale": "To answer this comparative growth question accurately, Understanding how one-hot encoding represents states and how inputs like y[6:1] and w influence transitions is essential for correctly deriving next-state logic in a finite state machine. These concepts form the foundation for interpreting and implementing FSM behavior in Verilog.",
+}    
+```
+
+Context: 
+- User: SEQ
+This is a sequential circuit. The circuit consists of combinational logic and one bit of memory (i.e., one flip-flop). The output of the flip-flop has been made observable through the output state.
+
+// Read the simulation waveforms to determine what the circuit does, then implement it.
+
+// time            clk             a               b               state           q               
+// 0ns             0               1               x               x               x               
+// 5ns             1               1               x               x               x               
+// 10ns            0               0               0               x               x               
+// 15ns            1               0               0               0               0               
+// 20ns            0               0               0               0               0               
+// 25ns            1               0               0               0               0               
+// 30ns            0               0               0               0               0               
+// 35ns            1               0               0               0               0               
+// 40ns            0               0               0               0               0               
+// 45ns            1               0               1               0               1               
+// 50ns            0               0               1               0               1               
+// 55ns            1               1               0               0               1               
+// 60ns            0               1               0               0               1               
+// 65ns            1               1               1               0               0               
+// 70ns            0               1               1               0               0               
+// 75ns            1               0               0               1               1               
+// 80ns            0               0               0               1               1               
+// 85ns            1               1               1               0               0               
+// 90ns            0               1               1               0               0               
+// 95ns            1               1               1               1               1               
+// 100ns           0               1               1               1               1               
+// 105ns           1               1               1               1               1               
+// 110ns           0               1               1               1               1               
+// 115ns           1               1               0               1               0               
+// 120ns           0               1               0               1               0               
+// 125ns           1               0               1               1               0               
+// 130ns           0               0               1               1               0               
+// 135ns           1               0               0               1               1               
+// 140ns           0               0               0               1               1               
+// 145ns           1               0               0               0               0               
+// 150ns           0               0               0               0               0               
+// 155ns           1               0               0               0               0               
+// 160ns           0               0               0               0               0               
+// 165ns           1               0               0               0               0               
+// 170ns           0               0               0               0               0               
+// 175ns           1               0               0               0               0               
+// 180ns           0               0               0               0               0               
+// 185ns           1               0               0               0               0               
+// 190ns           0               0               0               0               0        
+module top_module (
+	input clk,
+	input a,
+	input b,
+	output q,
+	output state
+);
+
+
+- Analyze Report: 
+

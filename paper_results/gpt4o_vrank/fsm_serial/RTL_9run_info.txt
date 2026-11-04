@@ -1,0 +1,12 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:22: error: Enumeration name DATA_BIT_6 and START_BIT have the same value: 3'd1
+top_module.v:22: error: Enumeration name DATA_BIT_7 and DATA_BIT_0 have the same value: 3'd2
+top_module.v:22: error: Enumeration name STOP_BIT and DATA_BIT_1 have the same value: 3'd3
+4 error(s) during elaboration.
+

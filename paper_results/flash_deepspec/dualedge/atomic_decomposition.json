@@ -1,0 +1,22 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units by identifying individual requirements, constraints, and functional behaviors. Each atomic unit represents a distinct and independent piece of information necessary for understanding and implementing the dual-edge triggered flip-flop emulation. The goal was to create units that are technically specific, unambiguous, and directly implementable as a single requirement or feature in a digital circuit design. This involved breaking down complex sentences into smaller, more manageable components, focusing on the core functionality and constraints described in each document.",
+  "mindtraced_atomic_units": [
+    "Implement a dual-edge triggered D-type flip-flop using standard FPGA resources.",
+    "The output 'q' should update on both rising and falling edges of the clock 'clk'.",
+    "The output 'q' should update based on the input 'd' at the rising and falling edges of 'clk'."
+  ],
+  "spec_atomic_units": [
+    "Implement a dual-edge triggered flip-flop using combinational logic and single-edge triggered flip-flops.",
+    "The output `q` updates on both rising and falling edges of the clock `clk`.",
+    "The value of `d` is captured at the rising and falling edges of `clk`.",
+    "Use two single-edge triggered flip-flops: one positive-edge triggered and one negative-edge triggered.",
+    "Combine the outputs of the two flip-flops using an XOR gate.",
+    "The input to the positive-edge triggered flip-flop is `d ^ n` (where n is the output of the negative-edge triggered flip-flop).",
+    "The input to the negative-edge triggered flip-flop is `d ^ p` (where p is the output of the positive-edge triggered flip-flop).",
+    "The final output 'q' is calculated as `p ^ n`.",
+    "XOR-based combination minimizes glitches.",
+    "If the input 'd' is asynchronous to the clock 'clk', implement a synchronizer circuit before the dual-edge emulation circuit.",
+    "The synchronizer consists of two flip-flops in series, clocked by 'clk'.",
+    "Apply constraints to the synchronizer flip-flops to prevent optimization."
+  ]
+}

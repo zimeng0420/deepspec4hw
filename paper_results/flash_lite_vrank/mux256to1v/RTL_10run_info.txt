@@ -1,0 +1,21 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:12: error: A reference to a wire or reg (`start_bit') is not allowed in a constant expression.
+top_module.v:12: error: Part select expressions must be constant.
+top_module.v:12:      : This lsb expression violates the rule: start_bit
+top_module.v:12: error: A reference to a wire or reg (`start_bit') is not allowed in a constant expression.
+top_module.v:12: error: Part select expressions must be constant.
+top_module.v:12:      : This msb expression violates the rule: (start_bit)+('sd3)
+top_module.v:12: error: A reference to a wire or reg (`start_bit') is not allowed in a constant expression.
+top_module.v:12: error: Part select expressions must be constant.
+top_module.v:12:      : This lsb expression violates the rule: start_bit
+top_module.v:12: error: A reference to a wire or reg (`start_bit') is not allowed in a constant expression.
+top_module.v:12: error: Part select expressions must be constant.
+top_module.v:12:      : This msb expression violates the rule: (start_bit)+('sd3)
+8 error(s) during elaboration.
+

@@ -1,0 +1,26 @@
+# Messages for Task: m2014_q4e
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Implement a 2-input NOR gate.
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module `top_module` has two single-bit inputs, `in1` and `in2`, and a single-bit output, `out`. The module implements a combinational logic function where the output `out` is the logical NOR of the inputs `in1` and `in2`.",
+  "combinational_logic_function": "The output `out` is asserted to logic HIGH (1) only when both inputs `in1` and `in2` are at logic LOW (0). If either `in1` or `in2` or both are at logic HIGH (1), then the output `out` is asserted to logic LOW (0). This behavior can be represented by the Boolean expression: `out = !(in1 | in2)` or `out = ~(in1 | in2)`. The truth table representation is as follows:\n\n| in1 | in2 | out |\n|-----|-----|-----|\n|  0  |  0  |  1  |\n|  0  |  1  |  0  |\n|  1  |  0  |  0  |\n|  1  |  1  |  0  |\n\nThe combinational logic structure consists of a single NOR gate. The inputs `in1` and `in2` are directly connected to the inputs of the NOR gate, and the output of the NOR gate is connected to the output `out` of the module. There is no operator sharing or resource utilization strategy needed for this simple gate. Logic level balancing and delay equalization techniques are not applicable. Output multiplexing and selection logic organization are not applicable.",
+  "enhanced_combinational_description": "The `top_module` implements a 2-input NOR gate. The functionality is defined such that the output `out` is the logical negation of the OR operation performed on the inputs `in1` and `in2`. Specifically, the output `out` will be logic '1' only when both `in1` and `in2` are logic '0'. In all other cases (i.e., when `in1` is '1', `in2` is '1', or both are '1'), the output `out` will be logic '0'. The module's behavior is fully described by the Boolean equation `out = ~(in1 | in2)`. The module consists of a single combinational logic gate performing the NOR operation. The inputs `in1` and `in2` directly feed into the NOR gate, and the output of the NOR gate is directly connected to the module's output `out`. This implementation represents the most direct and efficient realization of a 2-input NOR gate."
+}
+```
+
+The header you have already known is:module top_module (
+	input in1,
+	input in2,
+	output logic out
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

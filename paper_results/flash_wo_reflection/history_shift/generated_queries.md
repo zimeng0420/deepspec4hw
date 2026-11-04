@@ -1,0 +1,10 @@
+# Task: history_shift
+
+## Analyze Report
+
+Top_Analyze="Analyze the module's input and output signals, focusing on their roles in branch prediction and history management. Specifically, examine how clk, areset, predict_valid, predict_taken, train_mispredicted, train_taken, train_history, and predict_history interact to implement the shift register and rollback functionality." Topic_Analyze="Provide a structured analysis of branch prediction, global history registers, and rollback mechanisms in pipelined processors. Research the following topics: 1) 'global branch history register design' to understand the basic structure and operation; 2) 'branch prediction rollback mechanism' to learn how to recover from mispredictions; 3) 'shift register implementation in Verilog' to find efficient ways to implement the history register; 4) 'handling simultaneous prediction and misprediction in branch predictors' to understand precedence rules; and 5) 'asynchronous reset in shift registers' to ensure proper initialization. Incorporate the current date, September 12, 2025, to ensure the research reflects the latest advancements." Solving_Strategies="Outline a step-by-step methodology for designing the 32-bit global history shift register with rollback capability. The steps are: 1) Design the basic shift register functionality using predict_valid and predict_taken; 2) Implement the asynchronous reset using areset; 3) Add the rollback mechanism using train_mispredicted, train_taken, and train_history; 4) Prioritize misprediction over prediction when both occur simultaneously; 5) Verify the design with test cases covering all possible scenarios, including reset, prediction, misprediction, and simultaneous events. Each step should directly relate to the module's inputs, outputs, and internal state."
+
+## Generated Queries
+
+['global branch history register design', 'branch prediction rollback mechanism', 'shift register implementation in Verilog', 'handling simultaneous prediction and misprediction in branch predictors', 'asynchronous reset in shift registers']
+

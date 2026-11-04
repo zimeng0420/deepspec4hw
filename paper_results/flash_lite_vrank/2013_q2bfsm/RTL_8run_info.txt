@@ -1,0 +1,37 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:21: error: f is not a valid l-value in testbench.DUT.
+top_module.v:6:      : f is declared here as wire.
+top_module.v:22: error: g is not a valid l-value in testbench.DUT.
+top_module.v:7:      : g is declared here as wire.
+top_module.v:27: error: f is not a valid l-value in testbench.DUT.
+top_module.v:6:      : f is declared here as wire.
+top_module.v:27: error: f is not a valid l-value in testbench.DUT.
+top_module.v:6:      : f is declared here as wire.
+top_module.v:33: error: f is not a valid l-value in testbench.DUT.
+top_module.v:6:      : f is declared here as wire.
+top_module.v:34: error: g is not a valid l-value in testbench.DUT.
+top_module.v:7:      : g is declared here as wire.
+top_module.v:41: error: f is not a valid l-value in testbench.DUT.
+top_module.v:6:      : f is declared here as wire.
+top_module.v:42: error: g is not a valid l-value in testbench.DUT.
+top_module.v:7:      : g is declared here as wire.
+top_module.v:46: error: f is not a valid l-value in testbench.DUT.
+top_module.v:6:      : f is declared here as wire.
+top_module.v:47: error: g is not a valid l-value in testbench.DUT.
+top_module.v:7:      : g is declared here as wire.
+top_module.v:52: error: f is not a valid l-value in testbench.DUT.
+top_module.v:6:      : f is declared here as wire.
+top_module.v:71: error: g is not a valid l-value in testbench.DUT.
+top_module.v:7:      : g is declared here as wire.
+top_module.v:82: error: g is not a valid l-value in testbench.DUT.
+top_module.v:7:      : g is declared here as wire.
+top_module.v:85: error: g is not a valid l-value in testbench.DUT.
+top_module.v:7:      : g is declared here as wire.
+14 error(s) during elaboration.
+

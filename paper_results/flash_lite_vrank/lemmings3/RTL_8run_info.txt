@@ -1,0 +1,33 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:29: error: walk_left is not a valid l-value in testbench.DUT.
+top_module.v:8:      : walk_left is declared here as wire.
+top_module.v:30: error: walk_right is not a valid l-value in testbench.DUT.
+top_module.v:9:      : walk_right is declared here as wire.
+top_module.v:31: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:10:      : aaah is declared here as wire.
+top_module.v:32: error: digging is not a valid l-value in testbench.DUT.
+top_module.v:11:      : digging is declared here as wire.
+top_module.v:36: error: walk_left is not a valid l-value in testbench.DUT.
+top_module.v:8:      : walk_left is declared here as wire.
+top_module.v:41: error: walk_left is not a valid l-value in testbench.DUT.
+top_module.v:8:      : walk_left is declared here as wire.
+top_module.v:44: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:10:      : aaah is declared here as wire.
+top_module.v:54: error: walk_right is not a valid l-value in testbench.DUT.
+top_module.v:9:      : walk_right is declared here as wire.
+top_module.v:57: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:10:      : aaah is declared here as wire.
+top_module.v:67: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:10:      : aaah is declared here as wire.
+top_module.v:76: error: digging is not a valid l-value in testbench.DUT.
+top_module.v:11:      : digging is declared here as wire.
+top_module.v:79: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:10:      : aaah is declared here as wire.
+12 error(s) during elaboration.
+

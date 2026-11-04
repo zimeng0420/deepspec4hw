@@ -1,0 +1,41 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units by identifying individual requirements, features, behaviors, and constraints. Each atomic unit represents a distinct and independent piece of information necessary for understanding and implementing the 32-bit global history shift register. The goal was to create units that are technically specific, unambiguous, and directly implementable as a single requirement or function. Overlapping or redundant information was avoided to ensure each unit's independence. The decomposition focused on functional aspects, timing considerations, and interface details.",
+  "mindtraced_atomic_units": [
+    "Design a 32-bit global history shift register.",
+    "Support rollback on mispredictions.",
+    "Update register on branch prediction (predict_valid = 1).",
+    "Shift in predict_taken from LSB.",
+    "predict_history[0] is the direction of the youngest branch.",
+    "On branch misprediction (train_mispredicted = 1), load register with history after mispredicted branch.",
+    "History is train_history concatenated with train_taken.",
+    "Misprediction takes precedence if both prediction and misprediction occur.",
+    "areset is a positive edge triggered asynchronous reset.",
+    "areset resets history counter to zero.",
+    "Input: clk",
+    "Input: areset",
+    "Input: predict_valid",
+    "Input: predict_taken",
+    "Output: predict_history[31:0]",
+    "Input: train_mispredicted",
+    "Input: train_taken",
+    "Input: train_history[31:0]"
+  ],
+  "spec_atomic_units": [
+    "Module has inputs: clk, areset, predict_valid, predict_taken, train_mispredicted, train_taken, train_history.",
+    "Module has output: predict_history[31:0].",
+    "predict_history register's next state depends on predict_valid, predict_taken, train_mispredicted, train_taken and train_history.",
+    "areset forces predict_history to zero.",
+    "train_mispredicted has priority over predict_valid.",
+    "predict_history is selected from all zeros (areset), shifted predict_history with predict_taken, or train_history concatenated with train_taken.",
+    "If areset is asserted, predict_history is 32'b0.",
+    "If train_mispredicted is asserted, predict_history is train_taken concatenated with train_history[30:0].",
+    "If predict_valid is asserted, predict_history is shifted left with predict_taken inserted into LSB.",
+    "If none are asserted, predict_history maintains current value.",
+    "Circuit type: Sequential (posedge triggered with asynchronous reset)",
+    "predict_history updates on the positive edge of clk.",
+    "areset asynchronously resets predict_history to zero.",
+    "When predict_valid is asserted, predict_taken is shifted into predict_history.",
+    "When train_mispredicted is asserted, predict_history is loaded with train_history concatenated with train_taken.",
+    "If both predict_valid and train_mispredicted are asserted simultaneously, train_mispredicted takes precedence."
+  ]
+}

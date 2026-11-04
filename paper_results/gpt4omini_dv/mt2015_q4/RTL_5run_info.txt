@@ -1,0 +1,25 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp top_module.v tb.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:19: error: z_B1 is not a valid l-value in tb_top_module.DUT.
+top_module.v:7:      : z_B1 is declared here as wire.
+top_module.v:20: error: z_B2 is not a valid l-value in tb_top_module.DUT.
+top_module.v:7:      : z_B2 is declared here as wire.
+top_module.v:24: error: z_B1 is not a valid l-value in tb_top_module.DUT.
+top_module.v:7:      : z_B1 is declared here as wire.
+top_module.v:25: error: z_B2 is not a valid l-value in tb_top_module.DUT.
+top_module.v:7:      : z_B2 is declared here as wire.
+top_module.v:29: error: z_B1 is not a valid l-value in tb_top_module.DUT.
+top_module.v:7:      : z_B1 is declared here as wire.
+top_module.v:30: error: z_B2 is not a valid l-value in tb_top_module.DUT.
+top_module.v:7:      : z_B2 is declared here as wire.
+top_module.v:34: error: z_B1 is not a valid l-value in tb_top_module.DUT.
+top_module.v:7:      : z_B1 is declared here as wire.
+top_module.v:35: error: z_B2 is not a valid l-value in tb_top_module.DUT.
+top_module.v:7:      : z_B2 is declared here as wire.
+8 error(s) during elaboration.
+

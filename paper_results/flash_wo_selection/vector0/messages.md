@@ -1,0 +1,28 @@
+# Messages for Task: vector0
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Build a circuit that has one 3-bit input, then outputs the same vector, and also splits it into three separate 1-bit outputs. Connect output o0 to the input vector's position 0, o1 to position 1, etc.
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module header definition is:\n\n```verilog\nmodule top_module(\n    input [2:0] vec,\n    output [2:0] outv,\n    output o2,\n    output o1,\n    output o0\n);\n```\n\nThis module defines a combinational logic circuit with one 3-bit input `vec` and four outputs: a 3-bit output `outv` and three 1-bit outputs `o2`, `o1`, and `o0`. The input `vec` is a 3-bit vector, where `vec[2]` is the most significant bit (MSB) and `vec[0]` is the least significant bit (LSB). The output `outv` is a 3-bit vector that mirrors the input `vec`. The outputs `o2`, `o1`, and `o0` are individual bits extracted from the input vector `vec`, corresponding to `vec[2]`, `vec[1]`, and `vec[0]` respectively.",
+  "combinational_logic_function": "The combinational logic function is straightforward. The 3-bit output `outv` is directly assigned the value of the 3-bit input `vec`. The 1-bit output `o0` is assigned the value of the least significant bit of the input vector `vec[0]`. The 1-bit output `o1` is assigned the value of the middle bit of the input vector `vec[1]`. The 1-bit output `o2` is assigned the value of the most significant bit of the input vector `vec[2]`. There is no complex Boolean expression or truth table pattern involved. The logic organization is a simple direct assignment of input bits to output signals. Signal flow is optimized as it is a direct connection. There is no operator sharing or resource utilization strategy needed due to the simplicity of the logic. Logic level balancing and delay equalization techniques are not applicable. There is no output multiplexing or selection logic.",
+  "enhanced_combinational_description": "The combinational logic circuit takes a 3-bit input vector `vec[2:0]` and produces a 3-bit output vector `outv[2:0]` that is identical to the input vector. Additionally, it provides the individual bits of the input vector as separate 1-bit outputs `o2`, `o1`, and `o0`. The relationship between the inputs and outputs is defined as follows:\n\n*   `outv[2] = vec[2]`\n*   `outv[1] = vec[1]`\n*   `outv[0] = vec[0]`\n*   `o2 = vec[2]`\n*   `o1 = vec[1]`\n*   `o0 = vec[0]`\n\nThis is achieved through direct assignment. The entire input vector `vec` is assigned to the output vector `outv`. Then, each individual bit of the input vector `vec` is assigned to its corresponding 1-bit output. Specifically, `o0` receives the value of `vec[0]`, `o1` receives the value of `vec[1]`, and `o2` receives the value of `vec[2]`. This circuit effectively replicates the input vector and also provides access to its individual bits. The circuit is purely combinational, meaning the outputs respond instantaneously to changes in the inputs, without any memory or state-holding elements. The outputs are solely determined by the current values of the inputs."
+}
+```
+
+The header you have already known is:module top_module(
+	input [2:0] vec, 
+	output [2:0] outv,
+	output o2,
+	output o1,
+	output o0
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

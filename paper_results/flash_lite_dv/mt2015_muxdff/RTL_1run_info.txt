@@ -1,0 +1,20 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+tb.v:11: error: port ``q_in'' is not a port of DUT.
+tb.v:11: error: port ``r_in'' is not a port of DUT.
+tb.v:11: error: port ``Q'' is not a port of DUT.
+top_module.v:54: error: q_next is not a valid l-value in testbench.DUT.
+top_module.v:26:      : q_next is declared here as wire.
+top_module.v:56: error: q_next['sd0] is not a valid l-value in testbench.DUT.
+top_module.v:26:      : q_next['sd0] is declared here as wire.
+top_module.v:57: error: q_next['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:26:      : q_next['sd1] is declared here as wire.
+top_module.v:58: error: q_next['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:26:      : q_next['sd2] is declared here as wire.
+7 error(s) during elaboration.
+

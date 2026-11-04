@@ -1,0 +1,21 @@
+iverilog simulation passed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+tb.v:35: warning: extra digits given for sized hex constant.
+tb.v:35: warning: Numeric constant truncated to 512 bits.
+tb.v:74: warning: extra digits given for sized hex constant.
+tb.v:74: warning: Numeric constant truncated to 512 bits.
+top_module.v:14: warning: Static variable initialization requires explicit lifetime in this context.
+top_module.v:15: warning: Static variable initialization requires explicit lifetime in this context.
+top_module.v:16: warning: Static variable initialization requires explicit lifetime in this context.
+
+iverilog cmd 2:
+/usr/bin/vvp run.vvp
+iverilog cmd 2 output:
+
+iverilog cmd 2 error:
+

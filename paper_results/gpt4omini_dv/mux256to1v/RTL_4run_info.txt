@@ -1,0 +1,21 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp top_module.v tb.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:6: error: A reference to a wire or reg (`sel') is not allowed in a constant expression.
+top_module.v:6: error: Part select expressions must be constant.
+top_module.v:6:      : This lsb expression violates the rule: (sel)*('sd4)
+top_module.v:6: error: A reference to a wire or reg (`sel') is not allowed in a constant expression.
+top_module.v:6: error: Part select expressions must be constant.
+top_module.v:6:      : This msb expression violates the rule: ((sel)*('sd4))+('sd3)
+top_module.v:6: error: A reference to a wire or reg (`sel') is not allowed in a constant expression.
+top_module.v:6: error: Part select expressions must be constant.
+top_module.v:6:      : This lsb expression violates the rule: (sel)*('sd4)
+top_module.v:6: error: A reference to a wire or reg (`sel') is not allowed in a constant expression.
+top_module.v:6: error: Part select expressions must be constant.
+top_module.v:6:      : This msb expression violates the rule: ((sel)*('sd4))+('sd3)
+8 error(s) during elaboration.
+

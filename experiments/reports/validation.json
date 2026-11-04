@@ -1,0 +1,45 @@
+{
+  "validated_on": "2026-11-04",
+  "tests": {
+    "command": "python -m pytest -q --tb=short -p no:cacheprovider",
+    "passed": 62,
+    "warnings": 11,
+    "warnings_note": "Legacy LangGraph config_schema and serializer deprecations; no test failures"
+  },
+  "alignment": {
+    "main_counts": "18/20",
+    "fig6_exact": "10/12",
+    "fig6_compatible": "11/12",
+    "prompt_logs_roundtripped": 14816,
+    "exported_files_verified": 107809,
+    "changed_or_missing_artifacts": 0,
+    "unchanged_source_artifacts": 107798,
+    "english_translated_artifacts_with_source_hashes": 11
+  },
+  "live_model_calls": 0,
+  "test_network": "socket connects blocked",
+  "simulator": "Icarus Verilog version 11.0 (stable) ()",
+  "source_commit": "eee5547f9a556cfbf16339f15b8037e93541485c",
+  "validated_runtime_sha256": {
+    "src/deepspec/__init__.py": "afb8d6bb0efc31182624a8906f0e293c6aa1af7376de5787e34d178660e2b3a3",
+    "src/deepspec/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "src/deepspec/alignment.py": "0305e2a393f10546936434274963a0fd0ae1419a4a95030c4a388428eaccdc94",
+    "src/deepspec/cli.py": "faac2a1b064ecfea37631b8db79ddeb0cb74e55e33bd96fbf2ab0b4ae45f03a0",
+    "src/deepspec/config.py": "1229c0da2ba85e5afcf613e331ab8d219396d8f32d3c6553917b42849cc0ea24",
+    "src/deepspec/evaluation.py": "92f10ae3cb80d1f26372be10b4e975e7f1dad8622aba62c6d1b6930a4138daf9",
+    "src/deepspec/messages.py": "ce634cef7f123d9fb83844551b76305ab53c3f02ba04075325879342cacf90c5",
+    "src/deepspec/prompts.py": "eecf831250f355db847be5ddc062963f36ba8dbf0785cb29dfb5f34c038d2227",
+    "src/deepspec/providers.py": "66ad073c27725ffa6cca6777e5d9e0d513098da5e0dd584a80b72924c3597407",
+    "src/deepspec/runner.py": "0b12cc2a1fba3d6ca9b51a4cc85016280e79f5ae691f99e488eb4ee6230ee827",
+    "src/deepspec/schemas.py": "b8f311333d8c7565e492a55e6caec29497358c3878567571c5af11f72ed1c452",
+    "src/deepspec/vrank.py": "d029211f0b2603fc37e950e10f98765c56ee7a551ab2958185d563f010fe377b",
+    "src/deepspec/workflow.py": "f1befb0f242ef1f435fcfa3c366c06a41973a33b483cd51b3f1daa0f95d85ad4"
+  },
+  "english_publication": {
+    "worktree_scan": "passed",
+    "historical_source_transformations_reproduced": 11,
+    "executable_python_ast_matches": 8,
+    "pdf_extracted_text_and_metadata": "passed",
+    "history_policy": "fresh_english_only_root; checked before push"
+  }
+}

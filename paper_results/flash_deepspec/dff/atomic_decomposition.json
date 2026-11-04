@@ -1,0 +1,34 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units based on individual requirements, features, behaviors, and constraints. Each atomic unit is designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement. For the original research topic, the Verilog code was parsed to identify key functionalities and constraints. For the generated technical specification, each section (header, combinational logic function, enhanced combinational description, interface behavior, timing dependency, and timing logic) was analyzed to extract atomic units of information.",
+  "mindtraced_atomic_units": [
+    "Create a single D flip-flop module.",
+    "Module has input clk (clock).",
+    "Module has input d (data).",
+    "Module has output reg q (output).",
+    "Create a D flip-flop with an asynchronous reset.",
+    "Reset is active high.",
+    "Reset resets the output q to 0.",
+    "Module has input reset.",
+    "q is set to 0 when reset is asserted.",
+    "q is assigned the value of d at the rising edge of clk."
+  ],
+  "spec_atomic_units": [
+    "Module top_module has input clk.",
+    "Module top_module has input d.",
+    "Module top_module has output reg q.",
+    "q = d during active clock edge (combinational logic aspect).",
+    "The module implements a D flip-flop with an asynchronous reset.",
+    "It has three inputs: clk, d, and reset.",
+    "It has one output: q.",
+    "The q output is a register.",
+    "The output q changes value at the positive edge of the clk signal, if reset is not asserted.",
+    "When the reset input is asserted (positive edge), the output q is immediately set to 0, overriding the clock input.",
+    "The d input is sampled at the rising edge of clk and assigned to q.",
+    "The critical path for the reset functionality is from the rising edge of reset to the update of q.",
+    "The critical path for the D flip-flop functionality includes setup time of d before clk rising edge.",
+    "The critical path for the D flip-flop functionality includes propagation delay from clk rising edge to q becoming stable.",
+    "The always block is triggered by either the positive edge of clk or the positive edge of reset.",
+    "If reset is high, q is asynchronously set to 0.",
+    "q is updated with the value of d at the rising edge of clk."
+  ]
+}

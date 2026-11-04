@@ -1,0 +1,10 @@
+# Task: 2013_q2bfsm
+
+## Analyze Report
+
+Top_Analyze="Analyze the module top_module's header, ports (clk, resetn, x, y, f, g), and overall behavior. Focus on how each input affects the outputs f and g based on the FSM's state transitions as described in the problem. Highlight the synchronous reset (resetn), the clock (clk), the motor inputs (x, y) and the motor control outputs (f, g)." Topic_Analyze='Provide a structured analysis of the FSM\'s behavior by addressing the following key aspects: 1) The initial state and the effect of the reset signal. 2) The condition for setting f to 1. 3) The sequence of x values (1, 0, 1) that triggers g to be set to 1. 4) The monitoring of the y input while g is 1. 5) The conditions under which g remains 1 permanently or is set to 0 permanently. 6) The overall state transitions of the FSM. Research these aspects using targeted search queries, incorporating "finite state machine", "Verilog", "state transition diagram", "synchronous reset", "input sequence detection", and "output control". Include the date "September 12, 2025" in the search queries to ensure up-to-date information.' Solving_Strategies='Outline a step-by-step methodology for solving the FSM design problem: 1) Define the states of the FSM based on the problem description. 2) Create a state transition diagram showing the transitions between states based on the inputs x and y. 3) Determine the output values (f and g) for each state. 4) Derive the next-state logic equations for each state. 5) Derive the output logic equations for f and g. 6) Consider the synchronous reset (resetn) and its impact on the state transitions. 7) Optimize the state encoding for efficient implementation. Each step should directly relate to the problem description and the desired FSM behavior.'
+
+## Generated Queries
+
+['finite state machine Verilog synchronous reset September 12, 2025', 'FSM state transition diagram input sequence detection September 12, 2025', 'Verilog output control FSM motor control September 12, 2025']
+

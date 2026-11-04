@@ -1,0 +1,23 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units by identifying individual requirements, features, behaviors, and constraints. Each atomic unit is designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement. For the original research topic, the decomposition focused on the functional description of the D flip-flops and their interconnections. For the generated technical specification, the decomposition considered the header information, combinational logic function, enhanced combinational description, interface behavior, timing dependency, and timing logic.",
+  "mindtraced_atomic_units": [
+    "Create eight D flip-flops",
+    "D flip-flops are triggered by the positive edge of clk",
+    "Each D flip-flop has an asynchronous reset input 'areset' that is active high",
+    "When 'areset' is high, the output 'q' of all D flip-flops is reset to 0",
+    "The 8-bit input 'd' is connected to the D inputs of the flip-flops",
+    "Outputs are q[0], q[1] and so on"
+  ],
+  "spec_atomic_units": [
+    "Module top_module has clk, d, areset, and q",
+    "Implements eight D flip-flops",
+    "q changes on the positive edge of clk if areset is low",
+    "When areset is high, q is immediately reset to 0, overriding the clock",
+    "d represents the data that will be loaded into the flip-flops on the next rising edge of clk when areset is low",
+    "The critical path is from d to q through the flip-flops, triggered by the rising edge of clk, but only when areset is low",
+    "areset has priority and asynchronously resets q to 0 regardless of clk or d",
+    "The flip-flops are positive edge-triggered",
+    "q is updated with the value of d on the rising edge of clk, unless areset is asserted",
+    "The asynchronous reset overrides the clocked behavior"
+  ]
+}

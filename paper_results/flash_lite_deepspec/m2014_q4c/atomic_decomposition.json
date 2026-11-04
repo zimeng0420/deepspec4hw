@@ -1,0 +1,33 @@
+{
+  "methodology": "The decomposition process involves breaking down the research topic and the generated specification into atomic units. The criteria for each unit are: independence, technical specificity, unambiguity, and implementability as a single requirement. The approach involves identifying key functionalities, behaviors, and constraints. For the research topic, I will extract the core requirements directly from the prompt. For the generated specification, I will analyze the provided JSON structures and extract the essential design elements described in each section, including the header, combinational logic function, and timing logic summary. I will focus on the functional behavior, input/output relationships, and timing dependencies.",
+  "mindtraced_atomic_units": [
+    "Implement a D flip flop",
+    "Active high synchronous reset",
+    "Reset output to 0",
+    "Sample input 'd' on rising edge of clk",
+    "Output q",
+    "Input clk",
+    "Input d",
+    "Input r",
+    "When r is high, q is 0",
+    "When r is low, flip-flop captures d on clock edge"
+  ],
+  "spec_atomic_units": [
+    "Module has clk, d, r, and q",
+    "D flip-flop with synchronous reset",
+    "Reset signal r forces q to 0 on clock edge",
+    "q is either d (when not reset) or 0 (when reset)",
+    "Reset signal r has highest priority",
+    "q_next = (r == 1'b1) ? 1'b0 : d;",
+    "On rising edge of clk: If r is high, q becomes 0",
+    "On rising edge of clk: If r is low, q becomes equal to d",
+    "q depends on rising edge of clk, d, and r",
+    "r has to be stable before rising edge of clk",
+    "Setup and hold times of flip-flop must be met for d and r",
+    "q is updated on the positive edge of clk",
+    "If r is high, q is set to 0",
+    "Otherwise, q is assigned the value of d",
+    "Assignment to q is non-blocking (<=)",
+    "Reset is synchronous"
+  ]
+}

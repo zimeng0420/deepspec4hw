@@ -1,0 +1,22 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:4: error: Unable to bind parameter `n' in `testbench.DUT'
+top_module.v:4: error: Dimensions must be constant.
+top_module.v:4       : This MSB expression violates the rule: (n)-('sd1)
+top_module.v:9: error: Unable to bind parameter `n' in `testbench.DUT'
+top_module.v:9: error: Dimensions must be constant.
+top_module.v:9       : This MSB expression violates the rule: (n)-('sd1)
+top_module.v:15: error: Unable to bind parameter `n' in `testbench.DUT'
+top_module.v:15: error: Part select expressions must be constant.
+top_module.v:15:      : This msb expression violates the rule: (n)-('sd2)
+top_module.v:15: error: Unable to bind parameter `n' in `testbench.DUT'
+top_module.v:15: error: Part select expressions must be constant.
+top_module.v:15:      : This msb expression violates the rule: (n)-('sd2)
+top_module.v:21: error: Unable to bind wire/reg/memory `n' in `testbench.DUT'
+9 error(s) during elaboration.
+

@@ -1,0 +1,10 @@
+# Task: lemmings2
+
+## Analyze Report
+
+Top_Analyze="Analyze the provided Verilog module's header, inputs, and outputs. Specifically, identify the function of each input (clk, areset, bump_left, bump_right, ground) and output (walk_left, walk_right, aaah). Detail how these inputs and outputs interact to model the Lemmings' behavior, including state transitions based on bump and ground signals." Topic_Analyze="Provide a structured analysis of the Lemmings' finite state machine (FSM) implementation. This includes: 1. Defining the states of the FSM (e.g., walking left, walking right, falling). 2. Describing the state transition rules based on inputs (bump_left, bump_right, ground). 3. Detailing the output behavior (walk_left, walk_right, aaah) for each state and transition. 4. Explain how the areset signal initializes the FSM. 5. Research and incorporate the latest information (as of September 08, 2025) on Moore state machine design principles and best practices in Verilog." Solving_Strategies='Outline a step-by-step methodology for implementing the Moore state machine: 1. Define the state encoding (e.g., using an enumerated type or binary encoding). 2. Create a state transition table that maps current state and inputs to the next state. 3. Design the logic for the outputs (walk_left, walk_right, aaah) based on the current state. 4. Implement the state update logic using a clocked process and the areset signal. 5. Simulate the design to verify its behavior, including all possible input combinations (bump_left, bump_right, ground) and the areset signal. 6. Ensure the design adheres to Moore machine principles, where outputs depend only on the current state. 7. Document the design, including state diagrams and transition tables.'
+
+## Generated Queries
+
+['Moore state machine design for Lemmings behavior in Verilog', 'Verilog implementation of a Moore FSM with bump and ground inputs', 'State transition logic for walking left/right and falling in a Lemmings FSM', 'Asynchronous reset implementation in Verilog for FSMs', 'Latest Moore state machine design principles and best practices in Verilog (as of September 08, 2025)']
+

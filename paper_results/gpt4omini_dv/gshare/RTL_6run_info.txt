@@ -1,0 +1,15 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp top_module.v tb.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:34: error: index is not a valid l-value in testbench.DUT.
+top_module.v:19:      : index is declared here as wire.
+top_module.v:51: error: index is not a valid l-value in testbench.DUT.
+top_module.v:19:      : index is declared here as wire.
+top_module.v:52: error: counter is not a valid l-value in testbench.DUT.
+top_module.v:20:      : counter is declared here as wire.
+3 error(s) during elaboration.
+

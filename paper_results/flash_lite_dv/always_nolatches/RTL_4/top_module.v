@@ -1,0 +1,52 @@
+module top_module(
+    input [15:0] sc_input,
+    output left,
+    output down,
+    output right,
+    output up
+);
+
+    reg left_reg, down_reg, right_reg, up_reg;
+
+    always @(sc_input) begin
+        case (sc_input)
+            16'he06b: begin
+                left_reg = 1'b1;
+                down_reg = 1'b0;
+                right_reg = 1'b0;
+                up_reg = 1'b0;
+            end
+            16'he072: begin
+                left_reg = 1'b0;
+                down_reg = 1'b1;
+                right_reg = 1'b0;
+                up_reg = 1'b0;
+            end
+            16'he074: begin
+                left_reg = 1'b0;
+                down_reg = 1'b0;
+                right_reg = 1'b1;
+                up_reg = 1'b0;
+            end
+            16'he075: begin
+                left_reg = 1'b0;
+                down_reg = 1'b0;
+                right_reg = 1'b0;
+                up_reg = 1'b1;
+            end
+            default: begin
+                left_reg = 1'b0;
+                down_reg = 1'b0;
+                right_reg = 1'b0;
+                up_reg = 1'b0;
+            end
+        endcase
+    end
+    
+    always @(posedge sc_input) begin
+        left <= left_reg;
+        down <= down_reg;
+        right <= right_reg;
+        up <= up_reg;
+    end
+endmodule

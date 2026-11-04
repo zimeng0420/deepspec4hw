@@ -1,0 +1,94 @@
+# Task: circuit8
+
+## Prompt to Generate Queries
+
+Your goal is to generate sophisticated and diverse search queries. These queries are intended for an advanced automated web research tool capable of analyzing complex results, following links, and synthesizing information.
+
+Instructions:
+- Single Query First: By default, generate only one search query. Add additional queries only if the original question covers multiple distinct aspects that cannot be addressed by a single query.
+- One Focus per Query: Each query must concentrate on one specific aspect of the original question, avoiding mixed or overlapping topics in a single query.
+- Sufficiently Detailed: Queries should include enough technical detail to enable a deep understanding of the research topic and to support solving the task.
+- Relevant to Task and I/O: Each query must stay closely tied to the key technical terms in the task description and the input/output (I/O) port definitions in the context of the research topic.
+- Diversity: If the research topic is broad, generate multiple diverse queries, with each query addressing a different perspective or subtopic.
+- No Redundancy: Do not generate multiple queries that are semantically similar. One well-phrased query is sufficient for each topic.
+
+
+Format: 
+- Format your response as a JSON object with ALL three of these exact keys:
+   - "query": A list of search queries
+   - "rationale": Brief explanation of why these queries are relevant
+   
+
+Example:
+
+Topic: Determine the next-state logic expressions for outputs Y2 and Y4 in a one-hot encoded FSM. 
+
+module top_module (
+  input [6:1] y,
+  input w,
+  output Y2,
+  output Y4,
+    
+
+```json
+{
+    "query": ["What is one-hot encoding in finite state machines?", "How are next-state signals derived in a one-hot encoded FSM?", "What do the inputs y[6:1] and w represent in the FSM?"],
+
+    "rationale": "To answer this comparative growth question accurately, Understanding how one-hot encoding represents states and how inputs like y[6:1] and w influence transitions is essential for correctly deriving next-state logic in a finite state machine. These concepts form the foundation for interpreting and implementing FSM behavior in Verilog.",
+}    
+```
+
+Context: 
+- User: SEQ
+This is a sequential circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+// time            clock           a               p               q               
+// 0ns             0               0               x               x               
+// 5ns             0               0               x               x               
+// 10ns            0               0               x               x               
+// 15ns            0               0               x               x               
+// 20ns            0               0               x               x               
+// 25ns            1               0               0               x               
+// 30ns            1               0               0               x               
+// 35ns            1               0               0               x               
+// 40ns            1               0               0               x               
+// 45ns            1               0               0               x               
+// 50ns            1               0               0               x               
+// 55ns            0               0               0               0               
+// 60ns            0               0               0               0               
+// 65ns            0               0               0               0               
+// 70ns            0               1               0               0               
+// 75ns            0               0               0               0               
+// 80ns            0               1               0               0               
+// 85ns            1               0               0               0               
+// 90ns            1               1               1               0               
+// 95ns            1               0               0               0               
+// 100ns           1               1               1               0               
+// 105ns           1               0               0               0               
+// 110ns           1               1               1               0               
+// 115ns           0               0               1               1               
+// 120ns           0               1               1               1               
+// 125ns           0               0               1               1               
+// 130ns           0               1               1               1               
+// 135ns           0               0               1               1               
+// 140ns           0               0               1               1               
+// 145ns           1               0               0               1               
+// 150ns           1               0               0               1               
+// 155ns           1               0               0               1               
+// 160ns           1               0               0               1               
+// 165ns           1               1               1               1               
+// 170ns           1               0               0               1               
+// 175ns           0               1               0               0               
+// 180ns           0               0               0               0               
+// 185ns           0               1               0               0               
+// 190ns           0               0               0               0       
+module top_module (
+	input clock,
+	input a, 
+	output reg p,
+	output reg q
+);
+
+
+- Analyze Report: Top_Analyze="Analyze the task's header, ports, and overall behavior, focusing on how the input 'a' and 'clock' signals influence the output signals 'p' and 'q' in the sequential circuit. Pay close attention to the initial 'x' states and how they resolve, as well as the transitions of 'p' and 'q' based on 'a' and 'clock'." Topic_Analyze="Provide a structured analysis of the sequential circuit's behavior by addressing the following questions: 1) What type of sequential circuit is suggested by the waveform (e.g., flip-flop, counter, shift register)? 2) What is the relationship between the input 'a', the 'clock' signal, and the outputs 'p' and 'q'? 3) Derive a state transition table or diagram based on the observed behavior. 4) What are the possible logic equations for 'p' and 'q' based on the state transitions? 5) How do the initial 'x' states affect the circuit's operation, and when do 'p' and 'q' become stable? Consider the current date, September 12, 2025, when searching for the latest information on sequential circuit analysis techniques." Solving_Strategies="Outline the overall reasoning strategies and methodology: 1) Observe the waveform and identify patterns in the transitions of 'p' and 'q' relative to 'a' and 'clock'. 2) Hypothesize the type of sequential circuit based on the observed behavior. 3) Create a state transition table or diagram to formally represent the circuit's operation. 4) Derive logic equations for 'p' and 'q' based on the state transition table. 5) Verify the derived logic equations against the waveform data. 6) Implement the circuit in Verilog based on the derived logic equations. 7) Simulate the Verilog implementation and compare the results with the original waveform. 8) Refine the hypothesis and repeat steps 3-7 if necessary."
+

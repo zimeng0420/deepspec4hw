@@ -1,0 +1,17 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:41: error: Unknown module type: A
+top_module.v:47: error: Unknown module type: A
+top_module.v:53: error: Unknown module type: B
+top_module.v:59: error: Unknown module type: B
+5 error(s) during elaboration.
+*** These modules were missing:
+        A referenced 2 times.
+        B referenced 2 times.
+***
+

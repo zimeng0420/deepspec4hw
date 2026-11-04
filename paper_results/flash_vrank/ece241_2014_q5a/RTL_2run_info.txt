@@ -1,0 +1,11 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:9: error: port z already has a port declaration.
+top_module.v:5: error: Port ``z'' has already been declared a port.
+top_module.v:9: error: Incomplete port declarations cannot be initialized.
+

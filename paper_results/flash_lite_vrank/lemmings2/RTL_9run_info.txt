@@ -1,0 +1,34 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:50: error: walk_left is not a valid l-value in testbench.DUT.
+top_module.v:7:      : walk_left is declared here as wire.
+top_module.v:51: error: walk_right is not a valid l-value in testbench.DUT.
+top_module.v:8:      : walk_right is declared here as wire.
+top_module.v:52: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:9:      : aaah is declared here as wire.
+top_module.v:55: error: walk_left is not a valid l-value in testbench.DUT.
+top_module.v:7:      : walk_left is declared here as wire.
+top_module.v:56: error: walk_right is not a valid l-value in testbench.DUT.
+top_module.v:8:      : walk_right is declared here as wire.
+top_module.v:57: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:9:      : aaah is declared here as wire.
+top_module.v:60: error: walk_left is not a valid l-value in testbench.DUT.
+top_module.v:7:      : walk_left is declared here as wire.
+top_module.v:61: error: walk_right is not a valid l-value in testbench.DUT.
+top_module.v:8:      : walk_right is declared here as wire.
+top_module.v:62: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:9:      : aaah is declared here as wire.
+top_module.v:65: error: walk_left is not a valid l-value in testbench.DUT.
+top_module.v:7:      : walk_left is declared here as wire.
+top_module.v:66: error: walk_right is not a valid l-value in testbench.DUT.
+top_module.v:8:      : walk_right is declared here as wire.
+top_module.v:67: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:9:      : aaah is declared here as wire.
+tb.v:20: warning: output port walk_left is coerced to inout.
+12 error(s) during elaboration.
+

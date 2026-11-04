@@ -1,0 +1,56 @@
+{
+  "run_id": "gpt4o_vrank",
+  "method": "vrank",
+  "models": {
+    "selection": {
+      "provider": "openai",
+      "model": "gpt-4o-2024-08-06",
+      "temperature": 0.1
+    },
+    "query": {
+      "provider": "openai",
+      "model": "gpt-4o-2024-08-06",
+      "temperature": 0.3
+    },
+    "finalize": {
+      "provider": "openai",
+      "model": "gpt-4o-2024-08-06",
+      "temperature": 0.0,
+      "max_tokens": 10000
+    },
+    "reflection": {
+      "provider": "openai",
+      "model": "gpt-4o-2024-08-06",
+      "temperature": 0.1
+    },
+    "codegen": {
+      "provider": "openai",
+      "model": "gpt-4o-2024-08-06",
+      "temperature": 1.0
+    },
+    "specgen": {
+      "provider": "openai",
+      "model": "gpt-4o-2024-08-06",
+      "temperature": null
+    },
+    "search": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "temperature": 0.0
+    },
+    "embedding": {
+      "provider": "google",
+      "model": "gemini-embedding-001"
+    }
+  },
+  "policy": {
+    "cluster_selection": "first"
+  },
+  "prompt_profile": "gpt4o_vrank",
+  "spec_source_run": null,
+  "provenance": {
+    "model_ids": "paper_declared_not_verified_from_historical_api_metadata",
+    "codegen_prompt": "logged_content_api_roles_inferred_from_source",
+    "ablation": null
+  }
+}

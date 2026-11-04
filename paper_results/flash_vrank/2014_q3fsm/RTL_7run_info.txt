@@ -1,0 +1,11 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:45: error: Parameter name C0 can't have member names (member_path=w).
+ivl: net_scope.cc:442: NetScope::param_ref_t NetScope::find_parameter(perm_string): Assertion `0' failed.
+Aborted (core dumped)
+

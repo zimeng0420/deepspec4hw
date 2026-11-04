@@ -1,0 +1,23 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:46: error: pht_write_data is not a valid l-value in testbench.DUT.
+top_module.v:29:      : pht_write_data is declared here as wire.
+top_module.v:47: error: pht_write_data is not a valid l-value in testbench.DUT.
+top_module.v:29:      : pht_write_data is declared here as wire.
+top_module.v:48: error: pht_write_data is not a valid l-value in testbench.DUT.
+top_module.v:29:      : pht_write_data is declared here as wire.
+top_module.v:49: error: pht_write_data is not a valid l-value in testbench.DUT.
+top_module.v:29:      : pht_write_data is declared here as wire.
+top_module.v:50: error: pht_write_data is not a valid l-value in testbench.DUT.
+top_module.v:29:      : pht_write_data is declared here as wire.
+top_module.v:54: error: pht_write_data is not a valid l-value in testbench.DUT.
+top_module.v:29:      : pht_write_data is declared here as wire.
+top_module.v:69: error: ghr_next_value is not a valid l-value in testbench.DUT.
+top_module.v:32:      : ghr_next_value is declared here as wire.
+7 error(s) during elaboration.
+

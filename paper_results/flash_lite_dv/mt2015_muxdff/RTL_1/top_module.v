@@ -1,0 +1,62 @@
+module ff_mux (
+    input clk,
+    input L,
+    input r_in,
+    input q_in,
+    output reg Q
+);
+
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= r_in;
+        end else begin
+            Q <= q_in;
+        end
+    end
+
+endmodule
+
+module top_module (
+    input [2:0] r,
+    input L,
+    input clk,
+    output reg [2:0] q
+);
+
+    wire [2:0] q_next;
+
+    ff_mux ff_mux_0 (
+        .clk(clk),
+        .L(L),
+        .r_in(r[0]),
+        .q_in(q_next[0]),
+        .Q(q[0])
+    );
+
+    ff_mux ff_mux_1 (
+        .clk(clk),
+        .L(L),
+        .r_in(r[1]),
+        .q_in(q_next[1]),
+        .Q(q[1])
+    );
+
+    ff_mux ff_mux_2 (
+        .clk(clk),
+        .L(L),
+        .r_in(r[2]),
+        .q_in(q_next[2]),
+        .Q(q[2])
+    );
+
+    always @(*) begin
+        if (L) begin
+            q_next = q;
+        end else begin
+            q_next[0] = q[1] ^ q[2];
+            q_next[1] = q[0];
+            q_next[2] = q[2];
+        end
+    end
+
+endmodule

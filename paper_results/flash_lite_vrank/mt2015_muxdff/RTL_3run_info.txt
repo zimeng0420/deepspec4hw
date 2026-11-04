@@ -1,0 +1,15 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:38: error: Unknown module type: flipflop_mux
+top_module.v:46: error: Unknown module type: flipflop_mux
+top_module.v:54: error: Unknown module type: flipflop_mux
+4 error(s) during elaboration.
+*** These modules were missing:
+        flipflop_mux referenced 3 times.
+***
+

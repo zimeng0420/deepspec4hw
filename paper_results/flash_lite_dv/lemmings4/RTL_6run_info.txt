@@ -1,0 +1,17 @@
+iverilog simulation passed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:25: warning: @* found no sensitivities so it will never trigger.
+tb.v:16: warning: Port 11 (aaah) of top_module expects 8 bits, got 1.
+tb.v:16:        : Padding 7 high bits of the port.
+
+iverilog cmd 2:
+/usr/bin/vvp run.vvp
+iverilog cmd 2 output:
+
+iverilog cmd 2 error:
+

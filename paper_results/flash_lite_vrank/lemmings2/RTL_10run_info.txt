@@ -1,0 +1,22 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:30: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:9:      : aaah is declared here as wire.
+top_module.v:37: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:9:      : aaah is declared here as wire.
+top_module.v:44: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:9:      : aaah is declared here as wire.
+top_module.v:49: error: aaah is not a valid l-value in testbench.DUT.
+top_module.v:9:      : aaah is declared here as wire.
+top_module.v:57: error: walk_left is not a valid l-value in testbench.DUT.
+top_module.v:7:      : walk_left is declared here as wire.
+top_module.v:58: error: walk_right is not a valid l-value in testbench.DUT.
+top_module.v:8:      : walk_right is declared here as wire.
+top_module.v:56: warning: @* found no sensitivities so it will never trigger.
+6 error(s) during elaboration.
+

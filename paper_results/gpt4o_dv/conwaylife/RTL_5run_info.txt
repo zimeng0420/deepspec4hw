@@ -1,0 +1,19 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:32: error: Concatenation operand "(xm1)+((ym1)*('sd16))" has indefinite width.
+top_module.v:33: error: Concatenation operand "(x)+((ym1)*('sd16))" has indefinite width.
+top_module.v:34: error: Concatenation operand "(xp1)+((ym1)*('sd16))" has indefinite width.
+top_module.v:35: error: Concatenation operand "(xm1)+((y)*('sd16))" has indefinite width.
+top_module.v:36: error: Concatenation operand "(xp1)+((y)*('sd16))" has indefinite width.
+top_module.v:37: error: Concatenation operand "(xm1)+((yp1)*('sd16))" has indefinite width.
+top_module.v:38: error: Concatenation operand "(x)+((yp1)*('sd16))" has indefinite width.
+top_module.v:39: error: Concatenation operand "(xp1)+((yp1)*('sd16))" has indefinite width.
+top_module.v:47: error: neighbors is not a valid l-value in testbench.DUT.
+top_module.v:8:      : neighbors is declared here as wire.
+9 error(s) during elaboration.
+

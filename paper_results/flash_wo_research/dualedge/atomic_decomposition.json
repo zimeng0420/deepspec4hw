@@ -1,0 +1,26 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic information units based on individual requirements, features, behaviors, and constraints. Each unit was designed to be independent, self-contained, technically specific, and implementable as a single requirement. This involved identifying key statements and breaking them down into their most granular components. For the research topic, the focus was on the functional requirements and constraints. For the technical specification, the focus was on the described logic, data flow, and timing considerations.",
+  "mindtraced_atomic_units": [
+    "Implement a dual-edge triggered D-type flip-flop using standard FPGA resources.",
+    "Output 'q' should update on both rising and falling edges of the clock 'clk'.",
+    "Output 'q' should update based on the input 'd' at the rising edge of 'clk'.",
+    "Output 'q' should update based on the input 'd' at the falling edge of 'clk'."
+  ],
+  "spec_atomic_units": [
+    "The circuit emulates a dual-edge triggered flip-flop.",
+    "The output `q` should update to the value of input `d` on both the rising and falling edges of the clock `clk`.",
+    "Value of `d` must be stable for a short setup and hold time window around both the rising and falling edges of `clk`.",
+    "Detect both rising and falling edges of the clock signal.",
+    "Capture the value of the input 'd' at both rising and falling edges.",
+    "Update the output 'q' based on the captured values of 'd' at both edges.",
+    "Use combinational logic to detect clock edges.",
+    "Use D flip-flops to store the previous clock value and the output value.",
+    "Minimize the delay through edge detection and data capture paths.",
+    "Mitigate glitches in edge detection logic.",
+    "Share resources in combinational logic where possible.",
+    "The module `top_module` has one clock input `clk`, one data input `d`, and one output `q`.",
+    "Implement a dual-edge triggered D flip-flop using standard FPGA resources.",
+    "The output `q` should update to the value of input `d` on both the rising and falling edges of the clock `clk`.",
+    "The value of `d` must be stable for a short setup and hold time window around both the rising and falling edges of `clk`."
+  ]
+}

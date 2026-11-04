@@ -1,0 +1,10 @@
+# Task: fsm_ps2data
+
+## Analyze Report
+
+Top_Analyze="Analyze the task's header, ports, and overall behavior, focusing on how the input 'in', clock 'clk', reset 'reset', output 'out_bytes', and 'done' signal interact to implement the message boundary search algorithm. Pay close attention to the timing requirements for asserting 'done' and the conditions under which 'out_bytes' is valid." Topic_Analyze="Provide a structured analysis of the FSM design, covering the following aspects: 1) FSM state transition logic for detecting the start of a message (in[3]=1) and collecting the subsequent 3 bytes; 2) Datapath implementation for storing and outputting the 24-bit message; 3) Reset logic and its impact on the FSM state and output; 4) Timing considerations for asserting the 'done' signal; 5) Handling edge cases and potential error conditions. Research and synthesize relevant information to address each of these aspects comprehensively." Solving_Strategies="Outline the overall reasoning strategies and detailed step-by-step methodology: 1) Decompose the problem into FSM state design, datapath design, and control logic; 2) Define the FSM states (e.g., 'search', 'byte1_received', 'byte2_received', 'byte3_received'); 3) Create a state transition diagram based on the input 'in' and the message boundary condition (in[3]=1); 4) Design the datapath to store the incoming bytes and output the 24-bit message; 5) Implement the control logic to manage the FSM state transitions and assert the 'done' signal; 6) Verify the design against the provided waveform example, paying attention to the timing of 'done' and the validity of 'out_bytes'; 7) Consider the reset condition and its effect on the FSM state and output. The current date is September 05, 2025."
+
+## Generated Queries
+
+['FSM design for message boundary detection in byte streams', 'Datapath implementation for serial data reception and storage', "Timing considerations for 'done' signal assertion in synchronous FSMs", 'One-hot FSM state encoding vs binary encoding', 'Verilog implementation of finite state machines with reset logic']
+

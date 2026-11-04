@@ -1,0 +1,227 @@
+============================================================
+SUMMARY RESULTS
+============================================================
+Skipping task log.txt: No final_golden_sim/test_result.txt found
+Skipping task mux256to1v: No final_golden_sim/test_result.txt found
+Skipping task analysis_results_20250907_164009.txt: No final_golden_sim/test_result.txt found
+Total tasks: 155
+Syntax pass: 150/155 (0.968 if total_tasks > 0 else 0)
+Functional pass: 98/155 (0.632 if total_tasks > 0 else 0)
+Passed tasks count: 98, Passed tasks: ['wire', 'andgate', 'm2014_q4f', 'gatesv', 'shift18', 'bugs_case', 'gates100', 'vector2', 'vectorgates', 'zero', 'mux256to1', 'm2014_q4e', 'ece241_2013_q7', 'always_nolatches', 'alwaysblock2', 'mt2015_q4b', 'bugs_addsubz', 'circuit2', 'dff8ar', 'vector3', 'norgate', 'step_one', 'm2014_q4a', 'vectorr', 'rotate100', '2012_q2b', 'mux2to1', 'mux2to1v', 'always_casez', 'dff8r', 'm2014_q4k', 'alwaysblock1', 'wire4', 'reduction', 'm2014_q6c', '2014_q4a', 'dff16e', 'thermostat', 'circuit1', 'm2014_q4c', 'circuit6', 'counter_2bc', 'conwaylife', 'popcount255', 'm2014_q4h', 'vector4', 'fsm3comb', 'notgate', 'count15', 'ringer', 'gates4', 'fsm3s', 'conditional', 'mux9to1v', 'always_if2', 'circuit7', 'gates', '7458', 'ece241_2014_q5b', 'vector5', 'always_if', 'hadd', 'count10', 'ece241_2013_q12', 'm2014_q4b', 'review2015_count1k', 'fadd', 'mt2015_q4a', 'fsm1', 'dff', 'edgedetect', '2012_q2fsm', 'ece241_2014_q5a', 'mt2015_eq2', 'wire_decl', 'fsm2', 'mt2015_q4', 'history_shift', '7420', 'xnorgate', 'fsm_onehot', 'shift4', 'popcount3', 'truthtable1', 'vector0', 'count1to10', 'ece241_2014_q1c', 'fsm1s', 'vector100r', 'circuit5', 'm2014_q4j', 'countslow', 'm2014_q4i', 'm2014_q4g', 'always_case', 'rule90', 'fsm2s', 'vector1']
+============================================================
+
+CMB Total tasks: 81
+CMB Syntax pass: 80/81 (0.988 if cmb_total > 0 else 0)
+CMB Functional pass: 64/81 (0.790 if cmb_total > 0 else 0)
+CMB Passed tasks count: 64, CMB Passed tasks: ['wire', 'andgate', 'm2014_q4f', 'gatesv', 'bugs_case', 'gates100', 'vector2', 'vectorgates', 'zero', 'mux256to1', 'm2014_q4e', 'always_nolatches', 'mt2015_q4b', 'bugs_addsubz', 'circuit2', 'vector3', 'norgate', 'step_one', 'vectorr', '2012_q2b', 'mux2to1', 'mux2to1v', 'always_casez', 'alwaysblock1', 'wire4', 'reduction', 'm2014_q6c', 'thermostat', 'circuit1', 'circuit6', 'popcount255', 'm2014_q4h', 'vector4', 'fsm3comb', 'notgate', 'ringer', 'gates4', 'conditional', 'mux9to1v', 'always_if2', 'gates', '7458', 'vector5', 'always_if', 'hadd', 'fadd', 'mt2015_q4a', 'mt2015_eq2', 'wire_decl', 'mt2015_q4', '7420', 'xnorgate', 'fsm_onehot', 'popcount3', 'truthtable1', 'vector0', 'ece241_2014_q1c', 'vector100r', 'circuit5', 'm2014_q4j', 'm2014_q4i', 'm2014_q4g', 'always_case', 'vector1']
+============================================================
+
+SEQ Total tasks: 75
+SEQ Syntax pass: 70/75 (0.933 if seq_total > 0 else 0)
+SEQ Functional pass: 34/75 (0.453 if seq_total > 0 else 0)
+SEQ Passed tasks count: 34, SEQ Passed tasks: ['shift18', 'ece241_2013_q7', 'alwaysblock2', 'dff8ar', 'm2014_q4a', 'rotate100', 'dff8r', 'm2014_q4k', '2014_q4a', 'dff16e', 'm2014_q4c', 'counter_2bc', 'conwaylife', 'count15', 'fsm3s', 'circuit7', 'ece241_2014_q5b', 'count10', 'ece241_2013_q12', 'm2014_q4b', 'review2015_count1k', 'fsm1', 'dff', 'edgedetect', '2012_q2fsm', 'ece241_2014_q5a', 'fsm2', 'history_shift', 'shift4', 'count1to10', 'fsm1s', 'countslow', 'rule90', 'fsm2s']
+============================================================
+
+SPEC_FILE = "/home/zimeng/Documents/final/DeepSpec/2.0flash2_total__spec.jsonl"
+TESTBENCH_FILE = "/home/zimeng/Documents/final/DeepSpec/data/all_testbench.jsonl"
+GOLDEN_FILE = "/home/zimeng/Documents/final/DeepSpec/data/total_merged_data.jsonl"
+
+
+ system_msg = (
+            "You are the strongest AI in the world. "
+            "You already have the knowledge of Verilog and hardware designing. "
+            "Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you."
+               )
+            system_content = system_msg +"\n\n" + description + "\n\n" + "The header you have already known is:" + header + "\n\n" + "Please only reply with the Verilog code after syntax check, no other words.\n" + "Please always begin with `module top_module()`."
+            # system_content = system_msg +"\n\n" + description + "\n\n"+ "The specification is as follows:" + "\n" + spec + "\n\n+ "Please only reply with the Verilog code after syntax check, no other words.\n" + "Please always begin with `module top_module()`."" 
+            write_log_file(task_dir, "messages.md", 
+                       f"# Messages for Task: {task_id}\n\n## System Message\n\n```\n{system_content}\n```\n\n")
+           
+            """
+            md_path = os.path.join(task_dir, "messages.md")
+            with open(md_path, "w", encoding="utf-8") as f:
+                f.write(f"# Task {task_id} - Run {i}\n\n")
+                f.write("## System Message\n```\n" + system_content + "\n```\n\n")
+                f.write("## User Message\n```\n" + user_content + "\n```\n\n")
+            """
+            
+            try:
+                with Timer() as t:
+                    client = ChatGoogleGenerativeAI(
+                            model="gemini-2.0-flash",
+                            api_key=os.getenv("GEMINI_API_KEY"),
+                            temperature=0.5,
+                            max_output_tokens=8192,
+                        )
+                    messages = [
+                        HumanMessage(content=system_content)
+                    ]
+                       
+       
+                    resp = client.invoke(messages)
+                    code = resp.content
+                    code = re.sub(r'^```verilog\n', '', code)
+                    code = re.sub(r'\n```$', '', code)
+                    code = re.sub(r'```verilog|```', '', code)
+
+                   
+
+
+Task            Baseline   Cluster         Final          Selected   ClusterSize 
+----------------------------------------------------------------------
+2012_q1g        1.000      0.976      PASS     FAIL        FAIL     7          10          
+2012_q2b        1.000      0.980      PASS     PASS        PASS     7          7           
+2012_q2fsm      1.000      0.959      PASS     PASS        PASS     10         10          
+2013_q2afsm     0.000      0.957      FAIL     FAIL        FAIL     None       0           
+2013_q2bfsm     1.000      0.935      PASS     FAIL        FAIL     6          4           
+2014_q3bfsm     1.000      0.968      PASS     FAIL        FAIL     7          10          
+2014_q3c        1.000      0.972      PASS     FAIL        FAIL     7          10          
+2014_q3fsm      1.000      0.973      PASS     FAIL        FAIL     4          10          
+2014_q4a        0.000      0.917      FAIL     FAIL        FAIL     None       0           
+7420            1.000      0.971      PASS     PASS        PASS     1          10          
+7458            1.000      0.984      PASS     PASS        PASS     7          10          
+always_case     1.000      0.974      PASS     PASS        PASS     1          10          
+always_case2    0.000      0.976      FAIL     FAIL        FAIL     None       0           
+always_casez    1.000      0.981      PASS     PASS        PASS     7          10          
+always_if       1.000      0.977      PASS     PASS        PASS     1          10          
+always_if2      1.000      0.983      PASS     PASS        PASS     4          10          
+always_nolatches 1.000      0.978      PASS     PASS        PASS     6          10          
+alwaysblock1    1.000      0.981      PASS     PASS        PASS     8          10          
+alwaysblock2    1.000      1.000      PASS     PASS        PASS     8          10          
+andgate         1.000      0.974      PASS     PASS        PASS     6          10          
+bugs_addsubz    1.000      0.979      PASS     PASS        PASS     5          10          
+bugs_case       1.000      0.975      PASS     PASS        PASS     1          10          
+bugs_mux2       1.000      0.973      PASS     FAIL        FAIL     7          10          
+circuit1        1.000      0.982      PASS     PASS        PASS     4          10          
+circuit10       1.000      0.955      PASS     FAIL        FAIL     1          3           
+circuit2        1.000      0.979      PASS     FAIL        FAIL     2          3           
+circuit3        1.000      0.972      PASS     FAIL        FAIL     1          9           
+circuit4        1.000      0.978      PASS     FAIL        FAIL     6          10          
+circuit5        1.000      0.974      PASS     PASS        PASS     3          10          
+circuit6        1.000      0.982      PASS     PASS        PASS     4          10          
+circuit7        1.000      0.943      PASS     PASS        PASS     4          10          
+circuit8        1.000      1.000      PASS     FAIL        FAIL     3          10          
+circuit9        1.000      1.000      PASS     FAIL        FAIL     8          7           
+conditional     1.000      0.983      PASS     PASS        PASS     2          10          
+conwaylife      1.000      0.933      PASS     PASS        PASS     7          3           
+count10         1.000      0.950      PASS     PASS        PASS     2          10          
+count15         1.000      0.938      PASS     PASS        PASS     8          10          
+count1to10      1.000      0.967      PASS     PASS        PASS     2          10          
+count_clock     1.000      0.941      PASS     FAIL        FAIL     3          3           
+countbcd        1.000      0.966      PASS     FAIL        FAIL     7          4           
+counter_2bc     1.000      0.931      PASS     PASS        PASS     5          10          
+countslow       1.000      0.970      PASS     PASS        PASS     5          10          
+dff             1.000      0.957      PASS     PASS        PASS     5          10          
+dff16e          1.000      0.920      PASS     PASS        PASS     6          10          
+dff8            1.000      0.969      PASS     FAIL        FAIL     10         10          
+dff8ar          1.000      1.000      PASS     PASS        PASS     2          10          
+dff8p           1.000      0.969      PASS     FAIL        FAIL     10         4           
+dff8r           1.000      1.000      PASS     PASS        PASS     4          10          
+dualedge        1.000      1.000      PASS     FAIL        FAIL     10         10          
+ece241_2013_q12 1.000      0.951      PASS     PASS        PASS     2          10          
+ece241_2013_q2  1.000      0.973      PASS     FAIL        FAIL     10         2           
+ece241_2013_q4  1.000      0.963      PASS     FAIL        FAIL     10         9           
+ece241_2013_q7  1.000      1.000      PASS     PASS        PASS     4          10          
+ece241_2013_q8  1.000      0.929      PASS     FAIL        FAIL     2          10          
+ece241_2014_q1c 1.000      0.973      PASS     PASS        PASS     8          9           
+ece241_2014_q3  1.000      0.984      PASS     FAIL        FAIL     9          2           
+ece241_2014_q4  1.000      1.000      PASS     FAIL        FAIL     6          10          
+ece241_2014_q5a 1.000      0.960      PASS     PASS        PASS     5          10          
+ece241_2014_q5b 1.000      0.973      PASS     PASS        PASS     10         5           
+edgecapture     1.000      1.000      PASS     FAIL        FAIL     1          10          
+edgedetect      1.000      0.958      PASS     PASS        PASS     1          10          
+edgedetect2     1.000      0.970      PASS     FAIL        FAIL     1          10          
+fadd            1.000      0.977      PASS     PASS        PASS     9          10          
+fsm1            1.000      0.956      PASS     PASS        PASS     5          8           
+fsm1s           1.000      0.968      PASS     PASS        PASS     2          10          
+fsm2            1.000      0.962      PASS     PASS        PASS     4          7           
+fsm2s           1.000      0.971      PASS     PASS        PASS     4          7           
+fsm3            1.000      0.964      PASS     PASS        PASS     3          9           
+fsm3comb        1.000      0.983      PASS     PASS        PASS     8          10          
+fsm3onehot      1.000      0.977      PASS     FAIL        FAIL     5          10          
+fsm3s           1.000      0.939      PASS     PASS        PASS     4          8           
+fsm_hdlc        1.000      1.000      PASS     FAIL        FAIL     5          4           
+fsm_onehot      1.000      0.972      PASS     PASS        PASS     2          8           
+fsm_ps2         1.000      1.000      PASS     FAIL        FAIL     3          10          
+fsm_ps2data     1.000      0.966      PASS     FAIL        FAIL     8          10          
+fsm_serial      1.000      1.000      PASS     FAIL        FAIL     5          9           
+fsm_serialdata  1.000      0.971      PASS     FAIL        FAIL     7          7           
+gates           1.000      0.984      PASS     PASS        PASS     10         10          
+gates100        1.000      0.976      PASS     PASS        PASS     7          9           
+gates4          1.000      0.983      PASS     PASS        PASS     9          10          
+gatesv          1.000      0.975      PASS     PASS        PASS     6          5           
+gatesv100       1.000      0.978      PASS     FAIL        FAIL     4          10          
+gshare          1.000      0.961      PASS     FAIL        FAIL     4          1           
+hadd            1.000      0.977      PASS     PASS        PASS     7          10          
+history_shift   1.000      0.962      PASS     PASS        PASS     3          10          
+kmap1           1.000      0.972      PASS     FAIL        FAIL     6          7           
+kmap2           1.000      0.984      PASS     FAIL        FAIL     1          1           
+kmap3           1.000      0.979      PASS     FAIL        FAIL     2          10          
+kmap4           1.000      0.971      PASS     PASS        PASS     8          10          
+lemmings1       1.000      0.967      PASS     FAIL        FAIL     7          8           
+lemmings2       1.000      0.946      PASS     FAIL        FAIL     8          3           
+lemmings3       1.000      0.949      PASS     PASS        PASS     5          7           
+lemmings4       1.000      0.972      PASS     FAIL        FAIL     10         3           
+lfsr32          1.000      1.000      PASS     FAIL        FAIL     2          7           
+lfsr5           1.000      0.957      PASS     FAIL        FAIL     10         10          
+m2014_q3        1.000      0.975      PASS     FAIL        FAIL     7          10          
+m2014_q4a       1.000      1.000      PASS     PASS        PASS     2          10          
+m2014_q4b       1.000      0.952      PASS     PASS        PASS     8          10          
+m2014_q4c       1.000      0.923      PASS     PASS        PASS     5          10          
+m2014_q4d       1.000      0.947      PASS     FAIL        FAIL     7          10          
+m2014_q4e       1.000      0.977      PASS     PASS        PASS     1          10          
+m2014_q4f       1.000      0.974      PASS     PASS        PASS     7          10          
+m2014_q4g       1.000      0.974      PASS     PASS        PASS     2          10          
+m2014_q4h       1.000      0.982      PASS     PASS        PASS     7          10          
+m2014_q4i       1.000      0.974      PASS     PASS        PASS     8          10          
+m2014_q4j       1.000      0.974      PASS     PASS        PASS     3          10          
+m2014_q4k       1.000      1.000      PASS     PASS        PASS     4          7           
+m2014_q6        1.000      1.000      PASS     FAIL        FAIL     5          7           
+m2014_q6b       1.000      0.971      PASS     FAIL        FAIL     9          10          
+m2014_q6c       1.000      0.981      PASS     PASS        PASS     3          10          
+mt2015_eq2      1.000      0.970      PASS     PASS        PASS     4          10          
+mt2015_muxdff   1.000      0.973      PASS     FAIL        FAIL     7          10          
+mt2015_q4       1.000      0.971      PASS     PASS        PASS     2          4           
+mt2015_q4a      1.000      0.970      PASS     PASS        PASS     7          10          
+mt2015_q4b      1.000      0.978      PASS     FAIL        FAIL     3          4           
+mux256to1       1.000      0.977      PASS     PASS        PASS     8          10          
+mux256to1v      0.000      0.970      FAIL     FAIL        FAIL     None       0           
+mux2to1         1.000      0.980      PASS     PASS        PASS     3          10          
+mux2to1v        1.000      0.981      PASS     PASS        PASS     7          10          
+mux9to1v        1.000      0.983      PASS     PASS        PASS     10         10          
+norgate         1.000      0.980      PASS     PASS        PASS     9          10          
+notgate         1.000      0.983      PASS     PASS        PASS     6          10          
+popcount255     1.000      0.982      PASS     PASS        PASS     10         10          
+popcount3       1.000      0.972      PASS     PASS        PASS     3          10          
+reduction       1.000      0.981      PASS     PASS        PASS     9          10          
+review2015_count1k 1.000      0.953      PASS     PASS        PASS     4          10          
+review2015_fancytimer 1.000      1.000      FAIL     FAIL        FAIL     6          7           
+review2015_fsm  1.000      0.944      FAIL     FAIL        FAIL     1          10          
+review2015_fsmonehot 1.000      0.978      PASS     FAIL        FAIL     5          6           
+review2015_fsmseq 1.000      0.926      PASS     PASS        PASS     9          9           
+review2015_fsmshift 1.000      1.000      PASS     FAIL        FAIL     10         10          
+review2015_shiftcount 1.000      1.000      PASS     FAIL        FAIL     2          10          
+ringer          1.000      0.983      PASS     PASS        PASS     1          10          
+rotate100       1.000      1.000      PASS     PASS        PASS     5          10          
+rule110         1.000      0.965      PASS     FAIL        FAIL     4          10          
+rule90          1.000      0.971      PASS     FAIL        FAIL     6          10          
+shift18         1.000      1.000      PASS     PASS        PASS     2          10          
+shift4          1.000      0.964      PASS     PASS        PASS     6          10          
+step_one        1.000      0.980      PASS     PASS        PASS     5          10          
+thermostat      1.000      0.982      PASS     PASS        PASS     9          10          
+timer           1.000      1.000      PASS     FAIL        FAIL     10         7           
+truthtable1     1.000      0.972      PASS     PASS        PASS     1          10          
+vector0         1.000      0.973      PASS     PASS        PASS     1          10          
+vector1         1.000      0.974      PASS     PASS        PASS     9          10          
+vector100r      1.000      0.973      PASS     PASS        PASS     4          1           
+vector2         1.000      0.976      PASS     PASS        PASS     10         10          
+vector3         1.000      0.979      PASS     PASS        PASS     2          6           
+vector4         1.000      0.982      PASS     PASS        PASS     1          10          
+vector5         1.000      0.976      PASS     PASS        PASS     1          10          
+vectorgates     1.000      0.976      PASS     PASS        PASS     2          10          
+vectorr         1.000      0.980      PASS     PASS        PASS     3          10          
+wire            1.000      0.974      PASS     PASS        PASS     1          10          
+wire4           1.000      0.981      PASS     PASS        PASS     9          10          
+wire_decl       1.000      0.970      PASS     PASS        PASS     10         10          
+xnorgate        1.000      0.971      PASS     PASS        PASS     8          10          
+zero            1.000      0.977      PASS     PASS        PASS     8          10     

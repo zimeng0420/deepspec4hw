@@ -1,0 +1,17 @@
+module top_module (
+    input a,
+    input b,
+    input c,
+    input d,
+    output out_sop,
+    output out_pos
+);
+
+  //Minimization using K-map yields:
+  //out_sop = ~a&~b&c&~d | ~a&b&c&d | a&b&c&d;
+  //out_pos = (a+b+c) & (a+b+d) & (a+c+d) & (b+c+d);
+
+  assign out_sop = (~a & ~b & c & ~d) | (~a & b & c & d) | (a & b & c & d);
+  assign out_pos = (a | b | c) & (a | b | d) & (a | c | d) & (b | c | d);
+
+endmodule

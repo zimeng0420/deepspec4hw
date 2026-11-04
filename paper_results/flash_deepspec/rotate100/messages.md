@@ -1,0 +1,44 @@
+# Messages for Task: rotate100
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Build a 100-bit left/right rotator, with synchronous load and left/right enable. A rotator shifts-in the shifted-out bit from the other end of the register, unlike a shifter that discards the shifted-out bit and shifts in a zero. If enabled, a rotator rotates the bits around and does not modify/discard them. 
+// (1) load: Loads shift register with data[99:0] instead of rotating. Synchronous active high.
+// (2) ena[1:0]: Synchronous. Chooses whether and which direction to rotate: 
+//     (a) 2'b01 rotates right by one bit, 
+//     (b) 2'b10 rotates left by one bit, 
+//     (c) 2'b00 and 2'b11 do not rotate. 
+// (3) q: The contents of the rotator.
+
+The compressed specification is as follows: Pure CMB Logic :
+```json
+{
+  "header": "The top module header definition is:\n\nmodule top_module(\n input clk,\n input load,\n input [1:0] ena,\n input [99:0] data,\n output reg [99:0] q\n);\n\nThis module defines a 100-bit left/right rotator with synchronous load and left/right enable. The inputs are `clk` (clock signal), `load` (synchronous load enable), `ena[1:0]` (rotation enable signals), and `data[99:0]` (100-bit data input). The output is `q[99:0]` (100-bit output representing the rotator's contents).",
+  "combinational_logic_function": "The combinational logic function determines the value of the output `q` based on the inputs `load`, `ena`, and the current value of `q`. When `load` is asserted, the output `q` is directly assigned the value of the input `data`. When `load` is not asserted, the `ena` input determines the rotation direction. If `ena` is `2'b01`, `q` is rotated right by one bit. If `ena` is `2'b10`, `q` is rotated left by one bit. If `ena` is `2'b00` or `2'b11`, `q` retains its current value. The rotation is implemented using bit concatenation. Right rotation is achieved by concatenating the least significant bit (LSB) of `q` with the remaining bits. Left rotation is achieved by concatenating the most significant bit (MSB) of `q` with the remaining bits.",
+  "enhanced_combinational_description": "This specification details the combinational logic for a 100-bit left/right rotator. The rotator has a synchronous load and left/right enable functionality. The module `top_module` has the following inputs: `clk`, `load`, `ena[1:0]`, and `data[99:0]`. The output is `q[99:0]`. The `load` input is an active-high synchronous load enable. When `load` is asserted, the output `q` is loaded with the value of `data`. The `ena[1:0]` input controls the rotation direction. If `ena` is `2'b01`, the output `q` is rotated right by one bit. This is achieved by taking the least significant bit (LSB) of `q`, `q[0]`, and placing it in the most significant bit (MSB) position, while shifting all other bits to the right. The operation is expressed as `q <= {q[0], q[99:1]}`. If `ena` is `2'b10`, the output `q` is rotated left by one bit. This is achieved by taking the most significant bit (MSB) of `q`, `q[99]`, and placing it in the least significant bit (LSB) position, while shifting all other bits to the left. The operation is expressed as `q <= {q[98:0], q[99]}`. If `ena` is `2'b00` or `2'b11`, no rotation occurs, and the output `q` retains its current value. This is expressed as `q <= q`. The rotator performs a circular shift, where bits shifted out from one end are shifted back in at the other end. The load operation has priority over the rotation operation. When `load` is asserted, the rotation logic is disabled, and the output `q` is loaded with the value of `data`."
+}
+```
+
+ With Timing Logic Summary:
+```json
+{
+  "header": "The module `top_module` implements a 100-bit left/right rotator with synchronous load and left/right enable. It has a clock input `clk`, a load enable input `load`, a 2-bit enable input `ena`, a 100-bit data input `data`, and a 100-bit output register `q`. When `load` is asserted, the register is loaded with `data`. Otherwise, the register rotates left or right based on the value of `ena`.",
+  "Interface Behavior": "The `load` signal, when asserted high synchronously with the rising edge of `clk`, causes the register `q` to be loaded with the value of `data[99:0]`. When `load` is deasserted, the `ena[1:0]` signal controls the rotation. `ena = 2'b01` rotates `q` right by one bit on the rising edge of `clk`. `ena = 2'b10` rotates `q` left by one bit on the rising edge of `clk`. `ena = 2'b00` or `ena = 2'b11` results in no rotation, and `q` retains its current value on the rising edge of `clk`.",
+  "Timing Dependency": "The next state of register `q` depends on the current values of `load`, `ena`, and `data` at the rising edge of `clk`. If `load` is asserted, `q` will take the value of `data` after a clock-to-output delay. If `load` is not asserted, the value of `ena` determines the next state of `q`. If `ena` is `2'b01`, `q` will be rotated right. If `ena` is `2'b10`, `q` will be rotated left. If `ena` is `2'b00` or `2'b11`, `q` will retain its current value. All these transitions occur synchronously with the rising edge of `clk`.",
+  "Timing logic": "The circuit is a sequential circuit with one 100-bit register `q` declared as `output reg [99:0] q`. The register updates its value on the rising edge of the clock `clk`, as indicated by `always @(posedge clk)`. The updates to `q` are performed using non-blocking assignments `<=`. The value of `q` is updated based on the synchronous inputs `load` and `ena`. When `load` is high, `q` is loaded with `data`. When `load` is low, a case statement determines the rotation direction based on `ena`. The rotation is implemented using concatenation operations."
+}
+```
+
+The header you have already known is:module top_module(
+	input clk,
+	input load,
+	input [1:0] ena,
+	input [99:0] data,
+	output reg [99:0] q);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

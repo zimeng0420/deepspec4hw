@@ -1,0 +1,15 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp top_module.v tb.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:65: error: This assignment requires an explicit cast.
+top_module.v:30 Warning: Synthesis requires the sensitivity list of an always_ff process to only be edge sensitive. dig is missing a pos/negedge.
+top_module.v:30 Warning: Synthesis requires the sensitivity list of an always_ff process to only be edge sensitive. ground is missing a pos/negedge.
+top_module.v:30 Warning: Synthesis requires the sensitivity list of an always_ff process to only be edge sensitive. bump_right is missing a pos/negedge.
+top_module.v:30 Warning: Synthesis requires the sensitivity list of an always_ff process to only be edge sensitive. bump_left is missing a pos/negedge.
+top_module.v:30 Warning: Synthesis requires the sensitivity list of an always_ff process to only be edge sensitive. state is missing a pos/negedge.
+1 error(s) during elaboration.
+

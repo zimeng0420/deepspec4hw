@@ -1,0 +1,27 @@
+Total tasks: 156
+Syntax passed: 136 (87.18%)
+Functionality passed: 96 (61.54%)
+
+Combinational tasks: 81
+Syntax passed: 79/81 (97.53%)
+Functionality passed: 63/81 (77.78%)
+
+Sequential tasks: 75
+Syntax passed: 57/75 (76.00%)
+Functionality passed: 33/75 (44.00%)
+
+Total tasks               | Combinational tasks            | Sequential tasks              
+-------------------------   | ------------------------------    | ------------------------------
+96/156 (61.54%) | 63/81 (77.78%) | 33/75 (44.00%)
+
+
+
+         
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = client.chat.completions.create(
+                        model="gpt-4o-2024-11-20",
+                        messages=[
+                         {"role": "system", "content": system_content},
+                            {"role": "user", "content": user_content}
+                         ]
+                        )

@@ -1,0 +1,26 @@
+# Messages for Task: bugs_case
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.This combinational circuit is supposed to recognize 8-bit keyboard scancodes for keys 0 through 9. It should indicate whether one of the 10 cases were recognized (valid), and if so, which key was detected. If the 8-bit input is 8'h45, 8'h16, 8'h1e, 8'h26, 8'h25, 8'h2e, 8'h36, 8'h3d, 8'h3e, or 8'h46, the 4-bit output will be set to 0, 1, 2, 3, 4, 5, 6, 7, 8, or 9 respectively, the 1-bit valid would be set to 1. If the input does not match any of the cases, both output signals would be set to 0.
+
+The compressed specification is as follows: ```json
+{
+  "header": "module top_module (\n input [7:0] code,\n output reg [3:0] out,\n output reg valid\n);",
+  "combinational_logic_function": "The combinational logic circuit decodes an 8-bit input 'code' to produce a 4-bit output 'out' and a 1-bit output 'valid'. The 'valid' output is asserted (set to 1) if the input 'code' matches one of the ten predefined scancodes (8'h45, 8'h16, 8'h1e, 8'h26, 8'h25, 8'h2e, 8'h36, 8'h3d, 8'h3e, 8'h46). If 'valid' is asserted, the 'out' output represents the corresponding decimal value of the recognized scancode, ranging from 0 to 9. If the input 'code' does not match any of the predefined scancodes, 'valid' is deasserted (set to 0), and 'out' is set to 0.",
+  "enhanced_combinational_description": "This combinational logic circuit is designed to decode keyboard scancodes for the digits 0 through 9. The circuit receives an 8-bit input 'code' and produces two outputs: a 4-bit output 'out' representing the decoded digit, and a 1-bit output 'valid' indicating whether the input 'code' corresponds to a valid digit scancode. The circuit operates as follows:\n\n1.  **Input:** The circuit accepts an 8-bit input signal named 'code'.\n\n2.  **Scancode Recognition:** The circuit compares the input 'code' against a predefined set of ten 8-bit scancodes. These scancodes represent the keys '0' through '9'. The specific scancodes are:\n    *   '0': 8'h45\n    *   '1': 8'h16\n    *   '2': 8'h1e\n    *   '3': 8'h26\n    *   '4': 8'h25\n    *   '5': 8'h2e\n    *   '6': 8'h36\n    *   '7': 8'h3d\n    *   '8': 8'h3e\n    *   '9': 8'h46\n\n3.  **Output 'valid':** If the input 'code' matches any of the ten predefined scancodes, the 'valid' output is asserted (set to 1). Otherwise, the 'valid' output is deasserted (set to 0).\n\n4.  **Output 'out':** If the 'valid' output is asserted, the 'out' output is set to the 4-bit binary representation of the corresponding digit. The mapping is as follows:\n    *   8'h45 (key '0') -> 'out' = 4'h0\n    *   8'h16 (key '1') -> 'out' = 4'h1\n    *   8'h1e (key '2') -> 'out' = 4'h2\n    *   8'h26 (key '3') -> 'out' = 4'h3\n    *   8'h25 (key '4') -> 'out' = 4'h4\n    *   8'h2e (key '5') -> 'out' = 4'h5\n    *   8'h36 (key '6') -> 'out' = 4'h6\n    *   8'h3d (key '7') -> 'out' = 4'h7\n    *   8'h3e (key '8') -> 'out' = 4'h8\n    *   8'h46 (key '9') -> 'out' = 4'h9\n\n5.  **Invalid Input:** If the input 'code' does not match any of the predefined scancodes (i.e., 'valid' is 0), the 'out' output is set to 4'h0."
+}
+```
+
+The header you have already known is:module top_module (
+	input [7:0] code,
+	output reg [3:0] out,
+	output reg valid
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

@@ -1,0 +1,17 @@
+{
+  "methodology": "The decomposition process involved analyzing each provided information set and extracting distinct, self-contained requirements or features.",
+  "mindtraced_atomic_units": [
+    "Implement a D flip-flop.",
+    "Include an active-high synchronous reset.",
+    "Output 'q' is set to 0 on the rising edge of 'clk' if 'r' is high.",
+    "Output 'q' follows 'd' otherwise.",
+    "Module interface includes inputs 'clk', 'd', 'r', and output 'q'."
+  ],
+  "spec_atomic_units": [
+    "Module interface includes inputs 'clk', 'd', 'r', and output 'q'.",
+    "Output 'q' is updated on the rising edge of 'clk'.",
+    "If 'r' is high, 'q' is set to 0.",
+    "If 'r' is low, 'q' reflects 'd'.",
+    "Behavior is implemented using a non-blocking assignment inside an 'always_ff' block."
+  ]
+}

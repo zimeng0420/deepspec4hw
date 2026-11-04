@@ -1,0 +1,79 @@
+# Task: mt2015_q4
+
+## Prompt to Generate Queries
+
+Your goal is to generate sophisticated and diverse search queries. These queries are intended for an advanced automated web research tool capable of analyzing complex results, following links, and synthesizing information.
+
+Instructions:
+- Single Query First: By default, generate only one search query. Add additional queries only if the original question covers multiple distinct aspects that cannot be addressed by a single query.
+- One Focus per Query: Each query must concentrate on one specific aspect of the original question, avoiding mixed or overlapping topics in a single query.
+- Sufficiently Detailed: Queries should include enough technical detail to enable a deep understanding of the research topic and to support solving the task.
+- Relevant to Task and I/O: Each query must stay closely tied to the key technical terms in the task description and the input/output (I/O) port definitions in the context of the research topic.
+- Diversity: If the research topic is broad, generate multiple diverse queries, with each query addressing a different perspective or subtopic.
+- No Redundancy: Do not generate multiple queries that are semantically similar. One well-phrased query is sufficient for each topic.
+
+
+Format: 
+- Format your response as a JSON object with ALL three of these exact keys:
+   - "query": A list of search queries
+   - "rationale": Brief explanation of why these queries are relevant
+   
+
+Example:
+
+Topic: Determine the next-state logic expressions for outputs Y2 and Y4 in a one-hot encoded FSM. 
+
+module top_module (
+  input [6:1] y,
+  input w,
+  output Y2,
+  output Y4,
+    
+
+```json
+{
+    "query": ["What is one-hot encoding in finite state machines?", "How are next-state signals derived in a one-hot encoded FSM?", "What do the inputs y[6:1] and w represent in the FSM?"],
+
+    "rationale": "To answer this comparative growth question accurately, Understanding how one-hot encoding represents states and how inputs like y[6:1] and w influence transitions is essential for correctly deriving next-state logic in a finite state machine. These concepts form the foundation for interpreting and implementing FSM behavior in Verilog.",
+}    
+```
+
+Context: 
+- User: CMB
+Module A implements the boolean function z = (x^y) & x.
+
+// Module B can be described by the following simulation waveform: 
+
+// time            x               y               z               
+// 0ns             0               0               1               
+// 5ns             0               0               1               
+// 10ns            0               0               1               
+// 15ns            0               0               1               
+// 20ns            0               0               1               
+// 25ns            1               0               0               
+// 30ns            1               0               0               
+// 35ns            0               1               0               
+// 40ns            0               1               0               
+// 45ns            1               1               1               
+// 50ns            1               1               1               
+// 55ns            0               0               1               
+// 60ns            0               1               0               
+// 65ns            0               1               0               
+// 70ns            1               1               1               
+// 75ns            0               1               0               
+// 80ns            0               1               0               
+// 85ns            0               1               0               
+// 90ns            1               0               0               
+
+
+// Now consider a top-level that uses two A submodules and two B submodules. The first input of all four submodules is connect to input 'x', and the second input of all four submodules is connected to 'y'. The output of the first A submodule is connected to a two-input OR, along with the output of the first B submodule. The second pair of A and B submodules is similarly connected to an AND gate. The output of the OR and the AND is connected to an XOR, whose output is 'z'.
+
+// Implement this circuit in Verilog.
+module top_module(
+	input x,
+	input y,
+	output z);
+
+
+- Analyze Report: Top_Analyze="Analyze the top-level module's inputs (x, y) and output (z). Deconstruct the circuit into its sub-modules (two A modules, two B modules, OR gate, AND gate, XOR gate). Analyze the connections between these modules, paying close attention to how the outputs of A and B modules feed into the OR and AND gates, and how the outputs of these gates feed into the final XOR gate to produce the output z." Topic_Analyze='Research and analyze the functionality of module A (z = (x^y) & x). Research and analyze the functionality of module B based on the provided simulation waveform. Research the behavior of OR, AND, and XOR gates. Research how to implement these modules and gates in Verilog. Research how to connect modules in Verilog.' Solving_Strategies="1. Decompose the problem into smaller, manageable parts: understanding module A, understanding module B, understanding the gates, and understanding the connections. 2. Analyze module A's boolean function to determine its output for all possible inputs. 3. Analyze module B's simulation waveform to determine its output for all possible inputs. 4. Create truth tables for the OR, AND, and XOR gates. 5. Use the information gathered to implement each module and gate in Verilog. 6. Connect the modules and gates according to the problem description in Verilog. 7. Verify the Verilog implementation by simulating it and comparing the results to the expected behavior. Consider the date September 12, 2025, when searching for the latest Verilog implementation practices."
+

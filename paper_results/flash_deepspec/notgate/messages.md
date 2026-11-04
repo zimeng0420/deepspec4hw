@@ -1,0 +1,25 @@
+# Messages for Task: notgate
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Create a module that implements a NOT gate.
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module header definition is:\n\n```verilog\nmodule top_module(\n    input in,\n    output out\n);\n```\n\nThis module, named `top_module`, has one input port named `in` and one output port named `out`. Both ports are single-bit signals.",
+  "combinational_logic_function": "The combinational logic function implemented by this module is a logical NOT operation. The output `out` is the logical inverse (complement) of the input `in`. This can be represented by the Boolean expression: `out = NOT(in)`.  Alternatively, it can be represented by the following truth table:\n\n| in | out |\n|----|-----|\n| 0  | 1   |\n| 1  | 0   |\n\nThe logic organization is a single NOT gate. The signal flow is from the input `in` through the NOT gate to the output `out`. There is no operator sharing or resource utilization strategy to consider as it is a single gate. Logic level balancing and delay equalization techniques are not applicable for a single NOT gate. There is no output multiplexing or selection logic.",
+  "enhanced_combinational_description": "This module implements a NOT gate, also known as an inverter. The module `top_module` takes a single-bit input `in` and produces a single-bit output `out`. The output `out` is the logical negation of the input `in`. When `in` is logic '0', `out` is logic '1', and when `in` is logic '1', `out` is logic '0'. The combinational logic function is defined by the equation `out = ~in`, where `~` represents the bitwise NOT operator. The module's functionality can be summarized as follows: the output `out` is always the inverse of the input `in`. The implementation utilizes a single combinational logic element, specifically a NOT gate, to perform the inversion. The input signal `in` is directly connected to the input of the NOT gate, and the output of the NOT gate is directly connected to the output signal `out` of the module. This ensures that the output `out` reflects the inverted value of the input `in` at all times."
+}
+```
+
+The header you have already known is:module top_module(
+	input in,
+	output out
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

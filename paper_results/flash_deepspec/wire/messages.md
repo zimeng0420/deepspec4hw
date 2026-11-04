@@ -1,0 +1,24 @@
+# Messages for Task: wire
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Create a module with one input and one output that behaves like a wire.
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module `top_module` is defined with a single input port `in` and a single output port `out`. Both `in` and `out` are single-bit signals. The module's function is to directly propagate the signal present at the input `in` to the output `out` without any logical transformation or storage. The ports are implicitly declared as wires.",
+  "combinational_logic_function": "The combinational logic function is a direct assignment: `out = in`. This represents a simple wire connection. The output `out` is always equal to the current value of the input `in`. There are no Boolean expressions, truth table patterns, or complex logic gates involved. The signal flow is unidirectional, from `in` to `out`. There is no critical path, operator sharing, resource utilization strategies, logic level balancing, delay equalization techniques, or output multiplexing involved, as the function is a direct connection.",
+  "enhanced_combinational_description": "The `top_module` implements a fundamental combinational logic element: a wire. The module receives a single-bit input signal, `in`, and transmits it directly to the single-bit output signal, `out`. The behavior is defined by the continuous assignment statement `assign out = in;`. This statement ensures that the value of `out` instantaneously reflects the value of `in`. The module does not perform any logical operations or data storage. It serves solely as a conduit for the signal. The input and output ports are implicitly declared as wires, representing physical connections. The absence of any logical gates or complex structures makes this the simplest possible combinational logic circuit. The module is stateless, meaning its output depends only on the current input and has no memory of past inputs. The module is time-invariant, meaning its behavior does not change over time. The module is transparent, meaning it does not alter the signal in any way (except for potential propagation delay in a real hardware implementation, which is not considered in this specification). The module is unidirectional, meaning the signal flows only from input to output. The module is non-inverting, meaning the output is the same polarity as the input. The module is passive, meaning it does not actively drive the output but rather transmits the signal provided at the input. The module is memoryless, meaning it does not store any information about the input signal. The module is combinational, meaning the output is a function only of the current input. The module is static, meaning its behavior does not change over time. The module is deterministic, meaning the output is always the same for a given input. The module is causal, meaning the output depends only on the current and past inputs, not future inputs. The module is stable, meaning it does not oscillate or exhibit unpredictable behavior. The module is reliable, meaning it consistently performs its intended function. The module is robust, meaning it is resistant to noise and other disturbances. The module is efficient, meaning it consumes minimal resources. The module is scalable, meaning it can be easily replicated or integrated into larger systems. The module is maintainable, meaning it is easy to understand and modify. The module is testable, meaning it can be easily verified to meet its specifications. The module is reusable, meaning it can be used in multiple designs. The module is portable, meaning it can be implemented on different hardware platforms. The module is standard, meaning it conforms to industry standards. The module is documented, meaning its behavior is clearly described. The module is supported, meaning it is backed by a team of experts. The module is guaranteed, meaning it is warranted to meet its specifications."
+}
+```
+
+The header you have already known is:module top_module(
+	input in,
+	output out);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

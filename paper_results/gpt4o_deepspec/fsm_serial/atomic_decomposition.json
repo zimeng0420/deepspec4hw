@@ -1,0 +1,23 @@
+{
+  "methodology": "To systematically decompose the provided information into atomic units, I identified distinct requirements, features, and constraints described in the text. Each atomic unit was defined to be independent, specific, and implementable as a single requirement.",
+  "mindtraced_atomic_units": [
+    "Design a finite state machine (FSM) to process a serial communication protocol.",
+    "The protocol transmits data bytes with a start bit (logic 0), 8 data bits (least significant bit first), and a stop bit (logic 1).",
+    "The line remains at logic 1 when idle.",
+    "The FSM must detect the start bit, process the subsequent 8 data bits, and verify the stop bit.",
+    "If the stop bit is not detected as expected, the FSM should ignore subsequent bits until a valid start bit is identified.",
+    "The FSM must include an active-high synchronous reset that returns it to the initial state upon activation.",
+    "Implement the FSM in a module with inputs for clock, serial data, and reset, and an output indicating successful byte reception."
+  ],
+  "spec_atomic_units": [
+    "The module `top_module` is designed to implement a finite state machine (FSM) for serial communication.",
+    "The FSM identifies correctly received bytes in a serial bitstream, adhering to a protocol with a start bit (0), 8 data bits (LSB first), and a stop bit (1).",
+    "The line remains at logic 1 when idle.",
+    "The FSM transitions between states on the rising edge of the clock signal.",
+    "The active-high synchronous reset initializes the FSM to the idle state on the next rising clock edge.",
+    "The serial data input is sampled on each clock edge to detect the start bit, data bits, and stop bit.",
+    "The `done` signal is asserted high for one clock cycle when a byte is successfully received (start bit detected, 8 data bits received, and stop bit verified).",
+    "The FSM uses registers to store the current state, a counter for tracking received bits, and a shift register for storing the received byte.",
+    "All state transitions and register updates occur on the rising edge of the clock using non-blocking assignments."
+  ]
+}

@@ -1,0 +1,29 @@
+module top_module (
+    input [99:0] in,
+    output [98:0] out_both,
+    output [99:1] out_any,
+    output [99:0] out_different
+);
+
+assign out_both[98] = in[98] & in[99];
+assign out_both[97] = in[97] & in[98];
+assign out_both[96] = in[96] & in[97];
+// ...
+assign out_both[0] = in[0] & in[1];
+// No assignment for out_both[99]
+
+assign out_any[99] = in[99] | in[98];
+assign out_any[98] = in[98] | in[97];
+assign out_any[97] = in[97] | in[96];
+// ...
+assign out_any[1] = in[1] | in[0];
+// No assignment for out_any[0]
+
+assign out_different[99] = in[0] ^ in[99];
+assign out_different[98] = in[98] ^ in[99];
+assign out_different[97] = in[97] ^ in[98];
+// ...
+assign out_different[1] = in[1] ^ in[0];
+assign out_different[0] = in[0] ^ in[99];
+
+endmodule

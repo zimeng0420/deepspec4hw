@@ -1,0 +1,10 @@
+# Task: shift18
+
+## Analyze Report
+
+Top_Analyze='Analyze the module header, ports, and overall behavior of the 64-bit arithmetic shift register. Specifically, examine the function of each input signal (clk, load, ena, amount, data) and the output signal (q), detailing how they interact to achieve the shifting and loading operations. Focus on the arithmetic right shift behavior.' Topic_Analyze="Provide a structured analysis of the research topic, addressing the following key aspects: 1. The fundamental principles of arithmetic shift registers, including the difference between logical and arithmetic right shifts. 2. The role of synchronous loading and its implementation. 3. The function of the 'amount' input and how it controls the direction and magnitude of the shift. 4. The design considerations for a 64-bit shift register, including potential performance bottlenecks. 5. Best practices for Verilog implementation of shift registers, including clocking and reset strategies. Aggregate findings from web searches using queries such as: 'arithmetic shift register Verilog', 'synchronous load shift register', 'Verilog shift left right by amount', '64-bit shift register design', and 'arithmetic right shift implementation'." Solving_Strategies="Outline a step-by-step methodology for designing and verifying the shift register: 1. Define the state transition behavior based on the 'amount' input (left by 1, left by 8, right by 1, right by 8). 2. Design the logic for the shift operation, considering both left and right shifts, and the arithmetic right shift. 3. Implement the synchronous load functionality. 4. Create a test bench to verify the functionality of the shift register, including testing all shift amounts, loading, and enabling/disabling the shift. 5. Simulate the design and analyze the results to ensure correctness. Each step directly relates to the module's functionality and its sub-modules. The date is September 08, 2025."
+
+## Generated Queries
+
+['arithmetic shift register Verilog', 'synchronous load shift register', 'Verilog shift left right by amount', '64-bit shift register design', 'arithmetic right shift implementation']
+

@@ -1,0 +1,47 @@
+# Messages for Task: rule90
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Rule 90 is a one-dimensional cellular automaton with interesting properties. The rules are simple. There is a one-dimensional array of cells (on or off). At each time step, the next state of each cell is the XOR of the cell's two current neighbours:
+// Left | Center | Right | Center's next state
+// 1 | 1 | 1 | 0
+// 1 | 1 | 0 | 1
+// 1 | 0 | 1 | 0
+// 1 | 0 | 0 | 1
+// 0 | 1 | 1 | 1
+// 0 | 1 | 0 | 0 
+// 0 | 0 | 1 | 1
+// 0 | 0 | 0 | 0
+// In this circuit, create a 512-cell system (q[511:0]), and advance by one time step each clock cycle. The load input indicates the state of the system should be loaded with data[511:0]. Assume the boundaries (q[-1] and q[512]) are both zero (off).
+
+The compressed specification is as follows: Pure CMB Logic :
+```json
+{
+  "header": "The top module header definition is:\n\nmodule top_module(\n input clk,\n input load,\n input [511:0] data,\n output reg [511:0] q);\n\nThis module implements a 512-cell Rule 90 cellular automaton. The `clk` input is a clock signal. The `load` input is a control signal that, when asserted, loads the initial state of the cellular automaton from the `data` input. The `data` input is a 512-bit wide vector representing the initial state of the cells. The `q` output is a 512-bit wide register representing the current state of the cells.",
+  "combinational_logic_function": "The combinational logic implements the Rule 90 update rule for each cell in the 512-cell array. The next state of each cell `q[i]` is determined by the XOR of its left and right neighbors: `q[i-1]` and `q[i+1]`. The boundary conditions are such that `q[-1]` and `q[512]` are always zero. Therefore, the combinational logic for cell `q[0]` is `0 ^ q[1]` which simplifies to `q[1]`. Similarly, the combinational logic for cell `q[511]` is `q[510] ^ 0` which simplifies to `q[510]`. For all other cells `q[i]` (where 0 < i < 511), the combinational logic is `q[i-1] ^ q[i+1]`. When the `load` signal is asserted, the combinational logic selects the `data` input to be loaded into the `q` register. When the `load` signal is deasserted, the combinational logic selects the output of the Rule 90 update logic to be loaded into the `q` register. This selection is implemented using a multiplexer controlled by the `load` signal. The output `q` is updated based on the combinational logic's output at each clock cycle.",
+  "enhanced_combinational_description": "The combinational logic within the `top_module` implements the core functionality of the Rule 90 cellular automaton. This involves two primary functions: loading initial data and updating the cell states according to the Rule 90 algorithm. \n\n1. **Data Loading Logic:** When the `load` signal is asserted (high), the combinational logic must select the `data[511:0]` input and pass it through to the input of the `q` register. This is achieved using a 512-bit wide 2-to-1 multiplexer. The `load` signal acts as the select line for this multiplexer. When `load` is high, the `data` input is selected; otherwise, the output of the Rule 90 update logic is selected.\n\n2. **Rule 90 Update Logic:** This logic calculates the next state of each cell based on the current states of its neighbors. For each cell `q[i]`, the next state is determined by `q[i-1] XOR q[i+1]`. This requires 512 XOR gates. Special consideration is given to the boundary cells:\n    *   **Cell q[0]:** Since `q[-1]` is defined as 0, the next state of `q[0]` is `0 XOR q[1]`, which simplifies to `q[1]`.\n    *   **Cell q[511]:** Since `q[512]` is defined as 0, the next state of `q[511]` is `q[510] XOR 0`, which simplifies to `q[510]`.\n    *   **Cells q[1:510]:** For all other cells, the next state is calculated as `q[i-1] XOR q[i+1]`.\n\nTherefore, the combinational logic consists of:\n\n*   A 512-bit wide 2-to-1 multiplexer controlled by the `load` signal.\n*   512 XOR gates to implement the Rule 90 update rule.\n*   Specific wiring for the boundary cells `q[0]` and `q[511]` to implement the boundary conditions.\n\nThe output of the multiplexer is connected to the input of the `q` register. The `q` register is updated based on the combinational logic's output."
+}
+```
+
+ With Timing Logic Summary:
+```json
+{
+  "header": "The module `top_module` implements a 512-cell Rule 90 cellular automaton. It has a clock input `clk`, a load signal `load`, a 512-bit data input `data`, and a 512-bit output `q` representing the current state of the cells. When `load` is asserted, the cells are initialized with `data`. When `load` is not asserted, on each rising edge of `clk`, the cells update their state according to Rule 90. The boundary conditions are such that the neighbors of q[0] and q[511] are always 0.",
+  "Interface Behavior": "The `data` input is loaded into the `q` register when the `load` input is high. This load operation happens synchronously with the rising edge of the `clk` signal. When `load` is low, on each rising edge of `clk`, the `q` register updates its value based on the Rule 90 calculation using the previous value of `q`.",
+  "Timing Dependency": "The critical path involves the Rule 90 calculation. When `load` is low, the next state of `q` depends on the current state of `q`. The propagation delay through the XOR gates (implementing Rule 90) and the setup time of the `q` register with respect to the rising edge of `clk` determine the minimum clock period. Specifically, the next value of q[i] depends on q[i-1] and q[i+1]. The boundary cells q[0] and q[511] depend on q[1] and q[510] respectively.",
+  "Timing logic": "The circuit is a sequential circuit with 512 registers (q[511:0]). The registers are updated on the positive edge of the `clk` signal. The update logic uses non-blocking assignments (`<=`). When `load` is high, `q` is loaded with `data`. When `load` is low, `q` is updated with the Rule 90 calculation (q[i] <= q[i-1] ^ q[i+1]). The `q` signal is declared as `reg [511:0] q;`."
+}
+```
+
+The header you have already known is:module top_module(
+	input clk,
+	input load,
+	input [511:0] data,
+	output reg [511:0] q);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

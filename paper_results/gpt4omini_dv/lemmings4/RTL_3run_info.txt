@@ -1,0 +1,12 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp top_module.v tb.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:20: warning: extra digits given for sized binary constant.
+top_module.v:20: warning: Numeric constant truncated to 2 bits.
+top_module.v:23: error: Enumeration name SPLATTERED and WALK_LEFT have the same value: 2'd0
+2 error(s) during elaboration.
+

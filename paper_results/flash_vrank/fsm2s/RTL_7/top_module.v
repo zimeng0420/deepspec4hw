@@ -1,0 +1,39 @@
+module top_module (
+    input clk,
+    input j,
+    input k,
+    input reset,
+    output out
+);
+
+    reg state;
+
+    parameter OFF = 0, ON = 1;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= OFF;
+        end else begin
+            case (state)
+                OFF: begin
+                    if (j == 0) begin
+                        state <= OFF;
+                    end else begin
+                        state <= ON;
+                    end
+                end
+                ON: begin
+                    if (k == 0) begin
+                        state <= ON;
+                    end else begin
+                        state <= OFF;
+                    end
+                end
+                default: state <= OFF;
+            endcase
+        end
+    end
+
+    assign out = state;
+
+endmodule

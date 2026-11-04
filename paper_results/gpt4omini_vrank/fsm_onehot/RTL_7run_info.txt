@@ -1,0 +1,54 @@
+iverilog simulation passed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+
+iverilog cmd 2:
+/usr/bin/vvp run.vvp
+iverilog cmd 2 output:
+ERROR: tb.v:41: Scenario 2 failed!
+       Time: 2000 Scope: tb_top_module
+ERROR: tb.v:49: Scenario 3 failed!
+       Time: 3000 Scope: tb_top_module
+ERROR: tb.v:56: Scenario 4 failed!
+       Time: 4000 Scope: tb_top_module
+ERROR: tb.v:64: Scenario 5 failed!
+       Time: 5000 Scope: tb_top_module
+ERROR: tb.v:71: Scenario 6 failed!
+       Time: 6000 Scope: tb_top_module
+ERROR: tb.v:79: Scenario 7 failed!
+       Time: 7000 Scope: tb_top_module
+ERROR: tb.v:86: Scenario 8 failed!
+       Time: 8000 Scope: tb_top_module
+ERROR: tb.v:94: Scenario 9 failed!
+       Time: 9000 Scope: tb_top_module
+ERROR: tb.v:101: Scenario 10 failed!
+       Time: 10000 Scope: tb_top_module
+ERROR: tb.v:109: Scenario 11 failed!
+       Time: 11000 Scope: tb_top_module
+ERROR: tb.v:116: Scenario 12 failed!
+       Time: 12000 Scope: tb_top_module
+ERROR: tb.v:124: Scenario 13 failed!
+       Time: 13000 Scope: tb_top_module
+ERROR: tb.v:131: Scenario 14 failed!
+       Time: 14000 Scope: tb_top_module
+ERROR: tb.v:139: Scenario 15 failed!
+       Time: 15000 Scope: tb_top_module
+ERROR: tb.v:140: Scenario 15 failed (out2 should be 1)!
+       Time: 15000 Scope: tb_top_module
+ERROR: tb.v:147: Scenario 16 failed!
+       Time: 16000 Scope: tb_top_module
+ERROR: tb.v:155: Scenario 17 failed!
+       Time: 17000 Scope: tb_top_module
+ERROR: tb.v:163: Scenario 18 failed!
+       Time: 18000 Scope: tb_top_module
+ERROR: tb.v:171: Scenario 19 failed!
+       Time: 19000 Scope: tb_top_module
+ERROR: tb.v:179: Scenario 20 failed!
+       Time: 20000 Scope: tb_top_module
+
+iverilog cmd 2 error:
+

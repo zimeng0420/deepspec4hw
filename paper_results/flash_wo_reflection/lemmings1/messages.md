@@ -1,0 +1,40 @@
+# Messages for Task: lemmings1
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.The game Lemmings involves critters with fairly simple brains. So simple that we are going to model it using a finite state machine. In the Lemmings' 2D world, Lemmings can be in one of two states: walking left (walk_left is 1) or walking right (walk_right is 1). It will switch directions if it hits an obstacle. In particular, if a Lemming is bumped on the left (by receiving a 1 on bump_left), it will walk right. If it's bumped on the right (by receiving a 1 on bump_right), it will walk left. If it's bumped on both sides at the same time, it will still switch directions. Implement a Moore state machine with two states, two inputs, and one output (internal to the module) that models this behaviour. areset is positive edge triggered asynchronous reseting the Lemming machine to walk left.
+
+The compressed specification is as follows: Pure CMB Logic :
+```json
+{
+  "header": "The top module header definition is:\n\nmodule top_module (\n input clk,\n input areset,\n input bump_left,\n input bump_right,\n output walk_left,\n output walk_right\n);\n\nThis module implements a simplified Lemmings behavior model. The inputs `bump_left` and `bump_right` signal obstacle detection, while `walk_left` and `walk_right` indicate the Lemming's current direction. The `areset` input asynchronously resets the Lemming to the walking left state. The `clk` input is not relevant for the combinational logic specification.",
+  "combinational_logic_function": "The combinational logic determines the outputs `walk_left` and `walk_right` based on the current state of the Lemming (walking left or walking right). Let's define the current state as a single bit `current_state`, where 1 represents walking left and 0 represents walking right. The outputs are then directly derived from this state:\n\n*   `walk_left = current_state`\n*   `walk_right = ~current_state`\n\nThe state transitions are determined by the inputs `bump_left` and `bump_right`. The Lemming changes direction (toggles `current_state`) if either `bump_left` or `bump_right` is asserted, or if both are asserted simultaneously. This can be expressed as:\n\n`next_state = current_state ^ (bump_left | bump_right)`\n\nHowever, the `next_state` is not a direct combinational output. The combinational logic only defines the *current* outputs based on the *current* state. The state update itself is a sequential operation.\n\nTherefore, the combinational logic consists of:\n\n1.  An inverter to generate `walk_right` from `current_state`.\n2.  Direct assignment of `current_state` to `walk_left`.\n\nThere is no critical path in the combinational logic, as it only involves a single inverter and a direct assignment. There is no opportunity for operator sharing or resource utilization strategies, as the logic is minimal. Logic level balancing and delay equalization techniques are not applicable. Output multiplexing and selection logic are not required.",
+  "enhanced_combinational_description": "This specification details the combinational logic required to implement the output stage of a simplified Lemmings behavior model. The Lemming can be in one of two states: walking left (`walk_left = 1`) or walking right (`walk_right = 1`). The inputs `bump_left` and `bump_right` indicate collisions with obstacles on the left and right, respectively. The `areset` input asynchronously resets the Lemming to the walking left state. The combinational logic is responsible for generating the `walk_left` and `walk_right` outputs based on the current state of the Lemming.\n\nLet `current_state` represent the Lemming's current direction, where `current_state = 1` indicates walking left and `current_state = 0` indicates walking right. The outputs are then defined as follows:\n\n*   `walk_left = current_state`\n*   `walk_right = NOT(current_state)`\n\nThis means that `walk_left` is directly equal to the `current_state`, and `walk_right` is the logical inverse of `current_state`. This ensures that only one of the outputs is asserted at any given time.\n\nThe `bump_left` and `bump_right` inputs do *not* directly affect the combinational outputs. They influence the *next* state of the Lemming, which is a sequential logic function. The combinational logic only reflects the *current* state.\n\nThe `areset` input also does *not* directly affect the combinational outputs. It asynchronously resets the `current_state` to 1 (walking left), but this is a sequential operation.\n\nTherefore, the combinational logic consists of a single inverter to generate `walk_right` from `current_state`, and a direct connection from `current_state` to `walk_left`. This is a minimal and straightforward implementation.\n\nTruth Table:\n\n| current_state | walk_left | walk_right |\n|---------------|-----------|------------|\n| 0             | 0         | 1          |\n| 1             | 1         | 0          |\n\nBoolean Expressions:\n\n*   `walk_left = current_state`\n*   `walk_right = ~current_state`"
+}
+```
+
+ With Timing Logic Summary:
+```json
+{
+  "header": "The module `top_module` implements a Moore state machine that models the walking direction of a Lemming. The Lemming can walk either left (`walk_left = 1`) or right (`walk_right = 1`). The direction changes when the Lemming encounters an obstacle, indicated by `bump_left` or `bump_right` inputs. The `areset` input asynchronously resets the Lemming to the walking left state.",
+  "Interface Behavior": "The `clk` input is the clock signal for the state machine. The `areset` input, when transitioning from 0 to 1, asynchronously resets the state machine. When `areset` is asserted, `walk_left` becomes 1 and `walk_right` becomes 0 immediately. When `bump_left` is asserted, the Lemming will walk right on the next clock edge. When `bump_right` is asserted, the Lemming will walk left on the next clock edge. If both `bump_left` and `bump_right` are asserted, the Lemming will switch direction on the next clock edge.",
+  "Timing Dependency": "The next state logic depends on the current state and the `bump_left` and `bump_right` inputs. The outputs `walk_left` and `walk_right` depend only on the current state. The critical path involves the combinational logic that determines the next state based on the current state and the bump inputs, followed by the register update on the rising edge of `clk`.",
+  "Timing logic": "The state machine has one register, `current_state`, which stores the current walking direction. The register is updated on the positive edge of `clk`. The `areset` signal asynchronously resets the `current_state` to `WALK_LEFT`. Non-blocking assignments (`<=`) are used to update the `current_state` register, ensuring that the updates occur at the end of the clock cycle. The `walk_left` and `walk_right` outputs are assigned based on the value of `current_state` using continuous assignment (`assign`)."
+}
+```
+
+The header you have already known is:module top_module (
+	input clk,
+	input areset,
+	input bump_left,
+	input bump_right,
+	output walk_left,
+	output walk_right
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

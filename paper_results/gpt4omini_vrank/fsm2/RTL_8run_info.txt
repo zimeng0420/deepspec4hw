@@ -1,0 +1,15 @@
+iverilog simulation passed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:44 Warning: Synthesis requires the sensitivity list of an always_ff process to only be edge sensitive. state is missing a pos/negedge.
+
+iverilog cmd 2:
+/usr/bin/vvp run.vvp
+iverilog cmd 2 output:
+
+iverilog cmd 2 error:
+

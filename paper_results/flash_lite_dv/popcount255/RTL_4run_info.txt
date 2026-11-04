@@ -1,0 +1,28 @@
+iverilog simulation passed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:81: warning: Port 1 (a) of adder16bit expects 16 bits, got 128.
+top_module.v:81:        : Pruning 112 high bits of the expression.
+top_module.v:81: warning: Port 2 (b) of adder16bit expects 16 bits, got 8.
+top_module.v:81:        : Padding 8 high bits of the port.
+top_module.v:82: warning: Port 1 (a) of adder16bit expects 16 bits, got 128.
+top_module.v:82:        : Pruning 112 high bits of the expression.
+top_module.v:82: warning: Port 2 (b) of adder16bit expects 16 bits, got 8.
+top_module.v:82:        : Padding 8 high bits of the port.
+top_module.v:83: warning: Port 1 (a) of adder16bit expects 16 bits, got 128.
+top_module.v:83:        : Pruning 112 high bits of the expression.
+top_module.v:83: warning: Port 2 (b) of adder16bit expects 16 bits, got 8.
+top_module.v:83:        : Padding 8 high bits of the port.
+top_module.v:84: warning: Port 2 (b) of adder16bit expects 16 bits, got 8.
+top_module.v:84:        : Padding 8 high bits of the port.
+
+iverilog cmd 2:
+/usr/bin/vvp run.vvp
+iverilog cmd 2 output:
+
+iverilog cmd 2 error:
+

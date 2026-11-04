@@ -1,0 +1,10 @@
+# Task: always_casez
+
+## Analyze Report
+
+Top_Analyze="Analyze the task's header, ports, and overall behavior, highlighting how each key port interacts with the specified functionality described in the task. The module's inputs and outputs, including their bit widths, are critical to understanding the priority encoder's function. The behavior centers on identifying the position of the most significant '1' bit in the input vector." Topic_Analyze="Provide a structured, aggregated answer for each research query by synthesizing the problem description with relevant web-researched findings, ensuring a precise and focused analysis of the research topic. We will structure our research around the following queries: 1) 'priority encoder definition and functionality' to establish the core concepts; 2) '8-bit priority encoder implementation' to focus on the specific bit width; 3) 'Verilog code for priority encoder' to find implementation examples; 4) 'priority encoder testbench' to understand verification methods; and 5) 'optimizations for priority encoder' to explore potential improvements. The aggregated results will provide a precise and focused analysis of the design and implementation." Solving_Strategies='Outline the overall reasoning strategies and detailed step-by-step methodology, explicitly mapping how each reasoning step relates to the top-level module and its sub-modules. Our methodology will be: (1) Understand the basic principle of priority encoding. (2) Design the logic for an 8-bit input. (3) Create a truth table or equivalent representation to map inputs to outputs. (4) Derive the Boolean expressions for each output bit. (5) Implement the design in Verilog, mapping the inputs and outputs of the top-level module. (6) Create a testbench to verify the functionality. Each step directly relates to the top-level module and its sub-modules, ensuring a comprehensive approach to the problem.'
+
+## Generated Queries
+
+['priority encoder 8-bit implementation Verilog', 'Verilog code priority encoder testbench', 'priority encoder optimization techniques']
+

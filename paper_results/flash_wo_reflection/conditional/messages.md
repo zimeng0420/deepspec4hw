@@ -1,0 +1,28 @@
+# Messages for Task: conditional
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Given four unsigned numbers, find the minimum. Unsigned numbers can be compared with standard comparison operators (a < b). 
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module header definition is:\n\n```verilog\nmodule top_module (\n    input [7:0] a,\n    input [7:0] b,\n    input [7:0] c,\n    input [7:0] d,\n    output reg [7:0] min\n);\n```\n\nThis module, named `top_module`, takes four 8-bit unsigned numbers as inputs: `a`, `b`, `c`, and `d`. It produces one 8-bit unsigned number as output: `min`. The `min` output represents the minimum value among the four input numbers. The module's behavior is to determine the smallest value among `a`, `b`, `c`, and `d` and assign that value to the `min` output.",
+  "combinational_logic_function": "The combinational logic function determines the minimum of four 8-bit unsigned numbers. This is achieved through a series of comparisons. First, `a` and `b` are compared. The smaller of the two is then compared with `c`. Finally, the smaller of those two is compared with `d`. The result of this final comparison is the overall minimum, which is assigned to the output `min`. The comparisons are performed using standard unsigned comparison operators. The selection of the minimum value at each stage is implemented using conditional assignment logic. The signal flow is structured to minimize the number of comparison stages, resulting in a relatively short critical path. The logic organization consists of three cascaded comparison stages, each selecting the minimum of two inputs. There is no operator sharing in this implementation, as each comparison stage requires its own comparator. Logic level balancing is achieved by ensuring that each comparison stage has approximately the same delay. The output multiplexing logic simply selects the final minimum value based on the result of the last comparison.",
+  "enhanced_combinational_description": "The `top_module` implements a combinational logic circuit to find the minimum of four 8-bit unsigned numbers (`a`, `b`, `c`, and `d`) and outputs the result to `min`. The core functionality relies on a series of comparisons. Initially, `a` and `b` are compared. If `a` is less than or equal to `b`, then `a` is considered the minimum of the first two numbers. Otherwise, `b` is the minimum. This intermediate minimum is then compared with `c`. If the intermediate minimum is less than or equal to `c`, the intermediate minimum remains the minimum. Otherwise, `c` becomes the new minimum. Finally, this second intermediate minimum is compared with `d`. If the second intermediate minimum is less than or equal to `d`, it is assigned to the output `min`. Otherwise, `d` is assigned to `min`. The comparison operations are performed using standard unsigned comparison operators (<=). The selection of the minimum value at each stage is achieved through conditional assignment. The entire circuit operates purely combinationally; the output `min` is a direct function of the inputs `a`, `b`, `c`, and `d` at any given time. The circuit does not contain any memory elements or sequential logic. The output `min` is an 8-bit unsigned value representing the smallest of the four input values."
+}
+```
+
+The header you have already known is:module top_module (
+	input [7:0] a,
+	input [7:0] b,
+	input [7:0] c,
+	input [7:0] d,
+	output reg [7:0] min
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

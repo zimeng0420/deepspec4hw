@@ -1,0 +1,14 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:48: error: predict_taken is not a valid l-value in testbench.DUT.
+top_module.v:7:      : predict_taken is declared here as wire.
+top_module.v:49: error: predict_history is not a valid l-value in testbench.DUT.
+top_module.v:8:      : predict_history is declared here as wire.
+tb.v:22: warning: output port predict_taken is coerced to inout.
+2 error(s) during elaboration.
+

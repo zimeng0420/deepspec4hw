@@ -1,0 +1,23 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:48: error: pht_next is not a valid l-value in testbench.DUT.
+top_module.v:44:      : pht_next is declared here as wire.
+top_module.v:49: error: ghr_next_temp is not a valid l-value in testbench.DUT.
+top_module.v:45:      : ghr_next_temp is declared here as wire.
+top_module.v:56: error: pht_next is not a valid l-value in testbench.DUT.
+top_module.v:44:      : pht_next is declared here as wire.
+top_module.v:60: error: pht_next is not a valid l-value in testbench.DUT.
+top_module.v:44:      : pht_next is declared here as wire.
+top_module.v:67: error: ghr_next_temp is not a valid l-value in testbench.DUT.
+top_module.v:45:      : ghr_next_temp is declared here as wire.
+top_module.v:69: error: ghr_next_temp is not a valid l-value in testbench.DUT.
+top_module.v:45:      : ghr_next_temp is declared here as wire.
+top_module.v:72: error: ghr_next_temp is not a valid l-value in testbench.DUT.
+top_module.v:45:      : ghr_next_temp is declared here as wire.
+7 error(s) during elaboration.
+

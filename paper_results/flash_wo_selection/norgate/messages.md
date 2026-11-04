@@ -1,0 +1,26 @@
+# Messages for Task: norgate
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Create a module that implements a NOR gate.
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module `top_module` has two single-bit inputs, `a` and `b`, and a single-bit output, `out`. The module implements a combinational logic function that computes the NOR of the two inputs. The interface consists of two input ports, `a` and `b`, which accept single-bit digital signals, and one output port, `out`, which provides the result of the NOR operation.",
+  "combinational_logic_function": "The output `out` is the logical NOR of the inputs `a` and `b`. This means `out` is '1' only when both `a` and `b` are '0'; otherwise, `out` is '0'. The Boolean expression for this function is: `out = ~(a | b)`. The combinational logic structure consists of a single OR gate followed by a NOT gate. The OR gate takes `a` and `b` as inputs and produces an intermediate signal. The NOT gate then inverts this intermediate signal to produce the final output `out`. There is no operator sharing or resource utilization strategies to consider for this simple gate. Logic level balancing and delay equalization techniques are not applicable. There is no output multiplexing or selection logic.",
+  "enhanced_combinational_description": "The `top_module` implements a two-input NOR gate. The output `out` is asserted high (logic '1') if and only if both inputs `a` and `b` are asserted low (logic '0'). If either `a` or `b` or both are asserted high (logic '1'), then the output `out` is asserted low (logic '0'). The combinational logic function is defined by the Boolean expression `out = ~(a | b)`, where '|' represents the logical OR operation and '~' represents the logical NOT operation. The gate's behavior can be summarized by the following truth table:\n\n| a | b | out |\n|---|---|-----|\n| 0 | 0 |  1  |\n| 0 | 1 |  0  |\n| 1 | 0 |  0  |\n| 1 | 1 |  0  |\n\nThe implementation consists of a single combinational logic block that directly implements the NOR function. No further optimization or complex logic structures are involved. The signal flow is straightforward: inputs `a` and `b` are fed into the NOR logic, and the result is directly outputted on `out`."
+}
+```
+
+The header you have already known is:module top_module(
+	input a, 
+	input b,
+	output out
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

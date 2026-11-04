@@ -1,0 +1,38 @@
+iverilog simulation passed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:29: warning: ignoring out of bounds l-value array access intermediate_sums[4].
+top_module.v:30: warning: ignoring out of bounds l-value array access intermediate_sums[5].
+top_module.v:31: warning: ignoring out of bounds l-value array access intermediate_sums[6].
+top_module.v:32: warning: ignoring out of bounds l-value array access intermediate_sums[7].
+top_module.v:33: warning: ignoring out of bounds l-value array access intermediate_sums[8].
+top_module.v:34: warning: ignoring out of bounds l-value array access intermediate_sums[9].
+top_module.v:35: warning: ignoring out of bounds l-value array access intermediate_sums[10].
+top_module.v:36: warning: ignoring out of bounds l-value array access intermediate_sums[11].
+top_module.v:37: warning: ignoring out of bounds l-value array access intermediate_sums[12].
+top_module.v:38: warning: ignoring out of bounds l-value array access intermediate_sums[13].
+top_module.v:39: warning: ignoring out of bounds l-value array access intermediate_sums[14].
+top_module.v:40: warning: ignoring out of bounds l-value array access intermediate_sums[15].
+top_module.v:47: warning: returning 'bx for out of bounds array access intermediate_sums[4].
+top_module.v:47: warning: returning 'bx for out of bounds array access intermediate_sums[5].
+top_module.v:48: warning: returning 'bx for out of bounds array access intermediate_sums[6].
+top_module.v:48: warning: returning 'bx for out of bounds array access intermediate_sums[7].
+top_module.v:49: warning: returning 'bx for out of bounds array access intermediate_sums[8].
+top_module.v:49: warning: returning 'bx for out of bounds array access intermediate_sums[9].
+top_module.v:50: warning: returning 'bx for out of bounds array access intermediate_sums[10].
+top_module.v:50: warning: returning 'bx for out of bounds array access intermediate_sums[11].
+top_module.v:51: warning: returning 'bx for out of bounds array access intermediate_sums[12].
+top_module.v:51: warning: returning 'bx for out of bounds array access intermediate_sums[13].
+top_module.v:52: warning: returning 'bx for out of bounds array access intermediate_sums[14].
+top_module.v:52: warning: returning 'bx for out of bounds array access intermediate_sums[15].
+
+iverilog cmd 2:
+/usr/bin/vvp run.vvp
+iverilog cmd 2 output:
+
+iverilog cmd 2 error:
+

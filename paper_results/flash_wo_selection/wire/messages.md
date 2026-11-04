@@ -1,0 +1,24 @@
+# Messages for Task: wire
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Create a module with one input and one output that behaves like a wire.
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module `top_module` has one input port `in` and one output port `out`. The input `in` is a single-bit signal, and the output `out` is also a single-bit signal. The module's function is to directly pass the value of the input `in` to the output `out`.",
+  "combinational_logic_function": "The combinational logic function is a direct assignment. The output `out` is always equal to the input `in`. This can be represented by the Boolean expression: `out = in`. There is no complex logic organization, signal flow optimization, or critical path to consider, as it is a single direct connection. No operator sharing, resource utilization strategies, logic level balancing, or output multiplexing is applicable in this simple case.",
+  "enhanced_combinational_description": "The `top_module` implements a simple wire-like behavior using combinational logic. The module receives a single-bit input signal `in` and produces a single-bit output signal `out`. The combinational logic within the module consists of a direct connection between the input and output. The value of `in` is continuously assigned to `out`. This means that any change in the value of `in` will immediately be reflected in the value of `out`. The functionality is achieved through a continuous assignment statement, ensuring that `out` always mirrors the current state of `in`. There are no intermediate logic gates or complex operations involved. The module effectively acts as a conduit for the signal, preserving its integrity and transmitting it without modification. The combinational logic function can be described as a simple identity function, where the output is identical to the input. This design is inherently optimized for both performance and area, as it requires minimal resources and introduces negligible delay. The signal flow is unidirectional, from `in` to `out`, and there are no alternative paths or feedback loops. The absence of complex logic eliminates the need for logic level balancing or delay equalization techniques. The module's simplicity ensures that it operates with maximum efficiency and minimal overhead."
+}
+```
+
+The header you have already known is:module top_module(
+	input in,
+	output out);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

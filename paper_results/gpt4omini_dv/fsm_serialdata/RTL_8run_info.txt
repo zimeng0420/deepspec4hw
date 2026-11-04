@@ -1,0 +1,12 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp top_module.v tb.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:23: error: Enumeration name DATA_RECEIVE_6 has an incorrectly sized constant.
+top_module.v:23: error: Enumeration name DATA_RECEIVE_6 has a value that is too large 4'd8.
+top_module.v:23: error: Enumeration name DATA_RECEIVE_6 has a value that is too large: 4'd8.
+4 error(s) during elaboration.
+

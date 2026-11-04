@@ -1,0 +1,20 @@
+{
+  "methodology": "The decomposition process involved analyzing both the original research topic and the generated technical specification to extract individual requirements and features. Each piece of information was carefully reviewed to identify self-contained units that are technically specific and unambiguous. The criteria for atomic units included independence, clarity, and implementability. The original research topic was broken down into its core functional requirements, while the generated specification was analyzed for its detailed descriptions of behavior, timing, and logic structure. This systematic approach ensured that all relevant aspects were captured in the atomic sets.",
+  "mindtraced_atomic_units": [
+    "The module is named 'top_module'.",
+    "The module has three inputs: 'clk' (clock), 'd' (data input), and 'r' (reset input).",
+    "The module has one output: 'q' (output of the flip-flop).",
+    "The flip-flop has an active high synchronous reset.",
+    "When the reset signal 'r' is high, the output 'q' is set to 0.",
+    "When the reset signal 'r' is low, the output 'q' captures the value of the input 'd' on the rising edge of the clock signal 'clk'."
+  ],
+  "spec_atomic_units": [
+    "The module 'top_module' implements a D flip-flop with an active high synchronous reset.",
+    "The module has three inputs: 'clk' (clock), 'd' (data), and 'r' (reset), and one output: 'q'.",
+    "When the reset signal 'r' is high, the output 'q' is set to 0 on the next rising edge of the clock.",
+    "If 'r' is low, the output 'q' captures the value of the input 'd' on the rising edge of 'clk'.",
+    "The timing characteristics require 'r' to be stable before and after the rising edge of 'clk'.",
+    "The critical paths involve the reset signal 'r' and the clock signal 'clk'.",
+    "The implementation uses non-blocking assignments to ensure proper sequential behavior."
+  ]
+}

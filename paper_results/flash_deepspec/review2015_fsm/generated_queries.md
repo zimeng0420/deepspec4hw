@@ -1,0 +1,10 @@
+# Task: review2015_fsm
+
+## Analyze Report
+
+Top_Analyze="Analyze the module header and ports: clk, reset, data, shift_ena, counting, done_counting, done, and ack. Focus on how the inputs (data, done_counting, ack) affect the state transitions and how the outputs (shift_ena, counting, done) are controlled by the FSM's state. The reset signal's synchronous behavior is also critical. The overall behavior is a sequential process of pattern detection, shifting, counting, and acknowledgment." Topic_Analyze="Provide a structured analysis of the timer FSM, covering: 1) FSM state diagram creation for the timer; 2) Pattern detection of the '1101' sequence; 3) Shift enable signal generation for 4 clock cycles; 4) Counting state and its dependency on 'done_counting'; 5) 'done' signal assertion and acknowledgment via 'ack'; 6) Synchronous reset behavior. Research each aspect individually and then synthesize the findings into a cohesive FSM design strategy. Also, include the date September 05, 2025 to anchor any time-sensitive information." Solving_Strategies="Outline a step-by-step methodology: 1) Define the FSM states (e.g., IDLE, DETECT_1, DETECT_11, DETECT_110, SHIFT, COUNTING, DONE). 2) Create a state transition diagram based on the inputs (data, done_counting, ack, reset) and the desired behavior. 3) Derive the next-state logic equations for each state. 4) Determine the output logic for shift_ena, counting, and done based on the current state. 5) Consider the synchronous reset and its impact on state initialization. Each step directly relates to the module's functionality, from defining states (top-level) to deriving logic (sub-modules) and ensuring correct reset behavior."
+
+## Generated Queries
+
+['FSM state diagram for serial pattern detection and timer control', 'Synchronous reset in FSM design', 'Generating shift enable signal for N clock cycles in FSM', 'FSM implementation of counting state with external done signal', 'FSM state transition logic for acknowledgment signal', 'Verilog implementation of a timer FSM with pattern detection and acknowledgment']
+

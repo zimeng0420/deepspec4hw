@@ -1,0 +1,29 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units based on individual requirements, features, behaviors, and constraints. Each atomic unit is designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement. For the original research topic, the decomposition focused on the functional requirements of the D flip-flops and the module's input/output behavior. For the generated technical specification, the decomposition focused on the combinational logic function, reset conditions, data input conditions, and timing dependencies.",
+  "mindtraced_atomic_units": [
+    "Module top_module has input clk",
+    "Module top_module has input [7:0] d",
+    "Module top_module has input reset",
+    "Module top_module has output reg [7:0] q",
+    "Implements 8 D flip-flops",
+    "Each D flip-flop samples d[i] on the positive edge of clk",
+    "D flip-flops have a synchronous reset input",
+    "When reset is high, on the next positive edge of clk, q[i] is set to zero",
+    "Active high synchronous reset sets output to zero",
+    "Triggered by the positive edge of clk"
+  ],
+  "spec_atomic_units": [
+    "Module top_module has input clk",
+    "Module top_module has input [7:0] d",
+    "Module top_module has input reset",
+    "Module top_module has output reg [7:0] q",
+    "Output q changes only on the positive edge of clk",
+    "Value of d must be stable before the positive edge of clk for a setup time",
+    "Value of d must remain stable after the positive edge of clk for a hold time",
+    "Reset signal must be stable before and after the positive edge of clk",
+    "When reset is high, q is set to 0 on the positive edge of clk",
+    "When reset is low, q is updated with the value of d on the positive edge of clk",
+    "Implements 8 D flip-flops with a synchronous, active-high reset",
+    "Flip-flops are triggered by the positive edge of the clock clk"
+  ]
+}

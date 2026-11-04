@@ -1,0 +1,10 @@
+# Task: review2015_fsmseq
+
+## Analyze Report
+
+Top_Analyze="Analyze the module header, ports (clk, reset, data, start_shifting), and overall behavior. Focus on how the FSM should detect the sequence '1101', the synchronous reset, and the 'start_shifting' output that remains high once the sequence is detected until reset. Consider the implications of 'forever' in the problem statement." Topic_Analyze="Provide a structured analysis of the FSM design, including state diagram creation, state encoding, and transition logic. Research common FSM design patterns for sequence detection, focusing on handling overlapping sequences and ensuring correct behavior upon reset. Investigate how to implement the 'start_shifting' output to latch high after sequence detection and remain high until reset. Research synchronous reset implementation in Verilog. Research how to handle edge cases and potential race conditions in FSM design. Research the impact of clock frequency on the FSM's performance and reliability. Include the current date, September 12, 2025, in the context of the latest FSM design best practices." Solving_Strategies="Outline a step-by-step methodology: 1) Define the states of the FSM based on the sequence '1101'. 2) Create a state diagram showing transitions based on input 'data'. 3) Determine the state encoding. 4) Derive the next-state logic equations. 5) Implement the 'start_shifting' output logic to latch high upon sequence detection and remain high until reset. 6) Implement the synchronous reset. 7) Verify the design through simulation, focusing on sequence detection, reset behavior, and edge cases. Relate each step back to the module's ports and functionality, ensuring that the FSM correctly detects the sequence, handles reset appropriately, and controls the 'start_shifting' output as specified."
+
+## Generated Queries
+
+['FSM design for sequence detection Verilog synchronous reset', 'Verilog latch implementation with synchronous reset', 'State diagram for 1101 sequence detector FSM', 'Overlapping sequence detection FSM Verilog', "Implementing 'forever' condition in FSM Verilog"]
+

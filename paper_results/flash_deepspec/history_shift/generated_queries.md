@@ -1,0 +1,10 @@
+# Task: history_shift
+
+## Analyze Report
+
+Top_Analyze="Analyze the module header, input/output ports (clk, areset, predict_valid, predict_taken, predict_history, train_mispredicted, train_taken, train_history), and their roles in the 32-bit global history shift register. Focus on how each input affects the predict_history output, especially the interactions between prediction and misprediction signals. Consider the reset condition and its impact on the register's state." Topic_Analyze="Research the following topics: 1) '32-bit global history shift register design' to understand the basic structure and operation; 2) 'branch prediction history implementation in Verilog' to find standard coding practices; 3) 'handling branch mispredictions in shift registers' to learn how to rollback the history; 4) 'priority between prediction and misprediction signals in branch predictors' to resolve conflicts; 5) 'asynchronous reset in shift registers' to understand the reset behavior. Synthesize the findings to create a comprehensive understanding of the design requirements. Also, consider the implications of 'September 05, 2025' on the relevance of research findings." Solving_Strategies='Outline a step-by-step methodology: 1) Understand the basic shift register operation with prediction (predict_valid, predict_taken). 2) Implement the misprediction rollback mechanism (train_mispredicted, train_taken, train_history). 3) Resolve the conflict when both prediction and misprediction occur simultaneously, prioritizing misprediction. 4) Implement the asynchronous reset (areset). 5) Verify the design with test cases covering all scenarios. Each step relates to the top-level module by implementing a specific aspect of its functionality, ensuring the final design meets all requirements.'
+
+## Generated Queries
+
+['Verilog implementation of a 32-bit global branch history shift register with misprediction rollback', 'priority handling of simultaneous branch prediction and misprediction in Verilog', 'asynchronous reset implementation in Verilog shift registers', 'branch prediction history register rollback techniques']
+

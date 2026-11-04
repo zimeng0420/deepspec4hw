@@ -1,0 +1,28 @@
+# Messages for Task: vector0
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Build a circuit that has one 3-bit input, then outputs the same vector, and also splits it into three separate 1-bit outputs. Connect output o0 to the input vector's position 0, o1 to position 1, etc.
+
+The compressed specification is as follows: ```json
+{
+  "header": "module top_module(\n\tinput [2:0] vec,\n\toutput [2:0] outv,\n\toutput o2,\n\toutput o1,\n\toutput o0\n);",
+  "combinational_logic_function": "The combinational logic function is defined as follows:\n\n*   **outv[2:0] = vec[2:0]**: The 3-bit output vector `outv` is directly assigned the value of the 3-bit input vector `vec`. This is a direct connection, meaning each bit of `outv` mirrors the corresponding bit of `vec`.\n*   **o0 = vec[0]**: The single-bit output `o0` is assigned the value of the least significant bit (LSB) of the input vector `vec`.\n*   **o1 = vec[1]**: The single-bit output `o1` is assigned the value of the middle bit of the input vector `vec`.\n*   **o2 = vec[2]**: The single-bit output `o2` is assigned the value of the most significant bit (MSB) of the input vector `vec`.\n\nThis circuit performs a replication and fan-out function. The input vector is duplicated as a vector output and its individual bits are also made available as separate outputs. The logic organization is a simple direct assignment, with no complex Boolean operations involved. The signal flow is straightforward: from the input vector to the output vector and individual bit outputs. There is no operator sharing or resource utilization strategy needed due to the simplicity of the logic. Logic level balancing and delay equalization are not applicable in this case as the path delays are inherently equal. Output multiplexing and selection logic are not required.",
+  "enhanced_combinational_description": "This combinational logic circuit takes a 3-bit input vector, `vec[2:0]`, and produces a 3-bit output vector, `outv[2:0]`, which is an exact replica of the input vector. Additionally, the circuit provides three individual 1-bit outputs, `o0`, `o1`, and `o2`, each corresponding to a specific bit of the input vector. The output `o0` directly reflects the value of `vec[0]`, `o1` reflects `vec[1]`, and `o2` reflects `vec[2]`. The circuit's functionality is achieved through direct assignment, where each output is explicitly connected to its corresponding input. Specifically, `outv[2:0]` is assigned the value of `vec[2:0]`, `o0` is assigned the value of `vec[0]`, `o1` is assigned the value of `vec[1]`, and `o2` is assigned the value of `vec[2]`. This creates a simple fan-out structure where the input vector is both replicated as a whole and split into its constituent bits for individual access. The circuit's behavior is purely combinational, meaning the outputs respond instantaneously to changes in the input, without any internal state or memory elements. The absence of any complex logic gates or arithmetic operations ensures minimal propagation delay and straightforward implementation."
+}
+```
+
+The header you have already known is:module top_module(
+	input [2:0] vec, 
+	output [2:0] outv,
+	output o2,
+	output o1,
+	output o0
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

@@ -1,0 +1,39 @@
+{
+  "methodology": "The decomposition process involves breaking down the research topic and the generated specification into independent, technically specific, and implementable units. The criteria for each unit are: 1. Independence: Each unit should represent a single, self-contained requirement or feature. 2. Technical Specificity: Units should be unambiguous and avoid vague terms. 3. Implementability: Each unit should be directly translatable into a design element or constraint. The approach involves reading each document, identifying key functionalities, and then creating atomic units based on the criteria. For the research topic, the module description, signal descriptions, and functional behavior are analyzed. For the generated specification, the combinational logic function, enhanced combinational description, and timing logic summary are analyzed.",
+  "mindtraced_atomic_units": [
+    "Implement a 32-bit global history shift register.",
+    "Support rolling back state in response to a pipeline flush.",
+    "Shift in predict_taken from LSB when predict_valid is 1.",
+    "Update branch history for predicted branch.",
+    "Load branch history with history after mispredicted branch when train_mispredicted is 1.",
+    "Concatenate train_history and train_taken to form new history.",
+    "Misprediction takes precedence if prediction and misprediction occur simultaneously.",
+    "A positive edge-triggered asynchronous reset (areset) resets the history counter to zero.",
+    "predict_history[0] is the direction of the youngest branch.",
+    "The design is for branch prediction."
+  ],
+  "spec_atomic_units": [
+    "The module implements a 32-bit global history shift register.",
+    "The module updates the register based on branch predictions and mispredictions.",
+    "The clk is the clock signal.",
+    "areset is a positive edge-triggered asynchronous reset.",
+    "predict_valid and predict_taken are used for branch prediction.",
+    "train_mispredicted, train_taken, and train_history are used for handling branch mispredictions.",
+    "predict_history is the output, representing the current branch history.",
+    "areset: Asynchronous, positive edge-triggered reset.",
+    "The register is reset immediately when areset goes high.",
+    "All synchronous operations are performed on the positive edge of clk.",
+    "When predict_valid is high, and on the positive edge of clk, predict_taken is shifted into the LSB of predict_history.",
+    "When train_mispredicted is high, and on the positive edge of clk, the register is updated with the correct history.",
+    "The new history is formed by concatenating train_history with train_taken.",
+    "If both prediction and misprediction occur at the same time, misprediction takes precedence.",
+    "A 32-bit register predict_history is used to store the branch history.",
+    "All updates to predict_history happen on the positive edge of clk.",
+    "The areset signal asynchronously resets the predict_history register to zero.",
+    "Non-blocking assignments are used to update the predict_history register.",
+    "If areset is high, predict_history is set to 0.",
+    "If train_mispredicted is high, predict_history is updated with the concatenation of train_history and train_taken.",
+    "If predict_valid is high, predict_history is shifted to the right, and predict_taken is shifted into the LSB.",
+    "The critical path is likely to be areset (direct reset) or train_mispredicted -> Priority Logic -> Concatenation -> predict_history or predict_valid & predict_taken -> Priority Logic -> Shift Register -> predict_history."
+  ]
+}

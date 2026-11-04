@@ -1,0 +1,17 @@
+{
+  "methodology": "The decomposition process involved systematically analyzing each provided text to identify distinct, self-contained requirements, features, and behaviors.",
+  "mindtraced_atomic_units": [
+    "Design a 32-bit global history shift register.",
+    "Support rollback for pipeline flushes due to branch mispredictions.",
+    "Shift in predict_taken from the LSB side when predict_valid is asserted.",
+    "Load the register with concatenated train_history and train_taken upon misprediction.",
+    "areset initializes the register to zero asynchronously."
+  ],
+  "spec_atomic_units": [
+    "Define a 32-bit global history shift register module.",
+    "Include asynchronous reset functionality.",
+    "Update register state based on branch predictions and mispredictions.",
+    "Prioritize misprediction handling over prediction updates.",
+    "Output the current branch history state through predict_history."
+  ]
+}

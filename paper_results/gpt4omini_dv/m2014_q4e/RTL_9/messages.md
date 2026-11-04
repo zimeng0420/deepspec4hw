@@ -1,0 +1,33 @@
+# Messages for Task: m2014_q4e
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Implement a 2-input NOR gate.The header you have already known is:module top_module (
+	input in1,
+	input in2,
+	output logic out
+);
+
+```
+
+## User Message
+
+```
+
+
+You can use the technical specification as follows:```json
+{
+  "header": "The top module header definition from module top_module ( input in1, input in2, output logic out ); defines a combinational logic circuit that implements a 2-input NOR gate. The inputs in1 and in2 are the primary binary inputs that determine the output state, while out reflects the logical result of the NOR operation. The interface clearly delineates the inputs and output, establishing the foundation for the NOR gate's functionality.",
+  
+  "combinational_logic_function": "The output of the 2-input NOR gate is derived from the inputs in1 and in2 based on the logical NOR operation. The Boolean expression representing this operation is out = ~(in1 | in2), which indicates that the output is high (1) only when both inputs are low (0). The truth table for the NOR gate is as follows: \n\n| Input A | Input B | Output |\n|---|---|---|\n| 0 | 0 | 1 |\n| 0 | 1 | 0 |\n| 1 | 0 | 0 |\n| 1 | 1 | 0 |\n\nThis systematic breakdown of the combinational logic structure emphasizes the direct relationship between the inputs and the output, ensuring clarity in the logic organization. The signal flow is straightforward, with the NOR operation being the critical path that determines the output based on the states of the inputs. The design does not require operator sharing or complex resource utilization strategies due to its simplicity. The logic level is balanced, as the NOR gate inherently provides a single output based on two inputs, and there are no additional multiplexing or selection logic requirements in this basic implementation.",
+
+  "enhanced_combinational_description": "The comprehensive combinational logic specification for the 2-input NOR gate is derived from the task description provided by User: CMB. The module top_module is defined with two inputs, in1 and in2, and one output, out. The NOR gate's functionality is characterized by its truth table, where the output is high only when both inputs are low. The implementation can be achieved through various modeling styles in Verilog, including gate-level, dataflow, and behavioral modeling. The simplest and most direct implementation is through gate-level modeling, utilizing the predefined NOR gate primitive in Verilog. The output can be expressed as out = ~(in1 | in2), ensuring that the logical behavior aligns with the expected truth table. This specification serves as a clear guide for implementing the NOR gate in a combinational logic context, focusing solely on the relationships between inputs and outputs without delving into sequential logic or timing considerations."
+}
+```
+
+Please only reply with the Verilog code, no other words.
+
+Please always begin with `module top_module()`. 
+```
+

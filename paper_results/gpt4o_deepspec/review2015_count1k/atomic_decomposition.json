@@ -1,0 +1,15 @@
+{
+  "methodology": "The decomposition process involved analyzing each provided text to extract distinct, self-contained requirements or features.",
+  "mindtraced_atomic_units": [
+    "Counter increments from 0 to 999 inclusively.",
+    "Reset input is active high and synchronous.",
+    "Output 'q' is a 10-bit register."
+  ],
+  "spec_atomic_units": [
+    "Counter increments from 0 to 999 inclusively.",
+    "Reset input is active high and synchronous.",
+    "Output 'q' is a 10-bit register.",
+    "Critical path involves evaluation of reset signal and comparison with 999.",
+    "Wrap-around logic resets counter to 0 after reaching 999."
+  ]
+}

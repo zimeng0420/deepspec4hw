@@ -1,0 +1,25 @@
+# Messages for Task: mt2015_eq2
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Create a circuit that has two 2-bit inputs A[1:0] and B[1:0], and produces an output z. The value of z should be 1 if A = B, otherwise z should be 0.
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module `top_module` has two 2-bit input ports, `A` and `B`, and a single-bit output port, `z`. The inputs `A` and `B` are defined as 2-bit vectors, with `A[1]` and `A[0]` representing the most and least significant bits of input `A`, respectively, and similarly for `B[1]` and `B[0]` of input `B`. The output `z` is a single bit that indicates whether the two input vectors are equal. If `A` is equal to `B`, then `z` is asserted to a logic high (1); otherwise, `z` is de-asserted to a logic low (0).",
+  "combinational_logic_function": "The output `z` is derived directly from the comparison of the two input vectors, `A` and `B`. The combinational logic implements an equality comparison. The Boolean expression for `z` can be represented as: z = (A[1] == B[1]) AND (A[0] == B[0]). This can be implemented using an XNOR gate for each bit position, followed by an AND gate to combine the results. Alternatively, a single equality operator can be used. The signal flow is straightforward: the input vectors `A` and `B` are fed into the comparison logic, and the result of the comparison directly drives the output `z`. There is no multiplexing or selection logic involved.",
+  "enhanced_combinational_description": "The combinational logic circuit implements a 2-bit equality comparator. The circuit takes two 2-bit inputs, `A[1:0]` and `B[1:0]`, and generates a single-bit output, `z`. The output `z` is asserted to logic '1' if and only if the value of `A` is equal to the value of `B`. Otherwise, the output `z` is de-asserted to logic '0'. The equality comparison is performed bit-wise. Specifically, `A[1]` must be equal to `B[1]`, AND `A[0]` must be equal to `B[0]` for the overall equality condition to be true. The circuit's functionality can be described by the following truth table:\n\n| A[1] | A[0] | B[1] | B[0] | z |\n|---|---|---|---|---|\n| 0 | 0 | 0 | 0 | 1 |\n| 0 | 0 | 0 | 1 | 0 |\n| 0 | 0 | 1 | 0 | 0 |\n| 0 | 0 | 1 | 1 | 0 |\n| 0 | 1 | 0 | 0 | 0 |\n| 0 | 1 | 0 | 1 | 1 |\n| 0 | 1 | 1 | 0 | 0 |\n| 0 | 1 | 1 | 1 | 0 |\n| 1 | 0 | 0 | 0 | 0 |\n| 1 | 0 | 0 | 1 | 0 |\n| 1 | 0 | 1 | 0 | 1 |\n| 1 | 0 | 1 | 1 | 0 |\n| 1 | 1 | 0 | 0 | 0 |\n| 1 | 1 | 0 | 1 | 0 |\n| 1 | 1 | 1 | 0 | 0 |\n| 1 | 1 | 1 | 1 | 1 |\n\nThe circuit directly implements this truth table through combinational logic. The output `z` is a direct result of the equality comparison between `A` and `B`."
+}
+```
+
+The header you have already known is:module top_module(
+	input [1:0] A,
+	input [1:0] B,
+	output z);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

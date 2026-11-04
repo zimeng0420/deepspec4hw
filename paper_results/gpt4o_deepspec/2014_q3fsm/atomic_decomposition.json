@@ -1,0 +1,25 @@
+{
+  "methodology": "The decomposition process involved analyzing each provided text to extract distinct, self-contained requirements and behaviors.",
+  "mindtraced_atomic_units": [
+    "FSM begins in reset state A.",
+    "FSM remains in state A as long as s=0.",
+    "FSM transitions to state B when s=1.",
+    "In state B, FSM examines input w for three clock cycles.",
+    "If w=1 exactly twice, output z=1 in the next clock cycle.",
+    "Otherwise, output z=0.",
+    "FSM repeats the process for subsequent three clock cycles.",
+    "Reset is active high and synchronous.",
+    "Design should use minimal states."
+  ],
+  "spec_atomic_units": [
+    "Module defines FSM with inputs clk, reset, s, w, and output z.",
+    "FSM starts in state A and transitions to state B when s=1.",
+    "In state B, input w is evaluated over three clock cycles.",
+    "Output z is set to 1 if w=1 exactly twice; otherwise, z=0.",
+    "FSM uses synchronous reset to initialize to state A.",
+    "State transitions occur on rising clock edges.",
+    "FSM design optimizes logic for performance.",
+    "Output z is updated immediately after evaluation.",
+    "FSM continues evaluation in three-cycle windows."
+  ]
+}

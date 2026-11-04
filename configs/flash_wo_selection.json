@@ -1,0 +1,57 @@
+{
+  "run_id": "flash_wo_selection",
+  "method": "deepspec",
+  "models": {
+    "selection": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "temperature": 0.1
+    },
+    "query": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "temperature": 0.3
+    },
+    "finalize": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "temperature": 0.0,
+      "max_tokens": 10000
+    },
+    "reflection": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "temperature": 0.1
+    },
+    "codegen": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "temperature": 0.0
+    },
+    "specgen": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "temperature": 0.1
+    },
+    "search": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "temperature": 0.0
+    },
+    "embedding": {
+      "provider": "google",
+      "model": "gemini-embedding-001"
+    }
+  },
+  "policy": {
+    "cluster_selection": "largest"
+  },
+  "prompt_profile": "flash_wo_selection",
+  "spec_source_run": null,
+  "provenance": {
+    "model_ids": "paper_declared_not_verified_from_historical_api_metadata",
+    "codegen_prompt": "logged_content_api_roles_inferred_from_source",
+    "ablation": "code_snapshot_available"
+  },
+  "selection": false
+}

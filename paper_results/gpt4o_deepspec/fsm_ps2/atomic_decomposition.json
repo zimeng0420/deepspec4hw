@@ -1,0 +1,24 @@
+{
+  "methodology": "The decomposition process involved analyzing each provided text to identify distinct, self-contained requirements or features, ensuring clarity and specificity.",
+  "mindtraced_atomic_units": [
+    "The PS/2 mouse protocol sends messages that are three bytes long.",
+    "The first byte of each message has in[3]=1.",
+    "A finite state machine (FSM) is required to identify message boundaries.",
+    "The FSM discards bytes until it detects a byte with in[3]=1.",
+    "The FSM assumes this byte is the first of a message and waits for two more bytes.",
+    "The FSM signals 'done' immediately after receiving the third byte.",
+    "The reset signal is active high and synchronous."
+  ],
+  "spec_atomic_units": [
+    "The module is defined as module top_module (input clk, input [7:0] in, input reset, output done).",
+    "The 'in' input is an 8-bit data stream where in[3] indicates the start of a message.",
+    "The 'reset' input is active high and synchronous.",
+    "The 'done' output signals the successful receipt of a complete message.",
+    "The FSM detects the start of a message when in[3]=1.",
+    "A counter tracks the number of bytes received since the last message start.",
+    "The counter increments with each byte received.",
+    "The 'done' output is asserted when the counter reaches 3.",
+    "The FSM resets the counter when in[3]=1.",
+    "The FSM operates on the rising edge of 'clk'."
+  ]
+}

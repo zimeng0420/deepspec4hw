@@ -1,0 +1,2698 @@
+{
+  "source_commit": "eee5547f9a556cfbf16339f15b8037e93541485c",
+  "main_count_matches": 18,
+  "methods": [
+    {
+      "id": "A1",
+      "claim": "Selection -> Deep Research -> Finalize -> Self-Reflection (Figs. 1-2)",
+      "evidence": "Effective edges: START -> selection -> generate_query -> web_research -> finalize_answer -> reflection_simple -> [SEQ] reflection. The alternative START -> generate_query code is inside an inactive string.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A2",
+      "claim": "Selection produces module insight, topic insight and solution strategy (Fig. 5)",
+      "evidence": "Top_Analyze, Topic_Analyze and Solving_Strategies fields in tools_and_schemas.py.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/schemas.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A3",
+      "claim": "SEQ analyzes combinational logic, Mindtrace and timing, then combines them; CMB analyzes combinational logic only",
+      "evidence": "The live calls are CMB, Mindtrace and Sequential. Combine and search-result aggregation calls are inside inactive strings. The final specification directly concatenates Pure CMB Logic and With Timing Logic Summary.",
+      "status": "explained_difference; retain_observed_concatenation",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A4",
+      "claim": "The paper does not include a Compression module",
+      "evidence": "The Compression call in finalize_answer_continue is inside an inactive string.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A5",
+      "claim": "Stage A uses embedding cosine similarity and triggers regeneration",
+      "evidence": "gemini-embedding-001 with threshold 0.7. The low-score branch reads undefined result.explanation and raises NameError before routing, so the surviving source cannot retry normally. Historical cosine values were not saved.",
+      "status": "explained_difference; release_explicitly_repairs_retry",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A6",
+      "claim": "Jaccard reflection (Stage B) applies only to SEQ",
+      "evidence": "reflection_simple_continue routes only SEQ tasks into reflection.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A7",
+      "claim": "Semantic similarity and Jaccard determine whether a modified specification is accepted (Section 4.1 Metrics)",
+      "evidence": "Actual acceptance is jaccard >= 0.3 or is_consistent_B, where the latter is an LLM decision. Final units_similarity.md records show acceptance below 0.3 for 19/75 Flash SEQ tasks and 24/72 Flash-lite SEQ tasks, versus zero for GPT-4o and mini.",
+      "status": "explained_difference; document_acceptance_policy",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/config.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A8",
+      "claim": "Unsuccessful reflection regenerates the specification",
+      "evidence": "Stage B accepts the current specification after three retries. The Send back to Finalize lacks the header and Selection report; an earlier Send already dropped search context. Feedback is not included in the prompt.",
+      "status": "explained_difference; named_historical_drop_context_and_accept_last_policies",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A9",
+      "claim": "SEQ returns to Finalize when Stage A fails",
+      "evidence": "A5 raises NameError first; even after fixing that reference, the SEQ low-score route returns nothing. The release repairs both CMB and SEQ to return to Finalize.",
+      "status": "explained_difference; test_legacy_failure_and_repaired_route",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A10",
+      "claim": "The evaluated model handles selection, queries, finalization and reflection; search uses Gemini 2.0 Flash and embeddings use gemini-embedding-001 (Section 4.1)",
+      "evidence": "Legacy model names are placed in state, but Configuration.from_runnable_config reads configurable and environment variables. Only finalize reads reasoning_model from state. Other stages may use default gemini-2.0-flash or unrecorded environment settings. gpt_graphD+.py can pass gemini-2.0-flash to OpenAI selection/reflection clients unless overridden; query generation hardcodes gpt-4o-2024-11-20 while logging a configuration name, and code generation uses the undated gpt-4o-mini alias. The four main DeepSpec directories and the 20250909_101326_graphDplus candidate contain no stage model IDs.",
+      "status": "unverifiable; highest_priority",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/providers.py",
+      "release_check": "docs/PAPER_ALIGNMENT.md"
+    },
+    {
+      "id": "A11",
+      "claim": "Readable atomic-unit intersections and unions help engineers locate conflicts",
+      "evidence": "SEQ tasks contain atomic_decomposition.json and units_similarity.md. The jaccard_similarity field in spec_quality_metrics.json reads nonexistent conflict_analysis.json and is always 0.0.",
+      "status": "consistent; do_not_use_spec_quality_metrics_jaccard",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "docs/PAPER_ALIGNMENT.md"
+    }
+  ],
+  "settings": [
+    {
+      "id": "B1",
+      "claim": "VerilogEval-Human has 156 tasks classified into CMB and SEQ",
+      "evidence": "data/total_merged_data.jsonl contains 156 tasks; HDLBits_circuit_type.jsonl classifies 81 CMB and 75 SEQ tasks.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "data/benchmark.jsonl",
+      "release_check": "tests/test_evidence.py"
+    },
+    {
+      "id": "B2",
+      "claim": "Four dated model IDs",
+      "evidence": "Result directories lack model IDs. The GPT-4o Baseline summary mentions gpt-4o-2024-11-20, and GPT scripts use undated aliases.",
+      "status": "unverifiable",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "configs/gpt4o_deepspec.json",
+      "release_check": "docs/PAPER_ALIGNMENT.md"
+    },
+    {
+      "id": "B3",
+      "claim": "DeepSpec runs on all 156 tasks",
+      "evidence": "The surviving graphD+.py main reads 2.0flash7_total__spec.jsonl, containing only lemmings4, as a debug run. Ablation code.txt snapshots read the 156-task dataset.",
+      "status": "surviving_driver_does_not_directly_reproduce_full_run",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/cli.py",
+      "release_check": "tests/test_execution.py"
+    },
+    {
+      "id": "B4",
+      "claim": "The paper omits code-generation temperature, VRank candidate count and sampling temperature",
+      "evidence": "Gemini DeepSpec code generation uses temperature=0; GPT does not set temperature; with_VRank.py uses 10 candidates and temperature=1.0.",
+      "status": "record_in_configuration_and_paper_notes",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "configs/flash_vrank.json",
+      "release_check": "tests/test_execution.py"
+    },
+    {
+      "id": "B5",
+      "claim": "Section 4.1 gives the general pass@k formula",
+      "evidence": "Direct methods generate one candidate per task: pass@1 equals passed tasks / 156. VRank reports the selected candidate pass rate, not an unbiased pass@k estimate over 10 samples.",
+      "status": "explained_difference; identify_the_actual_metric",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/evaluation.py",
+      "release_check": "docs/PAPER_ALIGNMENT.md"
+    },
+    {
+      "id": "B6",
+      "claim": "Table 4 defines Failed as syntax errors",
+      "evidence": "Treating missing final results as syntax failures exactly reproduces all six Fig. 6 syntax-pass percentages.",
+      "status": "consistent; encode_paper_evaluation_policy",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/evaluation.py",
+      "release_check": "tests/test_evidence.py"
+    }
+  ],
+  "fig7": [
+    {
+      "id": "flash_dv",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_dv",
+      "observed_eval1": 106,
+      "observed_eval0": 42,
+      "observed_failed": 8
+    },
+    {
+      "id": "flash_deepspec",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_deepspec",
+      "observed_eval1": 106,
+      "observed_eval0": 41,
+      "observed_failed": 9
+    },
+    {
+      "id": "flash_wo_research",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_wo_research",
+      "observed_eval1": 102,
+      "observed_eval0": 42,
+      "observed_failed": 12
+    },
+    {
+      "id": "wo_finalization",
+      "status": "unverifiable",
+      "reason": "No source run or snapshot located; excluded from release"
+    },
+    {
+      "id": "flash_wo_selection",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_wo_selection",
+      "observed_eval1": 100,
+      "observed_eval0": 47,
+      "observed_failed": 9
+    },
+    {
+      "id": "flash_vrank",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_vrank",
+      "observed_eval1": 98,
+      "observed_eval0": 52,
+      "observed_failed": 6
+    },
+    {
+      "id": "flash_llmgen",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_llmgen",
+      "observed_eval1": 98,
+      "observed_eval0": 48,
+      "observed_failed": 10
+    },
+    {
+      "id": "flash_wo_reflection",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_wo_reflection",
+      "observed_eval1": 92,
+      "observed_eval0": 52,
+      "observed_failed": 12
+    },
+    {
+      "id": "flash_baseline",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_baseline",
+      "observed_eval1": 92,
+      "observed_eval0": 53,
+      "observed_failed": 11
+    }
+  ],
+  "errata_candidates": [
+    {
+      "location": "Fig. 6 and Section 4.4",
+      "paper": "Baseline CMB 73.51%",
+      "correction_candidate": "61/81 = 75.31%"
+    },
+    {
+      "location": "Table 3",
+      "paper": "Flash-lite and mini VRank are both 57.10%",
+      "correction_candidate": "89/156 = 57.05%"
+    },
+    {
+      "location": "Table 3",
+      "paper": "mini VRank+DeepSpec 61.53%; improvements +5.08% and +4.43%",
+      "correction_candidate": "96/156 = 61.54%; improvements +5.13% and +4.49%"
+    },
+    {
+      "location": "Table 2",
+      "paper": "gpt-40-2024-08-06 and gpt-4o-mini-07-18",
+      "correction_candidate": "gpt-4o-2024-08-06 and gpt-4o-mini-2024-07-18"
+    },
+    {
+      "location": "Section 4.3",
+      "paper": "below the Baseline by -2.56% and 3.21%",
+      "correction_candidate": "The second percentage is missing a minus sign."
+    },
+    {
+      "location": "Section 4.4",
+      "paper": "73.51% (as shown in Table 3); two bar charts (Fig. 2)",
+      "correction_candidate": "Both references should point to Fig. 6."
+    },
+    {
+      "location": "Section 4.2",
+      "paper": "next five columns / final five columns",
+      "correction_candidate": "The stated counts do not match the actual columns of Table 1."
+    },
+    {
+      "location": "Section 4.1",
+      "paper": "Only the general pass@k formula is given.",
+      "correction_candidate": "Clarify that VRank pass@1 is the selected candidate pass rate (B5)."
+    }
+  ],
+  "fig6_exact": 10,
+  "fig6_compatible": 11,
+  "results": [
+    {
+      "run_id": "flash_baseline",
+      "paper_pass": 92,
+      "observed_pass": 92,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "flash_llmgen",
+      "paper_pass": 98,
+      "observed_pass": 98,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "flash_deepspec",
+      "paper_pass": 106,
+      "observed_pass": 106,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "flash_vrank",
+      "paper_pass": 98,
+      "observed_pass": 98,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 1
+    },
+    {
+      "run_id": "flash_dv",
+      "paper_pass": 106,
+      "observed_pass": 106,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 6
+    },
+    {
+      "run_id": "flash_lite_baseline",
+      "paper_pass": 90,
+      "observed_pass": 90,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "flash_lite_llmgen",
+      "paper_pass": 86,
+      "observed_pass": 86,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "flash_lite_deepspec",
+      "paper_pass": 97,
+      "observed_pass": 97,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 3
+    },
+    {
+      "run_id": "flash_lite_vrank",
+      "paper_pass": 89,
+      "observed_pass": 89,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 5
+    },
+    {
+      "run_id": "flash_lite_dv",
+      "paper_pass": 97,
+      "observed_pass": 97,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 4
+    },
+    {
+      "run_id": "gpt4o_baseline",
+      "paper_pass": 101,
+      "observed_pass": 96,
+      "total": 156,
+      "status": "count_mismatch",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4o_llmgen",
+      "paper_pass": 103,
+      "observed_pass": 103,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4o_deepspec",
+      "paper_pass": 105,
+      "observed_pass": 105,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4o_vrank",
+      "paper_pass": 104,
+      "observed_pass": 104,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4o_dv",
+      "paper_pass": 109,
+      "observed_pass": 109,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4omini_baseline",
+      "paper_pass": 83,
+      "observed_pass": 83,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4omini_llmgen",
+      "paper_pass": 78,
+      "observed_pass": 78,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4omini_deepspec",
+      "paper_pass": 88,
+      "observed_pass": 96,
+      "total": 156,
+      "status": "count_mismatch",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4omini_vrank",
+      "paper_pass": 89,
+      "observed_pass": 89,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 0
+    },
+    {
+      "run_id": "gpt4omini_dv",
+      "paper_pass": 96,
+      "observed_pass": 96,
+      "total": 156,
+      "status": "count_match_provenance_unverified",
+      "missing": 2
+    },
+    {
+      "run_id": "flash_wo_reflection",
+      "paper_pass": null,
+      "observed_pass": 92,
+      "total": 156,
+      "status": "ablation_source_found",
+      "missing": 0
+    },
+    {
+      "run_id": "flash_wo_selection",
+      "paper_pass": null,
+      "observed_pass": 100,
+      "total": 156,
+      "status": "ablation_source_found",
+      "missing": 1
+    },
+    {
+      "run_id": "flash_wo_research",
+      "paper_pass": null,
+      "observed_pass": 102,
+      "total": 156,
+      "status": "ablation_source_found",
+      "missing": 0
+    }
+  ],
+  "fig6": [
+    {
+      "run_id": "flash_baseline",
+      "type": "CMB",
+      "metric": "functional",
+      "paper_percent": 73.51,
+      "rounding_exception": false,
+      "observed_count": 61,
+      "denominator": 81,
+      "observed_percent": 75.31,
+      "compatible": false
+    },
+    {
+      "run_id": "flash_baseline",
+      "type": "CMB",
+      "metric": "syntax_paper",
+      "paper_percent": 97.53,
+      "rounding_exception": false,
+      "observed_count": 79,
+      "denominator": 81,
+      "observed_percent": 97.53,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_baseline",
+      "type": "SEQ",
+      "metric": "functional",
+      "paper_percent": 41.33,
+      "rounding_exception": false,
+      "observed_count": 31,
+      "denominator": 75,
+      "observed_percent": 41.33,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_baseline",
+      "type": "SEQ",
+      "metric": "syntax_paper",
+      "paper_percent": 88.0,
+      "rounding_exception": false,
+      "observed_count": 66,
+      "denominator": 75,
+      "observed_percent": 88.0,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_vrank",
+      "type": "CMB",
+      "metric": "functional",
+      "paper_percent": 79.0,
+      "rounding_exception": true,
+      "observed_count": 64,
+      "denominator": 81,
+      "observed_percent": 79.01,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_vrank",
+      "type": "CMB",
+      "metric": "syntax_paper",
+      "paper_percent": 98.77,
+      "rounding_exception": false,
+      "observed_count": 80,
+      "denominator": 81,
+      "observed_percent": 98.77,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_vrank",
+      "type": "SEQ",
+      "metric": "functional",
+      "paper_percent": 45.33,
+      "rounding_exception": false,
+      "observed_count": 34,
+      "denominator": 75,
+      "observed_percent": 45.33,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_vrank",
+      "type": "SEQ",
+      "metric": "syntax_paper",
+      "paper_percent": 93.33,
+      "rounding_exception": false,
+      "observed_count": 70,
+      "denominator": 75,
+      "observed_percent": 93.33,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_dv",
+      "type": "CMB",
+      "metric": "functional",
+      "paper_percent": 81.48,
+      "rounding_exception": false,
+      "observed_count": 66,
+      "denominator": 81,
+      "observed_percent": 81.48,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_dv",
+      "type": "CMB",
+      "metric": "syntax_paper",
+      "paper_percent": 96.3,
+      "rounding_exception": false,
+      "observed_count": 78,
+      "denominator": 81,
+      "observed_percent": 96.3,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_dv",
+      "type": "SEQ",
+      "metric": "functional",
+      "paper_percent": 53.33,
+      "rounding_exception": false,
+      "observed_count": 40,
+      "denominator": 75,
+      "observed_percent": 53.33,
+      "compatible": true
+    },
+    {
+      "run_id": "flash_dv",
+      "type": "SEQ",
+      "metric": "syntax_paper",
+      "paper_percent": 93.33,
+      "rounding_exception": false,
+      "observed_count": 70,
+      "denominator": 75,
+      "observed_percent": 93.33,
+      "compatible": true
+    }
+  ],
+  "summaries": {
+    "flash_baseline": {
+      "all": {
+        "total": 156,
+        "functional": 92,
+        "functional_strict": 92,
+        "syntax_paper": 145,
+        "syntax_strict": 145,
+        "syntax_unknown": 0,
+        "statuses": {
+          "compile_fail": 11,
+          "pass": 92,
+          "mismatch": 53
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 61,
+        "functional_strict": 61,
+        "syntax_paper": 79,
+        "syntax_strict": 79,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 61,
+          "mismatch": 18,
+          "compile_fail": 2
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 31,
+        "functional_strict": 31,
+        "syntax_paper": 66,
+        "syntax_strict": 66,
+        "syntax_unknown": 0,
+        "statuses": {
+          "compile_fail": 9,
+          "pass": 31,
+          "mismatch": 35
+        }
+      }
+    },
+    "flash_llmgen": {
+      "all": {
+        "total": 156,
+        "functional": 98,
+        "functional_strict": 98,
+        "syntax_paper": 146,
+        "syntax_strict": 146,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 48,
+          "pass": 98,
+          "compile_fail": 10
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 64,
+        "functional_strict": 64,
+        "syntax_paper": 79,
+        "syntax_strict": 79,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 64,
+          "mismatch": 15,
+          "compile_fail": 2
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 34,
+        "functional_strict": 34,
+        "syntax_paper": 67,
+        "syntax_strict": 67,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 33,
+          "pass": 34,
+          "compile_fail": 8
+        }
+      }
+    },
+    "flash_deepspec": {
+      "all": {
+        "total": 156,
+        "functional": 106,
+        "functional_strict": 106,
+        "syntax_paper": 147,
+        "syntax_strict": 147,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 41,
+          "pass": 106,
+          "compile_fail": 9
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 68,
+        "functional_strict": 68,
+        "syntax_paper": 80,
+        "syntax_strict": 80,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 68,
+          "mismatch": 12,
+          "compile_fail": 1
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 38,
+        "functional_strict": 38,
+        "syntax_paper": 67,
+        "syntax_strict": 67,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 29,
+          "pass": 38,
+          "compile_fail": 8
+        }
+      }
+    },
+    "flash_vrank": {
+      "all": {
+        "total": 156,
+        "functional": 98,
+        "functional_strict": 98,
+        "syntax_paper": 150,
+        "syntax_strict": 150,
+        "syntax_unknown": 1,
+        "statuses": {
+          "mismatch": 52,
+          "pass": 98,
+          "compile_fail": 5,
+          "missing": 1
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 64,
+        "functional_strict": 64,
+        "syntax_paper": 80,
+        "syntax_strict": 80,
+        "syntax_unknown": 1,
+        "statuses": {
+          "pass": 64,
+          "mismatch": 16,
+          "missing": 1
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 34,
+        "functional_strict": 34,
+        "syntax_paper": 70,
+        "syntax_strict": 70,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 36,
+          "pass": 34,
+          "compile_fail": 5
+        }
+      }
+    },
+    "flash_dv": {
+      "all": {
+        "total": 156,
+        "functional": 106,
+        "functional_strict": 106,
+        "syntax_paper": 148,
+        "syntax_strict": 148,
+        "syntax_unknown": 6,
+        "statuses": {
+          "mismatch": 42,
+          "pass": 106,
+          "missing": 6,
+          "compile_fail": 2
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 66,
+        "functional_strict": 66,
+        "syntax_paper": 78,
+        "syntax_strict": 78,
+        "syntax_unknown": 3,
+        "statuses": {
+          "pass": 66,
+          "mismatch": 12,
+          "missing": 3
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 40,
+        "functional_strict": 40,
+        "syntax_paper": 70,
+        "syntax_strict": 70,
+        "syntax_unknown": 3,
+        "statuses": {
+          "mismatch": 30,
+          "pass": 40,
+          "missing": 3,
+          "compile_fail": 2
+        }
+      }
+    },
+    "flash_lite_baseline": {
+      "all": {
+        "total": 156,
+        "functional": 90,
+        "functional_strict": 90,
+        "syntax_paper": 136,
+        "syntax_strict": 136,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 46,
+          "pass": 90,
+          "compile_fail": 20
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 57,
+        "functional_strict": 57,
+        "syntax_paper": 75,
+        "syntax_strict": 75,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 57,
+          "mismatch": 18,
+          "compile_fail": 6
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 33,
+        "functional_strict": 33,
+        "syntax_paper": 61,
+        "syntax_strict": 61,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 28,
+          "pass": 33,
+          "compile_fail": 14
+        }
+      }
+    },
+    "flash_lite_llmgen": {
+      "all": {
+        "total": 156,
+        "functional": 86,
+        "functional_strict": 86,
+        "syntax_paper": 138,
+        "syntax_strict": 138,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 52,
+          "pass": 86,
+          "compile_fail": 18
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 55,
+        "functional_strict": 55,
+        "syntax_paper": 75,
+        "syntax_strict": 75,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 55,
+          "mismatch": 20,
+          "compile_fail": 6
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 31,
+        "functional_strict": 31,
+        "syntax_paper": 63,
+        "syntax_strict": 63,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 32,
+          "pass": 31,
+          "compile_fail": 12
+        }
+      }
+    },
+    "flash_lite_deepspec": {
+      "all": {
+        "total": 156,
+        "functional": 97,
+        "functional_strict": 97,
+        "syntax_paper": 139,
+        "syntax_strict": 139,
+        "syntax_unknown": 3,
+        "statuses": {
+          "mismatch": 42,
+          "compile_fail": 14,
+          "pass": 97,
+          "missing": 3
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 63,
+        "functional_strict": 63,
+        "syntax_paper": 77,
+        "syntax_strict": 77,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 63,
+          "mismatch": 14,
+          "compile_fail": 4
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 34,
+        "functional_strict": 34,
+        "syntax_paper": 62,
+        "syntax_strict": 62,
+        "syntax_unknown": 3,
+        "statuses": {
+          "mismatch": 28,
+          "compile_fail": 10,
+          "pass": 34,
+          "missing": 3
+        }
+      }
+    },
+    "flash_lite_vrank": {
+      "all": {
+        "total": 156,
+        "functional": 89,
+        "functional_strict": 89,
+        "syntax_paper": 149,
+        "syntax_strict": 149,
+        "syntax_unknown": 5,
+        "statuses": {
+          "mismatch": 60,
+          "pass": 89,
+          "missing": 5,
+          "compile_fail": 2
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 55,
+        "functional_strict": 55,
+        "syntax_paper": 77,
+        "syntax_strict": 77,
+        "syntax_unknown": 4,
+        "statuses": {
+          "pass": 55,
+          "mismatch": 22,
+          "missing": 4
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 34,
+        "functional_strict": 34,
+        "syntax_paper": 72,
+        "syntax_strict": 72,
+        "syntax_unknown": 1,
+        "statuses": {
+          "mismatch": 38,
+          "pass": 34,
+          "missing": 1,
+          "compile_fail": 2
+        }
+      }
+    },
+    "flash_lite_dv": {
+      "all": {
+        "total": 156,
+        "functional": 97,
+        "functional_strict": 97,
+        "syntax_paper": 150,
+        "syntax_strict": 150,
+        "syntax_unknown": 4,
+        "statuses": {
+          "mismatch": 53,
+          "pass": 97,
+          "missing": 4,
+          "compile_fail": 2
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 64,
+        "functional_strict": 64,
+        "syntax_paper": 78,
+        "syntax_strict": 78,
+        "syntax_unknown": 3,
+        "statuses": {
+          "pass": 64,
+          "mismatch": 14,
+          "missing": 3
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 33,
+        "functional_strict": 33,
+        "syntax_paper": 72,
+        "syntax_strict": 72,
+        "syntax_unknown": 1,
+        "statuses": {
+          "mismatch": 39,
+          "pass": 33,
+          "missing": 1,
+          "compile_fail": 2
+        }
+      }
+    },
+    "gpt4o_baseline": {
+      "all": {
+        "total": 156,
+        "functional": 96,
+        "functional_strict": 96,
+        "syntax_paper": 136,
+        "syntax_strict": 136,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 40,
+          "compile_fail": 20,
+          "pass": 96
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 63,
+        "functional_strict": 63,
+        "syntax_paper": 79,
+        "syntax_strict": 79,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 63,
+          "mismatch": 16,
+          "compile_fail": 2
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 33,
+        "functional_strict": 33,
+        "syntax_paper": 57,
+        "syntax_strict": 57,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 24,
+          "compile_fail": 18,
+          "pass": 33
+        }
+      }
+    },
+    "gpt4o_llmgen": {
+      "all": {
+        "total": 156,
+        "functional": 103,
+        "functional_strict": 103,
+        "syntax_paper": 151,
+        "syntax_strict": 151,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 48,
+          "pass": 103,
+          "compile_fail": 5
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 63,
+        "functional_strict": 63,
+        "syntax_paper": 80,
+        "syntax_strict": 80,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 63,
+          "mismatch": 17,
+          "compile_fail": 1
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 40,
+        "functional_strict": 40,
+        "syntax_paper": 71,
+        "syntax_strict": 71,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 31,
+          "pass": 40,
+          "compile_fail": 4
+        }
+      }
+    },
+    "gpt4o_deepspec": {
+      "all": {
+        "total": 156,
+        "functional": 105,
+        "functional_strict": 105,
+        "syntax_paper": 139,
+        "syntax_strict": 139,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 34,
+          "pass": 105,
+          "compile_fail": 17
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 68,
+        "functional_strict": 68,
+        "syntax_paper": 80,
+        "syntax_strict": 80,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 68,
+          "mismatch": 12,
+          "compile_fail": 1
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 37,
+        "functional_strict": 37,
+        "syntax_paper": 59,
+        "syntax_strict": 59,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 22,
+          "pass": 37,
+          "compile_fail": 16
+        }
+      }
+    },
+    "gpt4o_vrank": {
+      "all": {
+        "total": 156,
+        "functional": 104,
+        "functional_strict": 104,
+        "syntax_paper": 154,
+        "syntax_strict": 154,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 50,
+          "pass": 104,
+          "compile_fail": 2
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 62,
+        "functional_strict": 62,
+        "syntax_paper": 81,
+        "syntax_strict": 81,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 62,
+          "mismatch": 19
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 42,
+        "functional_strict": 42,
+        "syntax_paper": 73,
+        "syntax_strict": 73,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 31,
+          "pass": 42,
+          "compile_fail": 2
+        }
+      }
+    },
+    "gpt4o_dv": {
+      "all": {
+        "total": 156,
+        "functional": 109,
+        "functional_strict": 109,
+        "syntax_paper": 154,
+        "syntax_strict": 154,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 45,
+          "pass": 109,
+          "compile_fail": 2
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 68,
+        "functional_strict": 68,
+        "syntax_paper": 81,
+        "syntax_strict": 81,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 68,
+          "mismatch": 13
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 41,
+        "functional_strict": 41,
+        "syntax_paper": 73,
+        "syntax_strict": 73,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 32,
+          "pass": 41,
+          "compile_fail": 2
+        }
+      }
+    },
+    "gpt4omini_baseline": {
+      "all": {
+        "total": 156,
+        "functional": 83,
+        "functional_strict": 83,
+        "syntax_paper": 146,
+        "syntax_strict": 146,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 63,
+          "pass": 83,
+          "compile_fail": 10
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 54,
+        "functional_strict": 54,
+        "syntax_paper": 78,
+        "syntax_strict": 78,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 54,
+          "mismatch": 24,
+          "compile_fail": 3
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 29,
+        "functional_strict": 29,
+        "syntax_paper": 68,
+        "syntax_strict": 68,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 39,
+          "pass": 29,
+          "compile_fail": 7
+        }
+      }
+    },
+    "gpt4omini_llmgen": {
+      "all": {
+        "total": 156,
+        "functional": 78,
+        "functional_strict": 78,
+        "syntax_paper": 144,
+        "syntax_strict": 144,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 66,
+          "compile_fail": 12,
+          "pass": 78
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 56,
+        "functional_strict": 56,
+        "syntax_paper": 78,
+        "syntax_strict": 78,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 56,
+          "mismatch": 22,
+          "compile_fail": 3
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 22,
+        "functional_strict": 22,
+        "syntax_paper": 66,
+        "syntax_strict": 66,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 44,
+          "compile_fail": 9,
+          "pass": 22
+        }
+      }
+    },
+    "gpt4omini_deepspec": {
+      "all": {
+        "total": 156,
+        "functional": 96,
+        "functional_strict": 96,
+        "syntax_paper": 144,
+        "syntax_strict": 144,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 48,
+          "pass": 96,
+          "compile_fail": 12
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 60,
+        "functional_strict": 60,
+        "syntax_paper": 79,
+        "syntax_strict": 79,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 60,
+          "mismatch": 19,
+          "compile_fail": 2
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 36,
+        "functional_strict": 36,
+        "syntax_paper": 65,
+        "syntax_strict": 65,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 29,
+          "pass": 36,
+          "compile_fail": 10
+        }
+      }
+    },
+    "gpt4omini_vrank": {
+      "all": {
+        "total": 156,
+        "functional": 89,
+        "functional_strict": 89,
+        "syntax_paper": 154,
+        "syntax_strict": 154,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 65,
+          "pass": 89,
+          "compile_fail": 2
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 59,
+        "functional_strict": 59,
+        "syntax_paper": 81,
+        "syntax_strict": 81,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 59,
+          "mismatch": 22
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 30,
+        "functional_strict": 30,
+        "syntax_paper": 73,
+        "syntax_strict": 73,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 43,
+          "pass": 30,
+          "compile_fail": 2
+        }
+      }
+    },
+    "gpt4omini_dv": {
+      "all": {
+        "total": 156,
+        "functional": 96,
+        "functional_strict": 96,
+        "syntax_paper": 152,
+        "syntax_strict": 152,
+        "syntax_unknown": 2,
+        "statuses": {
+          "mismatch": 56,
+          "pass": 96,
+          "compile_fail": 2,
+          "missing": 2
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 62,
+        "functional_strict": 62,
+        "syntax_paper": 81,
+        "syntax_strict": 81,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 62,
+          "mismatch": 19
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 34,
+        "functional_strict": 34,
+        "syntax_paper": 71,
+        "syntax_strict": 71,
+        "syntax_unknown": 2,
+        "statuses": {
+          "mismatch": 37,
+          "pass": 34,
+          "compile_fail": 2,
+          "missing": 2
+        }
+      }
+    },
+    "flash_wo_reflection": {
+      "all": {
+        "total": 156,
+        "functional": 92,
+        "functional_strict": 92,
+        "syntax_paper": 144,
+        "syntax_strict": 144,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 52,
+          "pass": 92,
+          "compile_fail": 12
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 58,
+        "functional_strict": 58,
+        "syntax_paper": 78,
+        "syntax_strict": 78,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 58,
+          "mismatch": 20,
+          "compile_fail": 3
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 34,
+        "functional_strict": 34,
+        "syntax_paper": 66,
+        "syntax_strict": 66,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 32,
+          "pass": 34,
+          "compile_fail": 9
+        }
+      }
+    },
+    "flash_wo_selection": {
+      "all": {
+        "total": 156,
+        "functional": 100,
+        "functional_strict": 100,
+        "syntax_paper": 147,
+        "syntax_strict": 147,
+        "syntax_unknown": 1,
+        "statuses": {
+          "mismatch": 47,
+          "pass": 100,
+          "compile_fail": 8,
+          "missing": 1
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 61,
+        "functional_strict": 61,
+        "syntax_paper": 78,
+        "syntax_strict": 78,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 61,
+          "mismatch": 17,
+          "compile_fail": 3
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 39,
+        "functional_strict": 39,
+        "syntax_paper": 69,
+        "syntax_strict": 69,
+        "syntax_unknown": 1,
+        "statuses": {
+          "mismatch": 30,
+          "pass": 39,
+          "compile_fail": 5,
+          "missing": 1
+        }
+      }
+    },
+    "flash_wo_research": {
+      "all": {
+        "total": 156,
+        "functional": 102,
+        "functional_strict": 102,
+        "syntax_paper": 144,
+        "syntax_strict": 144,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 42,
+          "pass": 102,
+          "compile_fail": 12
+        }
+      },
+      "CMB": {
+        "total": 81,
+        "functional": 65,
+        "functional_strict": 65,
+        "syntax_paper": 77,
+        "syntax_strict": 77,
+        "syntax_unknown": 0,
+        "statuses": {
+          "pass": 65,
+          "mismatch": 12,
+          "compile_fail": 4
+        }
+      },
+      "SEQ": {
+        "total": 75,
+        "functional": 37,
+        "functional_strict": 37,
+        "syntax_paper": 67,
+        "syntax_strict": 67,
+        "syntax_unknown": 0,
+        "statuses": {
+          "mismatch": 30,
+          "pass": 37,
+          "compile_fail": 8
+        }
+      }
+    }
+  },
+  "prompts": [
+    {
+      "run_id": "flash_baseline",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_llmgen",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_deepspec",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_vrank",
+      "matched_logs": 1560,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_dv",
+      "matched_logs": 1560,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_lite_baseline",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_lite_llmgen",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_lite_deepspec",
+      "matched_logs": 153,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_lite_vrank",
+      "matched_logs": 1560,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_lite_dv",
+      "matched_logs": 1560,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "gpt4o_baseline",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "gpt4o_llmgen",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "specgen"
+    },
+    {
+      "run_id": "gpt4o_deepspec",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "gpt4o_vrank",
+      "matched_logs": 1560,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "gpt4o_dv",
+      "matched_logs": 1560,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "gpt4omini_baseline",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "gpt4omini_llmgen",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "specgen"
+    },
+    {
+      "run_id": "gpt4omini_deepspec",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "gpt4omini_vrank",
+      "matched_logs": 1560,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "gpt4omini_dv",
+      "matched_logs": 1560,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_wo_reflection",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_wo_selection",
+      "matched_logs": 155,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    },
+    {
+      "run_id": "flash_wo_research",
+      "matched_logs": 156,
+      "mismatched_logs": [],
+      "logged_stage": "codegen"
+    }
+  ],
+  "dv_specs": [
+    {
+      "run_id": "flash_dv",
+      "source_run": "flash_deepspec",
+      "counts": {
+        "same_model_spec_matches": 155,
+        "spec_does_not_match_saved_final_artifact": 1
+      },
+      "exceptions": [
+        {
+          "task_id": "ece241_2013_q4",
+          "status": "spec_does_not_match_saved_final_artifact"
+        }
+      ]
+    },
+    {
+      "run_id": "flash_lite_dv",
+      "source_run": "flash_lite_deepspec",
+      "counts": {
+        "same_model_spec_matches": 153,
+        "missing_spec_placeholder": 3
+      },
+      "exceptions": [
+        {
+          "task_id": "edgecapture",
+          "status": "missing_spec_placeholder"
+        },
+        {
+          "task_id": "m2014_q4d",
+          "status": "missing_spec_placeholder"
+        },
+        {
+          "task_id": "lemmings4",
+          "status": "missing_spec_placeholder"
+        }
+      ]
+    },
+    {
+      "run_id": "gpt4o_dv",
+      "source_run": "gpt4o_deepspec",
+      "counts": {
+        "same_model_spec_matches": 156
+      },
+      "exceptions": []
+    },
+    {
+      "run_id": "gpt4omini_dv",
+      "source_run": "gpt4omini_deepspec",
+      "counts": {
+        "same_model_spec_matches": 156
+      },
+      "exceptions": []
+    }
+  ],
+  "vrank_choices": {
+    "flash_vrank": {
+      "counts": {
+        "discriminating_tasks": 10,
+        "first_pick": 0,
+        "largest_pick": 10,
+        "no_final": 1,
+        "no_clusters": 1
+      },
+      "evidence": [
+        {
+          "task_id": "countbcd",
+          "matching_candidates": [
+            5
+          ],
+          "first_cluster": [
+            2,
+            1
+          ],
+          "largest_members": [
+            3,
+            5,
+            9,
+            10
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "ece241_2014_q5b",
+          "matching_candidates": [
+            4
+          ],
+          "first_cluster": [
+            1,
+            6,
+            2
+          ],
+          "largest_members": [
+            4,
+            7,
+            9,
+            10
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "fsm2",
+          "matching_candidates": [
+            4
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "fsm2s",
+          "matching_candidates": [
+            5
+          ],
+          "first_cluster": [
+            1,
+            6,
+            9,
+            10
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "fsm_hdlc",
+          "matching_candidates": [
+            6
+          ],
+          "first_cluster": [
+            1,
+            4,
+            5,
+            10
+          ],
+          "largest_members": [
+            2,
+            3,
+            6,
+            7,
+            9
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "fsm_onehot",
+          "matching_candidates": [
+            2,
+            3,
+            8,
+            10
+          ],
+          "first_cluster": [
+            1,
+            7
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            9,
+            10
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "gatesv100",
+          "matching_candidates": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "kmap1",
+          "matching_candidates": [
+            2,
+            3,
+            5,
+            8,
+            9,
+            10
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            3,
+            5,
+            8,
+            9,
+            10
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "review2015_fsmonehot",
+          "matching_candidates": [
+            7
+          ],
+          "first_cluster": [
+            1,
+            5,
+            9
+          ],
+          "largest_members": [
+            2,
+            3,
+            6,
+            7
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        },
+        {
+          "task_id": "vector3",
+          "matching_candidates": [
+            4,
+            5,
+            7,
+            8
+          ],
+          "first_cluster": [
+            1,
+            3,
+            6,
+            9
+          ],
+          "largest_members": [
+            4,
+            5,
+            7,
+            8,
+            10
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        }
+      ]
+    },
+    "flash_dv": {
+      "counts": {
+        "no_final": 6,
+        "discriminating_tasks": 1,
+        "first_pick": 0,
+        "largest_pick": 1,
+        "no_clusters": 1
+      },
+      "evidence": [
+        {
+          "task_id": "ece241_2013_q2",
+          "matching_candidates": [
+            2
+          ],
+          "first_cluster": [
+            1,
+            4,
+            8,
+            9
+          ],
+          "largest_members": [
+            2,
+            3,
+            5,
+            7,
+            10
+          ],
+          "first_pick": false,
+          "largest_pick": true,
+          "ambiguous": false
+        }
+      ]
+    },
+    "flash_lite_vrank": {
+      "counts": {
+        "discriminating_tasks": 10,
+        "first_pick": 10,
+        "largest_pick": 0,
+        "no_final": 5,
+        "no_clusters": 1
+      },
+      "evidence": [
+        {
+          "task_id": "2013_q2bfsm",
+          "matching_candidates": [
+            3
+          ],
+          "first_cluster": [
+            3
+          ],
+          "largest_members": [
+            4,
+            6,
+            9
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "circuit10",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            4,
+            6,
+            9
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "circuit3",
+          "matching_candidates": [
+            1,
+            2,
+            4
+          ],
+          "first_cluster": [
+            1,
+            2,
+            4,
+            8
+          ],
+          "largest_members": [
+            3,
+            5,
+            6,
+            7,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "ece241_2014_q5a",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            2,
+            10
+          ],
+          "largest_members": [
+            3,
+            7,
+            8,
+            9
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "fsm_ps2data",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            4,
+            6,
+            7,
+            9
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "fsm_serialdata",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            4,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "kmap1",
+          "matching_candidates": [
+            1,
+            3
+          ],
+          "first_cluster": [
+            1,
+            3,
+            7
+          ],
+          "largest_members": [
+            2,
+            4,
+            6,
+            8,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "kmap2",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            4,
+            5
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "mt2015_q4b",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            5,
+            7,
+            8
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "truthtable1",
+          "matching_candidates": [
+            2
+          ],
+          "first_cluster": [
+            2
+          ],
+          "largest_members": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        }
+      ]
+    },
+    "flash_lite_dv": {
+      "counts": {
+        "discriminating_tasks": 3,
+        "first_pick": 3,
+        "largest_pick": 0,
+        "no_final": 4,
+        "no_clusters": 1
+      },
+      "evidence": [
+        {
+          "task_id": "2012_q1g",
+          "matching_candidates": [
+            1,
+            8
+          ],
+          "first_cluster": [
+            1,
+            3,
+            4,
+            8
+          ],
+          "largest_members": [
+            2,
+            5,
+            7,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "m2014_q4k",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "m2014_q6",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            5
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            6,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        }
+      ]
+    },
+    "gpt4o_vrank": {
+      "counts": {
+        "discriminating_tasks": 9,
+        "first_pick": 9,
+        "largest_pick": 0,
+        "no_clusters": 1
+      },
+      "evidence": [
+        {
+          "task_id": "2012_q2b",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            4,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "circuit10",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            4,
+            6,
+            8
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "circuit2",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            3,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "circuit4",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            5,
+            8
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "fsm_onehot",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            4
+          ],
+          "largest_members": [
+            2,
+            6,
+            7,
+            8,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "gshare",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            4,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "kmap1",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            3,
+            4,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "review2015_fsmonehot",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            8,
+            9
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "timer",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            4,
+            6,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        }
+      ]
+    },
+    "gpt4o_dv": {
+      "counts": {
+        "discriminating_tasks": 2,
+        "first_pick": 2,
+        "largest_pick": 0,
+        "no_clusters": 1
+      },
+      "evidence": [
+        {
+          "task_id": "ece241_2014_q3",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            10
+          ],
+          "largest_members": [
+            2,
+            5,
+            6,
+            8
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "fsm2s",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            6,
+            8
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            9
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        }
+      ]
+    },
+    "gpt4omini_vrank": {
+      "counts": {
+        "discriminating_tasks": 2,
+        "first_pick": 2,
+        "largest_pick": 0,
+        "no_clusters": 1
+      },
+      "evidence": [
+        {
+          "task_id": "gatesv",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            3,
+            8
+          ],
+          "largest_members": [
+            2,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "truthtable1",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            3,
+            5
+          ],
+          "largest_members": [
+            2,
+            7,
+            8,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        }
+      ]
+    },
+    "gpt4omini_dv": {
+      "counts": {
+        "discriminating_tasks": 6,
+        "first_pick": 6,
+        "largest_pick": 0,
+        "no_final": 2,
+        "no_clusters": 1
+      },
+      "evidence": [
+        {
+          "task_id": "circuit3",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            4
+          ],
+          "largest_members": [
+            6,
+            8,
+            9
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "countbcd",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            6,
+            9
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "ece241_2014_q3",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "ece241_2014_q5b",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            7,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "m2014_q4j",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        },
+        {
+          "task_id": "review2015_fsmonehot",
+          "matching_candidates": [
+            1
+          ],
+          "first_cluster": [
+            1,
+            8
+          ],
+          "largest_members": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10
+          ],
+          "first_pick": true,
+          "largest_pick": false,
+          "ambiguous": false
+        }
+      ]
+    }
+  }
+}

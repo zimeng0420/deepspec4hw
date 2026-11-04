@@ -1,0 +1,44 @@
+module top_module (
+    input clk,
+    input j,
+    input k,
+    input areset,
+    output reg out
+);
+    reg state, next_state;
+
+    // State Definitions
+    localparam OFF = 1'b0, ON = 1'b1;
+
+    // Asynchronous reset
+    always @(posedge areset) begin
+        state <= OFF;
+    end
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (areset) 
+            state <= OFF;
+        else 
+            state <= next_state;
+    end
+
+    // Combinational logic for next state
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j) next_state = ON;
+                else next_state = OFF;
+            end
+            ON: begin
+                if (k) next_state = OFF;
+                else next_state = ON;
+            end
+            default: next_state = OFF; // Default case to avoid latches
+        endcase
+    end
+
+    // Output logic
+    assign out = state;
+
+endmodule

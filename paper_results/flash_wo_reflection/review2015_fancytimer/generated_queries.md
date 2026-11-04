@@ -1,0 +1,10 @@
+# Task: review2015_fancytimer
+
+## Analyze Report
+
+Top_Analyze="Analyze the module `top_module`'s header, ports (clk, reset, data, count, counting, done, ack), and overall behavior. Focus on how the input `data` is serially processed to detect the pattern 1101, followed by 4 bits for the delay. Examine how `clk` and `reset` control the state machine. Analyze the outputs `count`, `counting`, and `done`, and how they signal the timer's state. Finally, consider how `ack` resets the `done` signal." Topic_Analyze="Provide a structured analysis of the timer's functionality. Research the following topics: 1) Serial data detection using a state machine in Verilog. 2) Implementing a configurable timer with a variable delay in hardware. 3) Synchronous reset implementation in state machines. 4) Generating a counting output that decrements over time. 5) Handling acknowledgment signals to reset a state machine. Synthesize the findings to create a comprehensive understanding of the design requirements. Include the current date, September 12, 2025, to ensure the research considers the latest information." Solving_Strategies="Outline the overall reasoning strategies and methodology: 1) Decompose the problem into sub-problems: pattern detection, delay storage, counting, and signaling. 2) Solve each sub-problem step-by-step: a) Design a state machine to detect the 1101 pattern. b) Implement a shift register to store the 4-bit delay. c) Create a counter that counts down from (delay + 1) * 1000. d) Generate the `counting` and `done` signals based on the counter's state. e) Use the `ack` signal to reset the `done` signal and the state machine. 3) Integrate the sub-problems into a complete solution. 4) Verify the design using simulation."
+
+## Generated Queries
+
+['Verilog state machine for serial data detection 1101', 'Verilog shift register implementation for variable delay', 'Verilog synchronous reset state machine design', 'Verilog countdown counter implementation', 'Verilog state machine acknowledge signal reset']
+

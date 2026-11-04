@@ -1,0 +1,10 @@
+# Task: review2015_fancytimer
+
+## Analyze Report
+
+Top_Analyze="Analyze the module header, ports (clk, reset, data, count, counting, done, ack), and overall behavior. Focus on how the input 'data' is processed to detect the '1101' pattern and subsequent delay bits. Also, analyze how 'count', 'counting', and 'done' signals reflect the timer's state. Examine the reset and ack signals' roles in controlling the timer's operation." Topic_Analyze="Provide a structured analysis of the timer design, covering: 1) State machine design for sequence detection ('1101') and data shifting. 2) Counter implementation for generating the delay based on the shifted-in bits. 3) Control logic for managing the 'counting' and 'done' signals. 4) Reset and acknowledge ('ack') signal handling. 5) Outputting the current remaining time ('count'). Research relevant Verilog examples and best practices for each of these aspects. Incorporate the current date, September 05, 2025, to ensure the research reflects the latest available information." Solving_Strategies="Outline a step-by-step methodology: 1) Design the state machine for detecting the '1101' sequence and shifting in the delay bits. Define states for each stage (detecting '1', '11', '110', '1101', shifting delay bits). 2) Implement the counter logic to count (delay[3:0] + 1) * 1000 clock cycles. 3) Implement the logic for outputting the current remaining time ('count'). 4) Implement the control logic to assert 'counting' when the counter is active and 'done' when the counter finishes. 5) Implement the reset logic to return to the initial state and the acknowledge logic to wait for 'ack' before restarting. Relate each step to the module's ports and signals, ensuring all requirements are met."
+
+## Generated Queries
+
+['Verilog state machine for serial data pattern detection', 'Verilog counter implementation with variable delay', 'Verilog shift register for serial data input', 'Verilog timer with acknowledge signal', 'Verilog design for (delay[3:0] + 1) * 1000 clock cycles delay', 'Verilog implementation of counting down and outputting remaining time']
+

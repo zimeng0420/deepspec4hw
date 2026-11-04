@@ -1,0 +1,10 @@
+# Task: gatesv100
+
+## Analyze Report
+
+Top_Analyze="Analyze the Verilog module 'top_module' with input 'in' (100 bits) and outputs 'out_both' (99 bits), 'out_any' (99 bits), and 'out_different' (100 bits). Focus on how each output is derived from the input 'in' and its neighbors, paying special attention to the boundary conditions and the wrap-around behavior for 'out_different'." Topic_Analyze="Provide a structured analysis of the bitwise relationships required for each output: 'out_both' (AND of adjacent bits), 'out_any' (OR of adjacent bits), and 'out_different' (XOR of adjacent bits with wrap-around). Research Verilog implementations of these operations, focusing on efficient methods for handling large bit vectors and boundary conditions. Include a discussion of the trade-offs between different implementation approaches (e.g., using generate statements vs. explicit assignments)." Solving_Strategies="Outline a step-by-step methodology: 1) Decompose the problem into three sub-problems, one for each output ('out_both', 'out_any', 'out_different'). 2) For each sub-problem, define the required bitwise operation and address boundary conditions. 3) Research and compare different Verilog implementations for the bitwise operation, considering efficiency and readability. 4) Develop a Verilog implementation for each output, handling boundary conditions correctly. 5) Verify the implementation with test cases, including corner cases and wrap-around behavior. Incorporate the current date, September 05, 2025, when researching the latest Verilog best practices."
+
+## Generated Queries
+
+['Verilog implementation of bitwise AND operation on adjacent bits in a vector', 'Verilog implementation of bitwise OR operation on adjacent bits in a vector', 'Verilog implementation of bitwise XOR operation on adjacent bits with wrap-around', 'Verilog generate statement for bitwise operations on vectors', 'Efficient Verilog implementation of AND, OR, XOR operations on large bit vectors', 'Verilog handling of boundary conditions in bitwise vector operations', 'Verilog wrap-around implementation for vector operations']
+

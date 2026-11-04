@@ -1,0 +1,13 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:18: error: Y2 is not a valid l-value in tb_top_module.uut.
+top_module.v:4:      : Y2 is declared here as wire.
+top_module.v:23: error: Y4 is not a valid l-value in tb_top_module.uut.
+top_module.v:5:      : Y4 is declared here as wire.
+2 error(s) during elaboration.
+

@@ -1,0 +1,22 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units based on individual requirements, features, behaviors, and constraints. Each atomic unit is designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement. For the original research topic, the decomposition focused on the functional requirements of the D flip-flop. For the generated technical specification, the decomposition focused on the combinational logic and timing aspects of the asynchronous reset and the D flip-flop operation.",
+  "mindtraced_atomic_units": [
+    "Implement a D flip flop",
+    "Positive edge triggered",
+    "Asynchronous reset 'ar'",
+    "Output 'q' resets to 0 when 'ar' is asserted (high)",
+    "Output 'q' updates to the value of 'd' on the positive edge of 'clk'"
+  ],
+  "spec_atomic_units": [
+    "Module top_module with inputs clk, d, ar and output q",
+    "Asynchronous reset functionality described using combinational logic",
+    "q = (ar == 1'b1) ? 1'b0 : <state_dependent_on_clk_and_d>",
+    "When 'ar' is asserted (logic high, 1'b1), the output 'q' is immediately forced to a logic low (1'b0)",
+    "Critical path for the asynchronous reset is from 'ar' to 'q'",
+    "Output 'q' changes value based on the inputs 'clk', 'd', and 'ar'",
+    "When 'ar' is asserted high, 'q' is immediately reset to 0",
+    "When 'ar' is low, on the positive edge of 'clk', 'q' takes the value of 'd'",
+    "Register 'q' is updated on the positive edge of 'clk' when 'ar' is low",
+    "When 'ar' is high, 'q' is asynchronously reset to 0"
+  ]
+}

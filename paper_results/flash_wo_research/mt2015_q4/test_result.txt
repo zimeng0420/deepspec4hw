@@ -1,0 +1,12 @@
+FAIL: Compilation failed
+
+Compilation Errors:
+top_module.v:29: error: Unknown module type: module_a
+top_module.v:35: error: Unknown module type: module_a
+top_module.v:42: error: Unknown module type: module_b
+top_module.v:48: error: Unknown module type: module_b
+5 error(s) during elaboration.
+*** These modules were missing:
+        module_a referenced 2 times.
+        module_b referenced 2 times.
+***

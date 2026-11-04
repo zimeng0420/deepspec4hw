@@ -1,0 +1,58 @@
+# Messages for Task: mt2015_muxdff
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Consider this Verilog module "full_module":
+
+// module full_module (
+//     input [2:0] r,
+//     input L,
+//     input clk,
+//     output reg [2:0] q
+);
+
+// always @(posedge clk) begin
+//     if (L) begin
+//         q <= r;
+//     end else begin
+//         q <= {q[1] ^ q[2], q[0], q[2]};
+//     end
+// end
+
+// endmodule
+
+// You want to create a hierarchical Verilog design where a flipflop and 2-1 multiplexer are in a submodule, and that submodule is instantiated three times in this code. Create the submodule called "top_module".
+
+
+The compressed specification is as follows: Pure CMB Logic :
+```json
+{
+  "header": "module top_module(\n\tinput clk,\n\tinput L,\n\tinput q_in,\n\tinput r_in,\n\toutput reg Q);",
+  "combinational_logic_function": "The combinational logic within `top_module` consists of a 2-to-1 multiplexer. The output `Q` is selected based on the input `L`. When `L` is asserted (logic high), the input `r_in` is selected and passed to the output `Q`. When `L` is de-asserted (logic low), the input `q_in` is selected and passed to the output `Q`. This can be represented by the following Boolean expression: Q = (L & r_in) | (!L & q_in). The multiplexer's function is to conditionally select between the `r_in` and `q_in` signals based on the value of the `L` signal. The output `Q` is registered, but the multiplexer itself is purely combinational.",
+  "enhanced_combinational_description": "The `top_module` contains a single, fundamental combinational logic element: a 2-to-1 multiplexer. This multiplexer selects between two input signals, `r_in` and `q_in`, based on the value of the select signal `L`. The output of the multiplexer is assigned to the register `Q`. Specifically, if `L` is logic '1', then `r_in` is routed to the input of the register. Conversely, if `L` is logic '0', then `q_in` is routed to the input of the register. The combinational logic function can be described as follows:\n\nQ_input = (L * r_in) + (!L * q_in)\n\nWhere:\n* Q_input is the input to the register Q.\n* L is the select signal.\n* r_in is the first input signal.\n* q_in is the second input signal.\n* '*' represents the logical AND operation.\n* '+' represents the logical OR operation.\n* '!' represents the logical NOT operation.\n\nThis equation fully describes the combinational behavior of the multiplexer within the `top_module`. The output `Q` is only updated on the rising edge of the `clk` signal, but the input to the register `Q_input` is determined purely by the combinational logic described above."
+}
+```
+
+ With Timing Logic Summary:
+```json
+{
+  "header": "The module 'full_module' implements a 3-bit register 'q'. When input 'L' is high, 'q' loads the value of input 'r'. When 'L' is low, 'q' is updated with a value derived from its current state: {q[1] ^ q[2], q[0], q[2]}. The module 'top_module' is a submodule containing a D flip-flop and a 2-1 multiplexer. The multiplexer selects between 'r_in' and 'q_in' based on 'L'. The output of the multiplexer feeds the D flip-flop, which is clocked by 'clk'. Three instances of 'top_module' are used to implement the 3-bit register 'q' in 'full_module'.",
+  "Interface Behavior": "The 'full_module' updates its output 'q' on the positive edge of 'clk'. When 'L' is high at the rising edge of 'clk', 'q' is updated with the value of 'r'. When 'L' is low at the rising edge of 'clk', 'q' is updated with the value {q[1] ^ q[2], q[0], q[2]}.",
+  "Timing Dependency": "The critical path for loading 'r' into 'q' is from 'r' through the multiplexer in 'top_module' to the D input of the flip-flop, and then to 'Q' on the rising edge of 'clk'. The critical path for the state update is from 'q' through the XOR gate (q[1] ^ q[2]) and the multiplexer in 'top_module' to the D input of the flip-flop, and then to 'Q' on the rising edge of 'clk'. Setup and hold times of the D flip-flop in 'top_module' with respect to 'clk' must be met for both paths.",
+  "Timing logic": "The 'full_module' contains three D flip-flops, each implemented within an instance of 'top_module'. The flip-flops are positive edge-triggered, updating their outputs 'Q' on the rising edge of 'clk'. The update to 'q' is performed using non-blocking assignments (`<=`) within the `always @(posedge clk)` block. The 'top_module' contains a single register 'Q', which represents the output of the D flip-flop."
+}
+```
+
+The header you have already known is:module top_module(
+	input clk,
+	input L,
+	input q_in,
+	input r_in,
+	output reg Q);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

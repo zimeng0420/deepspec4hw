@@ -1,0 +1,48 @@
+# Messages for Task: always_if2
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Fix any and all bugs in this code:
+
+// module top_module (
+//     input      cpu_overheated,
+//     output reg shut_off_computer,
+//     input      arrived,
+//     input      gas_tank_empty,
+//     output reg keep_driving  ); //
+
+//     always @(*) begin
+//         if (cpu_overheated)
+//            shut_off_computer = 1;
+//     end
+
+//     always @(*) begin
+//         if (~arrived)
+//            keep_driving = ~gas_tank_empty;
+//     end
+
+// endmodule
+
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module header definition is:\n\nmodule top_module (\n input cpu_overheated,\n output reg shut_off_computer,\n input arrived,\n input gas_tank_empty,\n output reg keep_driving\n);\n\nThis module defines a combinational logic circuit with four input signals (cpu_overheated, arrived, gas_tank_empty) and two output signals (shut_off_computer, keep_driving). The output signals are declared as registers, but the logic implemented is purely combinational.",
+  "combinational_logic_function": "The combinational logic function can be described by the following Boolean expressions:\n\n1.  `shut_off_computer = cpu_overheated`\n2.  `keep_driving = !arrived & !gas_tank_empty`\n\nThis means:\n\n*   The `shut_off_computer` output is asserted (set to 1) if and only if the `cpu_overheated` input is asserted.\n*   The `keep_driving` output is asserted if and only if the `arrived` input is deasserted (set to 0) AND the `gas_tank_empty` input is deasserted.\n\nThe logic organization consists of two independent combinational paths. The first path directly connects the `cpu_overheated` input to the `shut_off_computer` output. The second path involves an inverter on the `arrived` input, an inverter on the `gas_tank_empty` input, and a two-input AND gate combining the inverted signals. The output of the AND gate drives the `keep_driving` output.\n\nSignal flow is straightforward. The `cpu_overheated` signal directly controls `shut_off_computer`. The `arrived` and `gas_tank_empty` signals are inverted and then combined to control `keep_driving`.\n\nThere is no operator sharing or resource utilization strategy applicable in this simple design. Logic level balancing is not required as the paths are very short. There is no output multiplexing or selection logic.",
+  "enhanced_combinational_description": "This specification details the combinational logic for the `top_module` module. The module's primary function is to control the `shut_off_computer` and `keep_driving` outputs based on the input conditions `cpu_overheated`, `arrived`, and `gas_tank_empty`.\n\n**1. Functional Overview:**\n\nThe module implements two independent combinational logic functions:\n\n*   **Computer Shutdown Logic:** The `shut_off_computer` output is asserted (logic high, or '1') if and only if the `cpu_overheated` input is asserted. This represents a direct pass-through of the `cpu_overheated` signal to the `shut_off_computer` output.\n*   **Driving Logic:** The `keep_driving` output is asserted (logic high, or '1') if and only if the `arrived` input is deasserted (logic low, or '0') AND the `gas_tank_empty` input is deasserted (logic low, or '0'). This means the system should continue driving only if the destination has not been reached AND the gas tank is not empty.\n\n**2. Detailed Logic Description:**\n\n*   **`shut_off_computer` Output:**\n    *   Function: `shut_off_computer = cpu_overheated`\n    *   Implementation: A direct connection from the `cpu_overheated` input to the `shut_off_computer` output. No additional logic gates are required.\n    *   Truth Table:\n        | cpu_overheated | shut_off_computer |\n        |-----------------|-------------------|\n        | 0               | 0                 |\n        | 1               | 1                 |\n\n*   **`keep_driving` Output:**\n    *   Function: `keep_driving = !arrived & !gas_tank_empty`\n    *   Implementation: This requires two inverters and one AND gate. The `arrived` input is inverted, and the `gas_tank_empty` input is inverted. The outputs of these inverters are then fed into a two-input AND gate. The output of the AND gate is connected to the `keep_driving` output.\n    *   Truth Table:\n        | arrived | gas_tank_empty | keep_driving |\n        |---------|-----------------|--------------|\n        | 0       | 0               | 1            |\n        | 0       | 1               | 0            |\n        | 1       | 0               | 0            |\n        | 1       | 1               | 0            |\n\n**3. Signal Flow:**\n\n*   `cpu_overheated` -> `shut_off_computer` (direct path)\n*   `arrived` -> Inverter -> AND gate\n*   `gas_tank_empty` -> Inverter -> AND gate\n*   AND gate -> `keep_driving`\n\n**4. Considerations:**\n\n*   The outputs `shut_off_computer` and `keep_driving` are declared as `reg` type. This is acceptable for combinational logic within an `always` block, but it's crucial to ensure that the `always` block is sensitive to all input signals to avoid unintended latch inference. The `always @(*)` sensitivity list ensures this.\n*   The logic is purely combinational; therefore, the outputs are directly dependent on the current inputs. There is no memory or state retention.\n*   The design avoids any potential for latch inference by ensuring that all possible input combinations result in a defined output value for both `shut_off_computer` and `keep_driving`.\n\n**5. Assumptions:**\n\n*   The input signals are assumed to be glitch-free and stable during the evaluation period.\n*   The target technology is assumed to have standard logic gates (inverters and AND gates) available for implementation."
+}
+```
+
+The header you have already known is:module top_module (
+	input cpu_overheated,
+	output reg shut_off_computer,
+	input arrived,
+	input gas_tank_empty,
+	output reg keep_driving
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

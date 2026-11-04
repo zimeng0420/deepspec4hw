@@ -1,0 +1,21 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:46: error: disc is not a valid l-value in testbench.DUT.
+top_module.v:5:      : disc is declared here as wire.
+top_module.v:47: error: flag is not a valid l-value in testbench.DUT.
+top_module.v:6:      : flag is declared here as wire.
+top_module.v:48: error: err is not a valid l-value in testbench.DUT.
+top_module.v:7:      : err is declared here as wire.
+top_module.v:86: error: disc is not a valid l-value in testbench.DUT.
+top_module.v:5:      : disc is declared here as wire.
+top_module.v:95: error: flag is not a valid l-value in testbench.DUT.
+top_module.v:6:      : flag is declared here as wire.
+top_module.v:101: error: err is not a valid l-value in testbench.DUT.
+top_module.v:7:      : err is declared here as wire.
+6 error(s) during elaboration.
+

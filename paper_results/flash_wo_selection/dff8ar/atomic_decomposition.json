@@ -1,0 +1,28 @@
+{
+  "methodology": "Both the original research topic and the generated technical specification were decomposed into atomic units by identifying individual requirements, features, behaviors, and constraints. Each atomic unit was designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement. This involved breaking down complex sentences into simpler, more manageable statements that capture a single aspect of the design or functionality.",
+  "mindtraced_atomic_units": [
+    "Create eight D flip-flops",
+    "D flip-flops have active high asynchronous reset",
+    "Output should be reset to 0 when areset is high",
+    "D flip-flops are triggered by the positive edge of clk",
+    "8-bit input 'd' provides the data input to the eight D flip-flops, such that d[0] is the D input to q[0], d[1] is the D input to q[1], and so on."
+  ],
+  "spec_atomic_units": [
+    "Module top_module has inputs clk, d[7:0], and areset",
+    "Module top_module has output q[7:0]",
+    "areset is an active-high asynchronous reset",
+    "When areset is high, output q is immediately reset to 0",
+    "clk is the clock input for the D flip-flops",
+    "d input provides the data to be stored in the flip-flops",
+    "q output holds the stored data",
+    "Combinational logic ensures that when areset is high, q is forced to 0",
+    "areset signal has the highest priority",
+    "When areset is high, the output q[7:0] is immediately set to 8'b0",
+    "The design uses an always block triggered by the positive edge of clk or the positive edge of areset",
+    "Inside the always block, an if statement checks if areset is high",
+    "If areset is high, q is reset to 0 using a non-blocking assignment",
+    "Otherwise, q is assigned the value of d using a non-blocking assignment",
+    "There are eight D flip-flops implemented using the 8-bit vector q",
+    "The flip-flops are triggered by the positive edge of clk"
+  ]
+}

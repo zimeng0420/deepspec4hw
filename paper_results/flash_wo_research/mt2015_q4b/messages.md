@@ -1,0 +1,46 @@
+# Messages for Task: mt2015_q4b
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.The module can be described by the following simulation waveform: 
+
+// time            x               y               z               
+// 0ns             0               0               1               
+// 5ns             0               0               1               
+// 10ns            0               0               1               
+// 15ns            0               0               1               
+// 20ns            0               0               1               
+// 25ns            1               0               0               
+// 30ns            1               0               0               
+// 35ns            0               1               0               
+// 40ns            0               1               0               
+// 45ns            1               1               1               
+// 50ns            1               1               1               
+// 55ns            0               0               1               
+// 60ns            0               1               0               
+// 65ns            0               1               0               
+// 70ns            1               1               1               
+// 75ns            0               1               0               
+// 80ns            0               1               0               
+// 85ns            0               1               0               
+// 90ns            1               0               0               
+
+The compressed specification is as follows: ```json
+{
+  "header": "module top_module(\n\tinput x,\n\tinput y,\n\toutput z);",
+  "combinational_logic_function": "The output 'z' is a function of the inputs 'x' and 'y'. Based on the provided simulation waveform, the logic function can be described as follows:\n\n*   When x = 0 and y = 0, z = 1\n*   When x = 1 and y = 0, z = 0\n*   When x = 0 and y = 1, z = 0\n*   When x = 1 and y = 1, z = 1\n\nThis behavior corresponds to the XNOR (Exclusive NOR) logic gate. Therefore, the Boolean expression for 'z' is: z = x'y' + xy, where x' and y' represent the complements of x and y, respectively.",
+  "enhanced_combinational_description": "The combinational logic circuit implements an XNOR gate. The circuit has two single-bit inputs, 'x' and 'y', and a single-bit output, 'z'. The output 'z' is asserted (logic high, or '1') if and only if both inputs 'x' and 'y' are the same (either both '0' or both '1'). If the inputs are different (one is '0' and the other is '1'), the output 'z' is deasserted (logic low, or '0'). The logic function is defined by the following truth table:\n\n| x | y | z |\n|---|---|---|\n| 0 | 0 | 1 |\n| 0 | 1 | 0 |\n| 1 | 0 | 0 |\n| 1 | 1 | 1 |\n\nThis behavior is equivalent to the Boolean expression: z = (x AND y) OR (NOT x AND NOT y). The circuit requires two inverters (NOT gates) to generate the complements of 'x' and 'y', two AND gates to compute (x AND y) and (NOT x AND NOT y), and one OR gate to combine the outputs of the AND gates. The signal flow is as follows: 'x' and 'y' are input to the circuit. 'x' and 'y' are also input to inverters to generate 'NOT x' and 'NOT y'. 'x' and 'y' are input to one AND gate. 'NOT x' and 'NOT y' are input to another AND gate. The outputs of the two AND gates are input to an OR gate, which generates the output 'z'."
+}
+```
+
+The header you have already known is:module top_module(
+	input x,
+	input y,
+	output z);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

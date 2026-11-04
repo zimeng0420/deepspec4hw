@@ -1,0 +1,10 @@
+# Task: review2015_count1k
+
+## Analyze Report
+
+Top_Analyze="Analyze the task's header, ports, and overall behavior. The module's header defines the inputs (clk, reset) and output (q). The clk is the clock signal, reset is an active-high synchronous reset, and q is a 10-bit register representing the counter's current value. The overall behavior is a counter that increments from 0 to 999 and resets to 0 upon reaching 1000 or when reset is asserted." Topic_Analyze="Provide a structured analysis of the research topic. The research will be structured around the following queries: 1) 'Verilog counter design from 0 to 999 with synchronous reset' to establish the fundamental design; 2) 'Synchronous reset implementation in Verilog counters' to understand the reset mechanism; 3) 'Clock domain considerations for counter design' to address timing aspects; 4) 'Verilog code examples for counters with specified bit width and range' to find relevant code examples; 5) 'Testing and simulation of Verilog counters' to ensure the design's correctness. The analysis will synthesize findings from these queries to provide a focused understanding of the counter's design and implementation." Solving_Strategies="Outline the overall reasoning strategies and detailed step-by-step methodology. The methodology includes: (1) Define the counter's state space (0-999). (2) Design the increment logic. (3) Implement the synchronous reset. (4) Integrate clock signal for synchronous operation. (5) Write the Verilog code for the counter module. (6) Simulate the design to verify its functionality, including the counting sequence and reset behavior. Each step directly relates to the top-level module and its sub-modules, ensuring a comprehensive design approach."
+
+## Generated Queries
+
+['Verilog counter design from 0 to 999 with synchronous reset', 'Synchronous reset implementation in Verilog counters', 'Clock domain considerations for counter design', 'Verilog code examples for counters with specified bit width and range', 'Testing and simulation of Verilog counters']
+

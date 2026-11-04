@@ -1,0 +1,32 @@
+# Messages for Task: fsm3comb
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.The following is the state transition table for a Moore state machine with one input, one output, and four states. Use the following state encoding: A=2'b00, B=2'b01, C=2'b10, D=2'b11.Implement only the state transition logic and output logic (the combinational logic portion) for this state machine. Given the current state (state), compute the next_state and output (out) based on the state transition table.
+// State | Next state in=0, Next state in=1 | Output
+// A | A, B | 0
+// B | C, B | 0
+// C | A, D | 0
+// D | C, B | 1
+
+The compressed specification is as follows: ```json
+{
+  "header": "module top_module (\n\tinput in,\n\tinput [1:0] state,\n\toutput reg [1:0] next_state,\n\toutput out\n);",
+  "combinational_logic_function": "The combinational logic determines the `next_state` and `out` signals based on the current `state` and the input `in`. The `next_state` logic is implemented as two separate functions, one for `next_state[1]` and one for `next_state[0]`. The `out` signal is a function of the current `state` only, as this is a Moore machine. The logic is derived directly from the state transition table using the specified state encoding (A=2'b00, B=2'b01, C=2'b10, D=2'b11). The state transition table dictates the next state based on the current state and input. The output is asserted only when the current state is D (2'b11).",
+  "enhanced_combinational_description": "The combinational logic block implements the state transition and output functions of a Moore state machine. The inputs are `in` (a single bit) and `state` (a 2-bit vector representing the current state). The outputs are `next_state` (a 2-bit vector representing the next state) and `out` (a single bit representing the output). The state encoding is A=2'b00, B=2'b01, C=2'b10, and D=2'b11.\n\n**State Transition Logic:**\n\nThe `next_state` is determined by the current `state` and the input `in` according to the following state transition table:\n\n| Current State (state) | Input (in) | Next State (next_state) |\n|---|---|---|\n| A (2'b00) | 0 | A (2'b00) |\n| A (2'b00) | 1 | B (2'b01) |\n| B (2'b01) | 0 | C (2'b10) |\n| B (2'b01) | 1 | B (2'b01) |\n| C (2'b10) | 0 | A (2'b00) |\n| C (2'b10) | 1 | D (2'b11) |\n| D (2'b11) | 0 | C (2'b10) |\n| D (2'b11) | 1 | B (2'b01) |\n\nThis can be expressed as Boolean equations for `next_state[1]` and `next_state[0]`:\n\n*   `next_state[1] = (!state[1] & state[0] & !in) | (state[1] & !state[0] & !in) | (state[1] & state[0] & !in)`\n*   `next_state[0] = (!state[1] & !state[0] & in) | (!state[1] & state[0] & in) | (state[1] & !state[0] & !in) | (state[1] & state[0] & in)`\n\n**Output Logic:**\n\nThe output `out` is determined solely by the current `state`:\n\n| Current State (state) | Output (out) |\n|---|---|\n| A (2'b00) | 0 |\n| B (2'b01) | 0 |\n| C (2'b10) | 0 |\n| D (2'b11) | 1 |\n\nThis can be expressed as a Boolean equation:\n\n*   `out = state[1] & state[0]`\n\nIn summary, the combinational logic block implements the Boolean equations for `next_state[1]`, `next_state[0]`, and `out` based on the current `state` and the input `in`, as defined by the state transition table and the state encoding."
+}
+```
+
+The header you have already known is:module top_module (
+	input in,
+	input [1:0] state,
+	output reg [1:0] next_state,
+	output out
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

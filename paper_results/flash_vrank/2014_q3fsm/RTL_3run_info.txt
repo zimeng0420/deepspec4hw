@@ -1,0 +1,19 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+
+iverilog cmd 2:
+/usr/bin/vvp run.vvp
+iverilog cmd 2 output:
+run.vvp: Program not runnable, 4 errors.
+
+iverilog cmd 2 error:
+top_module.v:54: Error: System task/function $past() is not defined by any module.
+top_module.v:54: Error: System task/function $past() is not defined by any module.
+top_module.v:60: Error: System task/function $past() is not defined by any module.
+top_module.v:60: Error: System task/function $past() is not defined by any module.
+

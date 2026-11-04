@@ -1,0 +1,10 @@
+# Task: review2015_fsmshift
+
+## Analyze Report
+
+Top_Analyze='Analyze the module header, ports (clk, reset, shift_ena), and overall behavior. Focus on how the reset signal affects the shift_ena output and the timing relationship between the clock and the shift_ena signal. Consider the implications of a synchronous reset.' Topic_Analyze="Research the following topics: 1) FSM design with synchronous reset in Verilog, focusing on best practices for ensuring correct behavior. 2) Implementing a pulse generator for a fixed number of clock cycles (4 cycles in this case). 3) Techniques for ensuring that the shift_ena signal is asserted for exactly 4 clock cycles after reset, and then remains deasserted. 4) Common pitfalls in FSM design related to reset and clock domain crossing (though this might not be directly relevant here, it's good to be aware of). 5) Verilog code examples for FSMs that control enable signals for shift registers. Use the date September 05, 2025 to ensure you are getting the latest information." Solving_Strategies='1. Understand the problem requirements: The shift_ena signal must be asserted for exactly 4 clock cycles after reset and then remain deasserted until the next reset. 2. Design the FSM states: Define the states needed to implement the required behavior (e.g., RESET, ENABLE1, ENABLE2, ENABLE3, ENABLE4, IDLE). 3. Determine the state transitions: Define the conditions for transitioning between states, paying close attention to the reset signal and the clock. 4. Implement the state logic: Write the Verilog code to implement the state transitions and the output logic for shift_ena. 5. Verify the design: Simulate the design to ensure that it meets the requirements.'
+
+## Generated Queries
+
+['Verilog FSM synchronous reset shift enable 4 clock cycles', 'Verilog pulse generator fixed clock cycles', 'FSM design ensure signal asserted exactly N clock cycles', 'Verilog FSM shift register enable control', 'Verilog FSM synchronous reset best practices September 05, 2025']
+

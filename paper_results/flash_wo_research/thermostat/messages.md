@@ -1,0 +1,30 @@
+# Messages for Task: thermostat
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.A heating/cooling thermostat controls both a heater (during winter) and an air conditioner (during summer). Implement a circuit that will turn on and off the heater, air conditioning, and blower fan as appropriate. The thermostat can be in one of two modes: heating (mode = 1) and cooling (mode = 0). In heating mode, turn the heater on when it is too cold (too_cold = 1) but do not use the air conditioner. In cooling mode, turn the air conditioner on when it is too hot (too_hot = 1), but do not turn on the heater. When the heater or air conditioner are on, also turn on the fan to circulate the air. In addition, the user can also request the fan to turn on (fan_on = 1), even if the heater and air conditioner are off.
+
+The compressed specification is as follows: ```json
+{
+  "header": "module top_module(\n\tinput mode,\n\tinput too_cold, \n\tinput too_hot,\n\tinput fan_on,\n\toutput heater,\n\toutput aircon,\n\toutput fan\n);",
+  "combinational_logic_function": "The thermostat's combinational logic determines the state of the heater, air conditioner, and fan based on the inputs: mode, too_cold, too_hot, and fan_on. The heater is activated only in heating mode (mode = 1) and when it's too cold (too_cold = 1). The air conditioner is activated only in cooling mode (mode = 0) and when it's too hot (too_hot = 1). The fan is activated if either the heater or air conditioner is on, or if the user requests it (fan_on = 1). Boolean expressions for each output are as follows:\n\nheater = mode & too_cold\naircon = ~mode & too_hot\nfan = (heater | aircon) | fan_on\n\nThis logic is structured to ensure that the heater and air conditioner are mutually exclusive based on the mode input. The fan logic prioritizes system needs (heater or aircon activation) but also allows for user override.",
+  "enhanced_combinational_description": "The combinational logic circuit implements a thermostat control system with heating and cooling functionalities. The system operates based on four input signals: 'mode', 'too_cold', 'too_hot', and 'fan_on', and generates three output signals: 'heater', 'aircon', and 'fan'.\n\n1.  **Heater Control:** The 'heater' output is activated (set to 1) only when the thermostat is in heating mode ('mode' = 1) AND the temperature is too cold ('too_cold' = 1). In all other conditions, the 'heater' output is deactivated (set to 0). This can be represented by the Boolean expression: `heater = mode AND too_cold`.\n\n2.  **Air Conditioner Control:** The 'aircon' output is activated (set to 1) only when the thermostat is in cooling mode ('mode' = 0) AND the temperature is too hot ('too_hot' = 1). In all other conditions, the 'aircon' output is deactivated (set to 0). This can be represented by the Boolean expression: `aircon = (NOT mode) AND too_hot`.\n\n3.  **Fan Control:** The 'fan' output is activated (set to 1) under any of the following conditions:\n    *   The 'heater' is active (heater = 1).\n    *   The 'aircon' is active (aircon = 1).\n    *   The user has requested the fan to be on ('fan_on' = 1).\n    If none of these conditions are met, the 'fan' output is deactivated (set to 0). This can be represented by the Boolean expression: `fan = heater OR aircon OR fan_on`.\n\nThe combinational logic ensures that the heater and air conditioner never operate simultaneously, as their activation is mutually exclusive based on the 'mode' input. The 'fan' logic provides a mechanism for both automatic activation based on heating/cooling needs and manual activation by the user. The circuit is designed to be purely combinational, meaning that the outputs are solely dependent on the current inputs, without any memory or state-holding elements."
+}
+```
+
+The header you have already known is:module top_module(
+	input mode,
+	input too_cold, 
+	input too_hot,
+	input fan_on,
+	output heater,
+	output aircon,
+	output fan
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

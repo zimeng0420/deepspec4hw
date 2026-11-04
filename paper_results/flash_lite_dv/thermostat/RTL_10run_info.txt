@@ -1,0 +1,16 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+tb.v:15: error: port ``mode'' is not a port of dut.
+tb.v:15: error: port ``too_cold'' is not a port of dut.
+tb.v:15: error: port ``too_hot'' is not a port of dut.
+tb.v:15: error: port ``fan_on'' is not a port of dut.
+tb.v:15: error: port ``heater'' is not a port of dut.
+tb.v:15: error: port ``aircon'' is not a port of dut.
+tb.v:15: error: port ``fan'' is not a port of dut.
+7 error(s) during elaboration.
+

@@ -1,0 +1,29 @@
+{
+  "methodology": "The decomposition process involved analyzing each provided text to extract distinct, self-contained, and technically specific requirements or features.",
+  "mindtraced_atomic_units": [
+    "Design a 4-bit binary counter module named 'top_module'.",
+    "The counter counts sequentially from 0 to 15 inclusive.",
+    "The counter has a period of 16 clock cycles.",
+    "The counter includes a synchronous reset input.",
+    "The reset input resets the counter value to 0 on the next clock edge.",
+    "The module interface includes an input 'clk' for the clock signal.",
+    "The module interface includes an input 'reset' for the reset signal.",
+    "The module interface includes a 4-bit output register 'q' representing the current counter value."
+  ],
+  "spec_atomic_units": [
+    "The module 'top_module' is a 4-bit binary counter.",
+    "The counter has three ports: 'clk', 'reset', and 'q'.",
+    "The 'clk' input is the clock signal driving the counter.",
+    "The 'reset' input is an active-high synchronous reset signal.",
+    "When 'reset' is asserted, the counter resets its output 'q' to 0 on the next rising edge of 'clk'.",
+    "The 'q' output is a 4-bit register representing the current counter value.",
+    "The counter increments its value by 1 on each rising edge of 'clk' when 'reset' is not asserted.",
+    "The counter cycles through the binary sequence 0000 to 1111 and rolls over to 0000 after reaching 1111.",
+    "The reset logic ensures the counter starts from a known state.",
+    "The increment logic uses a 4-bit binary adder.",
+    "The rollover behavior is inherent in the 4-bit binary addition.",
+    "The output 'q' is updated synchronously with the clock signal.",
+    "The design ensures minimal delay in reset and increment logic.",
+    "The counter operates reliably and efficiently, meeting the requirements."
+  ]
+}

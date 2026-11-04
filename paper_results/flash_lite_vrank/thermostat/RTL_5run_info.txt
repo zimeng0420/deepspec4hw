@@ -1,0 +1,23 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:12: error: heater is not a valid l-value in tb_top_module.dut.
+top_module.v:6:      : heater is declared here as wire.
+top_module.v:13: error: aircon is not a valid l-value in tb_top_module.dut.
+top_module.v:7:      : aircon is declared here as wire.
+top_module.v:14: error: fan is not a valid l-value in tb_top_module.dut.
+top_module.v:8:      : fan is declared here as wire.
+top_module.v:18: error: heater is not a valid l-value in tb_top_module.dut.
+top_module.v:6:      : heater is declared here as wire.
+top_module.v:19: error: fan is not a valid l-value in tb_top_module.dut.
+top_module.v:8:      : fan is declared here as wire.
+top_module.v:23: error: aircon is not a valid l-value in tb_top_module.dut.
+top_module.v:7:      : aircon is declared here as wire.
+top_module.v:24: error: fan is not a valid l-value in tb_top_module.dut.
+top_module.v:8:      : fan is declared here as wire.
+7 error(s) during elaboration.
+

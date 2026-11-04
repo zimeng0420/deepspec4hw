@@ -1,0 +1,43 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic information units based on individual requirements, features, behaviors, and constraints. Each atomic unit is designed to be independent, self-contained, technically specific, and implementable as a single requirement. This ensures a granular comparison between the two sets of information. The decomposition focuses on identifying key functionalities, input-output relationships, state transitions, and priority rules.",
+  "mindtraced_atomic_units": [
+    "Lemmings can walk left or right.",
+    "Lemmings switch direction when bumped.",
+    "Bump on the left (bump_left=1) causes Lemming to walk right.",
+    "Bump on the right (bump_right=1) causes Lemming to walk left.",
+    "Bump on both sides causes Lemming to switch direction.",
+    "When ground=0, Lemming falls and aaah=1.",
+    "When ground=1 (after falling), Lemming resumes walking in the same direction.",
+    "Bumping while falling does not affect walking direction.",
+    "dig=1 initiates digging if on ground (ground=1 and not falling).",
+    "Lemming continues digging until ground=0.",
+    "After digging and ground=0, Lemming falls (aaah=1).",
+    "After falling from digging and ground=1, Lemming resumes walking in original direction.",
+    "Bumping while digging has no effect.",
+    "dig input is ignored when falling or no ground.",
+    "Falling has higher precedence than digging.",
+    "Digging has higher precedence than switching directions.",
+    "areset resets the Lemming to walk left.",
+    "walk_left and walk_right indicate the direction of movement.",
+    "aaah indicates falling.",
+    "digging indicates digging.",
+    "Lemming is modeled using a finite state machine."
+  ],
+  "spec_atomic_units": [
+    "aaah = !ground",
+    "digging = ground & dig & !is_falling",
+    "change_direction = (bump_left | bump_right) & !is_falling & !is_digging",
+    "walk_left = (is_walking_left & !change_direction) | (!is_walking_left & change_direction)",
+    "walk_right = !(walk_left | is_falling | is_digging)",
+    "Lemming falls when not on the ground.",
+    "Lemming digs when on the ground, dig command is asserted, and not falling.",
+    "Walking direction changes when bumped and not falling or digging.",
+    "Falling has the highest priority.",
+    "Digging has the second highest priority.",
+    "Walking direction is determined by bump inputs and current direction when not falling or digging.",
+    "areset resets the Lemming to walk left.",
+    "walk_left and walk_right indicate the direction of movement.",
+    "aaah indicates falling.",
+    "digging indicates digging."
+  ]
+}

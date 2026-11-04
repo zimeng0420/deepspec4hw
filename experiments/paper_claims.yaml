@@ -1,0 +1,464 @@
+{
+  "paper_sha256": "f9d8e4584b33fc6e45e9bde0a07779e79210e1a0991ff408f1b13e15d92d524b",
+  "methods": [
+    {
+      "id": "A1",
+      "claim": "Selection -> Deep Research -> Finalize -> Self-Reflection (Figs. 1-2)",
+      "evidence": "Effective edges: START -> selection -> generate_query -> web_research -> finalize_answer -> reflection_simple -> [SEQ] reflection. The alternative START -> generate_query code is inside an inactive string.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A2",
+      "claim": "Selection produces module insight, topic insight and solution strategy (Fig. 5)",
+      "evidence": "Top_Analyze, Topic_Analyze and Solving_Strategies fields in tools_and_schemas.py.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/schemas.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A3",
+      "claim": "SEQ analyzes combinational logic, Mindtrace and timing, then combines them; CMB analyzes combinational logic only",
+      "evidence": "The live calls are CMB, Mindtrace and Sequential. Combine and search-result aggregation calls are inside inactive strings. The final specification directly concatenates Pure CMB Logic and With Timing Logic Summary.",
+      "status": "explained_difference; retain_observed_concatenation",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A4",
+      "claim": "The paper does not include a Compression module",
+      "evidence": "The Compression call in finalize_answer_continue is inside an inactive string.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A5",
+      "claim": "Stage A uses embedding cosine similarity and triggers regeneration",
+      "evidence": "gemini-embedding-001 with threshold 0.7. The low-score branch reads undefined result.explanation and raises NameError before routing, so the surviving source cannot retry normally. Historical cosine values were not saved.",
+      "status": "explained_difference; release_explicitly_repairs_retry",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A6",
+      "claim": "Jaccard reflection (Stage B) applies only to SEQ",
+      "evidence": "reflection_simple_continue routes only SEQ tasks into reflection.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A7",
+      "claim": "Semantic similarity and Jaccard determine whether a modified specification is accepted (Section 4.1 Metrics)",
+      "evidence": "Actual acceptance is jaccard >= 0.3 or is_consistent_B, where the latter is an LLM decision. Final units_similarity.md records show acceptance below 0.3 for 19/75 Flash SEQ tasks and 24/72 Flash-lite SEQ tasks, versus zero for GPT-4o and mini.",
+      "status": "explained_difference; document_acceptance_policy",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/config.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A8",
+      "claim": "Unsuccessful reflection regenerates the specification",
+      "evidence": "Stage B accepts the current specification after three retries. The Send back to Finalize lacks the header and Selection report; an earlier Send already dropped search context. Feedback is not included in the prompt.",
+      "status": "explained_difference; named_historical_drop_context_and_accept_last_policies",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A9",
+      "claim": "SEQ returns to Finalize when Stage A fails",
+      "evidence": "A5 raises NameError first; even after fixing that reference, the SEQ low-score route returns nothing. The release repairs both CMB and SEQ to return to Finalize.",
+      "status": "explained_difference; test_legacy_failure_and_repaired_route",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "tests/test_workflow.py"
+    },
+    {
+      "id": "A10",
+      "claim": "The evaluated model handles selection, queries, finalization and reflection; search uses Gemini 2.0 Flash and embeddings use gemini-embedding-001 (Section 4.1)",
+      "evidence": "Legacy model names are placed in state, but Configuration.from_runnable_config reads configurable and environment variables. Only finalize reads reasoning_model from state. Other stages may use default gemini-2.0-flash or unrecorded environment settings. gpt_graphD+.py can pass gemini-2.0-flash to OpenAI selection/reflection clients unless overridden; query generation hardcodes gpt-4o-2024-11-20 while logging a configuration name, and code generation uses the undated gpt-4o-mini alias. The four main DeepSpec directories and the 20250909_101326_graphDplus candidate contain no stage model IDs.",
+      "status": "unverifiable; highest_priority",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/providers.py",
+      "release_check": "docs/PAPER_ALIGNMENT.md"
+    },
+    {
+      "id": "A11",
+      "claim": "Readable atomic-unit intersections and unions help engineers locate conflicts",
+      "evidence": "SEQ tasks contain atomic_decomposition.json and units_similarity.md. The jaccard_similarity field in spec_quality_metrics.json reads nonexistent conflict_analysis.json and is always 0.0.",
+      "status": "consistent; do_not_use_spec_quality_metrics_jaccard",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/workflow.py",
+      "release_check": "docs/PAPER_ALIGNMENT.md"
+    }
+  ],
+  "settings": [
+    {
+      "id": "B1",
+      "claim": "VerilogEval-Human has 156 tasks classified into CMB and SEQ",
+      "evidence": "data/total_merged_data.jsonl contains 156 tasks; HDLBits_circuit_type.jsonl classifies 81 CMB and 75 SEQ tasks.",
+      "status": "consistent",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "data/benchmark.jsonl",
+      "release_check": "tests/test_evidence.py"
+    },
+    {
+      "id": "B2",
+      "claim": "Four dated model IDs",
+      "evidence": "Result directories lack model IDs. The GPT-4o Baseline summary mentions gpt-4o-2024-11-20, and GPT scripts use undated aliases.",
+      "status": "unverifiable",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "configs/gpt4o_deepspec.json",
+      "release_check": "docs/PAPER_ALIGNMENT.md"
+    },
+    {
+      "id": "B3",
+      "claim": "DeepSpec runs on all 156 tasks",
+      "evidence": "The surviving graphD+.py main reads 2.0flash7_total__spec.jsonl, containing only lemmings4, as a debug run. Ablation code.txt snapshots read the 156-task dataset.",
+      "status": "surviving_driver_does_not_directly_reproduce_full_run",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/cli.py",
+      "release_check": "tests/test_execution.py"
+    },
+    {
+      "id": "B4",
+      "claim": "The paper omits code-generation temperature, VRank candidate count and sampling temperature",
+      "evidence": "Gemini DeepSpec code generation uses temperature=0; GPT does not set temperature; with_VRank.py uses 10 candidates and temperature=1.0.",
+      "status": "record_in_configuration_and_paper_notes",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "configs/flash_vrank.json",
+      "release_check": "tests/test_execution.py"
+    },
+    {
+      "id": "B5",
+      "claim": "Section 4.1 gives the general pass@k formula",
+      "evidence": "Direct methods generate one candidate per task: pass@1 equals passed tasks / 156. VRank reports the selected candidate pass rate, not an unbiased pass@k estimate over 10 samples.",
+      "status": "explained_difference; identify_the_actual_metric",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/evaluation.py",
+      "release_check": "docs/PAPER_ALIGNMENT.md"
+    },
+    {
+      "id": "B6",
+      "claim": "Table 4 defines Failed as syntax errors",
+      "evidence": "Treating missing final results as syntax failures exactly reproduces all six Fig. 6 syntax-pass percentages.",
+      "status": "consistent; encode_paper_evaluation_policy",
+      "verification": "historical source review; release checks as linked; model identity remains unverified",
+      "release_implementation": "src/deepspec/evaluation.py",
+      "release_check": "tests/test_evidence.py"
+    }
+  ],
+  "fig6": [
+    {
+      "run_id": "flash_baseline",
+      "type": "CMB",
+      "metric": "functional",
+      "paper_percent": 73.51,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_baseline",
+      "type": "CMB",
+      "metric": "syntax_paper",
+      "paper_percent": 97.53,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_baseline",
+      "type": "SEQ",
+      "metric": "functional",
+      "paper_percent": 41.33,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_baseline",
+      "type": "SEQ",
+      "metric": "syntax_paper",
+      "paper_percent": 88.0,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_vrank",
+      "type": "CMB",
+      "metric": "functional",
+      "paper_percent": 79.0,
+      "rounding_exception": true
+    },
+    {
+      "run_id": "flash_vrank",
+      "type": "CMB",
+      "metric": "syntax_paper",
+      "paper_percent": 98.77,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_vrank",
+      "type": "SEQ",
+      "metric": "functional",
+      "paper_percent": 45.33,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_vrank",
+      "type": "SEQ",
+      "metric": "syntax_paper",
+      "paper_percent": 93.33,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_dv",
+      "type": "CMB",
+      "metric": "functional",
+      "paper_percent": 81.48,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_dv",
+      "type": "CMB",
+      "metric": "syntax_paper",
+      "paper_percent": 96.3,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_dv",
+      "type": "SEQ",
+      "metric": "functional",
+      "paper_percent": 53.33,
+      "rounding_exception": false
+    },
+    {
+      "run_id": "flash_dv",
+      "type": "SEQ",
+      "metric": "syntax_paper",
+      "paper_percent": 93.33,
+      "rounding_exception": false
+    }
+  ],
+  "excluded": [
+    {
+      "id": "wo_finalization",
+      "status": "unverifiable",
+      "reason": "No result or code snapshot identified; not exported."
+    }
+  ],
+  "tables": [
+    {
+      "id": "flash_baseline",
+      "paper_pass": 92,
+      "paper_model": "gemini-2.0-flash",
+      "evidence": "paper_results/flash_baseline"
+    },
+    {
+      "id": "flash_llmgen",
+      "paper_pass": 98,
+      "paper_model": "gemini-2.0-flash",
+      "evidence": "paper_results/flash_llmgen"
+    },
+    {
+      "id": "flash_deepspec",
+      "paper_pass": 106,
+      "paper_model": "gemini-2.0-flash",
+      "evidence": "paper_results/flash_deepspec"
+    },
+    {
+      "id": "flash_vrank",
+      "paper_pass": 98,
+      "paper_model": "gemini-2.0-flash",
+      "evidence": "paper_results/flash_vrank"
+    },
+    {
+      "id": "flash_dv",
+      "paper_pass": 106,
+      "paper_model": "gemini-2.0-flash",
+      "evidence": "paper_results/flash_dv"
+    },
+    {
+      "id": "flash_lite_baseline",
+      "paper_pass": 90,
+      "paper_model": "gemini-2.0-flash-lite",
+      "evidence": "paper_results/flash_lite_baseline"
+    },
+    {
+      "id": "flash_lite_llmgen",
+      "paper_pass": 86,
+      "paper_model": "gemini-2.0-flash-lite",
+      "evidence": "paper_results/flash_lite_llmgen"
+    },
+    {
+      "id": "flash_lite_deepspec",
+      "paper_pass": 97,
+      "paper_model": "gemini-2.0-flash-lite",
+      "evidence": "paper_results/flash_lite_deepspec"
+    },
+    {
+      "id": "flash_lite_vrank",
+      "paper_pass": 89,
+      "paper_model": "gemini-2.0-flash-lite",
+      "evidence": "paper_results/flash_lite_vrank"
+    },
+    {
+      "id": "flash_lite_dv",
+      "paper_pass": 97,
+      "paper_model": "gemini-2.0-flash-lite",
+      "evidence": "paper_results/flash_lite_dv"
+    },
+    {
+      "id": "gpt4o_baseline",
+      "paper_pass": 101,
+      "paper_model": "gpt-4o-2024-08-06",
+      "evidence": "paper_results/gpt4o_baseline"
+    },
+    {
+      "id": "gpt4o_llmgen",
+      "paper_pass": 103,
+      "paper_model": "gpt-4o-2024-08-06",
+      "evidence": "paper_results/gpt4o_llmgen"
+    },
+    {
+      "id": "gpt4o_deepspec",
+      "paper_pass": 105,
+      "paper_model": "gpt-4o-2024-08-06",
+      "evidence": "paper_results/gpt4o_deepspec"
+    },
+    {
+      "id": "gpt4o_vrank",
+      "paper_pass": 104,
+      "paper_model": "gpt-4o-2024-08-06",
+      "evidence": "paper_results/gpt4o_vrank"
+    },
+    {
+      "id": "gpt4o_dv",
+      "paper_pass": 109,
+      "paper_model": "gpt-4o-2024-08-06",
+      "evidence": "paper_results/gpt4o_dv"
+    },
+    {
+      "id": "gpt4omini_baseline",
+      "paper_pass": 83,
+      "paper_model": "gpt-4o-mini-2024-07-18",
+      "evidence": "paper_results/gpt4omini_baseline"
+    },
+    {
+      "id": "gpt4omini_llmgen",
+      "paper_pass": 78,
+      "paper_model": "gpt-4o-mini-2024-07-18",
+      "evidence": "paper_results/gpt4omini_llmgen"
+    },
+    {
+      "id": "gpt4omini_deepspec",
+      "paper_pass": 88,
+      "paper_model": "gpt-4o-mini-2024-07-18",
+      "evidence": "paper_results/gpt4omini_deepspec"
+    },
+    {
+      "id": "gpt4omini_vrank",
+      "paper_pass": 89,
+      "paper_model": "gpt-4o-mini-2024-07-18",
+      "evidence": "paper_results/gpt4omini_vrank"
+    },
+    {
+      "id": "gpt4omini_dv",
+      "paper_pass": 96,
+      "paper_model": "gpt-4o-mini-2024-07-18",
+      "evidence": "paper_results/gpt4omini_dv"
+    }
+  ],
+  "fig7": [
+    {
+      "id": "flash_dv",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_dv"
+    },
+    {
+      "id": "flash_deepspec",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_deepspec"
+    },
+    {
+      "id": "flash_wo_research",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_wo_research"
+    },
+    {
+      "id": "wo_finalization",
+      "status": "unverifiable",
+      "reason": "No source run or snapshot located; excluded from release"
+    },
+    {
+      "id": "flash_wo_selection",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_wo_selection"
+    },
+    {
+      "id": "flash_vrank",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_vrank"
+    },
+    {
+      "id": "flash_llmgen",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_llmgen"
+    },
+    {
+      "id": "flash_wo_reflection",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_wo_reflection"
+    },
+    {
+      "id": "flash_baseline",
+      "status": "artifacts_available_exact_figure_counts_not_labeled",
+      "evidence": "paper_results/flash_baseline"
+    }
+  ],
+  "errata": [
+    {
+      "location": "Fig. 6 and Section 4.4",
+      "paper": "Baseline CMB 73.51%",
+      "correction_candidate": "61/81 = 75.31%"
+    },
+    {
+      "location": "Table 3",
+      "paper": "Flash-lite and mini VRank are both 57.10%",
+      "correction_candidate": "89/156 = 57.05%"
+    },
+    {
+      "location": "Table 3",
+      "paper": "mini VRank+DeepSpec 61.53%; improvements +5.08% and +4.43%",
+      "correction_candidate": "96/156 = 61.54%; improvements +5.13% and +4.49%"
+    },
+    {
+      "location": "Table 2",
+      "paper": "gpt-40-2024-08-06 and gpt-4o-mini-07-18",
+      "correction_candidate": "gpt-4o-2024-08-06 and gpt-4o-mini-2024-07-18"
+    },
+    {
+      "location": "Section 4.3",
+      "paper": "below the Baseline by -2.56% and 3.21%",
+      "correction_candidate": "The second percentage is missing a minus sign."
+    },
+    {
+      "location": "Section 4.4",
+      "paper": "73.51% (as shown in Table 3); two bar charts (Fig. 2)",
+      "correction_candidate": "Both references should point to Fig. 6."
+    },
+    {
+      "location": "Section 4.2",
+      "paper": "next five columns / final five columns",
+      "correction_candidate": "The stated counts do not match the actual columns of Table 1."
+    },
+    {
+      "location": "Section 4.1",
+      "paper": "Only the general pass@k formula is given.",
+      "correction_candidate": "Clarify that VRank pass@1 is the selected candidate pass rate (B5)."
+    }
+  ]
+}

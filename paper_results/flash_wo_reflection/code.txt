@@ -1,0 +1,1623 @@
+from google import genai
+import os,json
+import logging
+import re
+import datetime
+import threading
+import numpy as np
+import sys
+sys.path.insert(0, "/home/ida/deepspec/mybranch/directlt_renew_correction/backend/src")
+from agent.tools_and_schemas import SearchQueryList,Reflection, Reflection_A, Reflection_B,AnalyzeReport, Mindtrace
+from sklearn.metrics.pairwise import cosine_similarity
+from dotenv import load_dotenv
+from langchain_core.messages import AIMessage
+from langgraph.types import Send
+from langgraph.graph import StateGraph
+from langgraph.graph import START, END
+from langchain_core.runnables import RunnableConfig
+from google.genai import Client
+
+from agent.state import (
+    OverallState,
+    QueryGenerationState,
+    WebSearchState,
+    
+)
+from agent.configuration import Configuration
+from agent.promptsB import (
+    get_current_date,
+    query_writer_instructions,
+    web_searcher_instructions,
+    Combine_SPEC_instructions,
+    answer_instructions_combinational,
+    answer_instructions_sequential,
+    web_aggregation_instructions,
+    selection_instructions,
+    Reflection_Instructions,
+    Compression_instructions,
+    mindtrace_instructions,
+    Reflection_B_Instructions,
+    Reflection_A_Instructions
+)
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.schema import HumanMessage, SystemMessage
+from agent.utils_copy import (
+    get_citations,
+    get_research_topic,
+    insert_citation_markers,
+    resolve_urls,
+    postprocess_verilog_code,
+    log_task_result,
+    run_simulation_test,
+    write_log_file,
+    analyze_task_results,
+    initialize_cost_tracking,
+    record_api_call_cost,
+    get_cost_summary,
+    save_cost_report,
+    print_cost_summary,
+   
+)
+
+
+
+
+# Configure logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+load_dotenv()
+
+if os.getenv("GEMINI_API_KEY") is None:
+    raise ValueError("GEMINI_API_KEY is not set")
+
+# Used for Google Search API
+genai_client = Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+def mindtrace(state: OverallState, config: RunnableConfig):
+    logger= logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    logger.info("Starting mindtrace generation")
+    """LangGraph node that generates a mindtrace based on the User's question."""
+    configurable = Configuration.from_runnable_config(config)
+    llm = ChatGoogleGenerativeAI(
+        model=configurable.mindtrace_model,
+        temperature=1.0,
+        max_retries=2,
+        api_key=os.getenv("GEMINI_API_KEY"),
+    )   
+    structured_llm = llm.with_structured_output(Mindtrace)
+    formatted_prompt = mindtrace_instructions.format(
+        current_date=get_current_date(),
+        research_topic=get_research_topic(state["messages"]),
+    )
+    mindtrace_result = structured_llm.invoke(formatted_prompt)
+    mindtraced_research_topic = mindtrace_result.mindtraced_research_topic
+    
+    logger.debug(f"Mindtrace Result: {mindtrace_result}")
+    return {
+        "mindtrace": mindtrace_result,
+        "mindtraced_research_topic": mindtraced_research_topic,
+        "messages": state.get("messages", []),
+        "task_id": state.get("task_id", "unknown"),
+        "task_dir": state.get("task_dir", ""),
+        "circuit_type": state.get("circuit_type", "unknown"),
+    }
+# Nodes
+def generate_query(state: OverallState, config: RunnableConfig) -> QueryGenerationState:
+    
+    logger= logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    logger.info("Starting query generation")
+    """LangGraph node that generates a search queries based on the User's question.
+
+    Uses Gemini 2.0 Flash to create an optimized search query for web research based on
+    the User's question.
+
+    Args:
+        state: Current graph state containing the User's question
+        config: Configuration for the runnable, including LLM provider settings
+
+    Returns:
+        Dictionary with state update, including search_query key containing the generated query
+    """
+    configurable = Configuration.from_runnable_config(config)
+    
+    # check for custom initial search query count
+    if state.get("initial_search_query_count") is None:
+        state["initial_search_query_count"] = configurable.number_of_initial_queries
+
+
+    """
+    client = OpenAI(api_key=self.api_key)
+    resp = client.chat.completions.create(
+            model="gpt-4o-mini-2024-07-18",
+            temperature=1.0,
+            #reasoning_effort="high",
+            messages=[
+            {"role": "system", "content": system_content},
+            {"role": "user", "content": user_content}
+                ]
+                )
+
+
+
+            code = resp.choices[-1].message.content
+    """
+    # init Gemini 2.0 Flash
+    llm = ChatGoogleGenerativeAI(
+        model=configurable.query_generator_model,
+        temperature=0.3,
+        max_retries=2,
+        api_key=os.getenv("GEMINI_API_KEY"),
+    )
+    structured_llm = llm.with_structured_output(SearchQueryList)
+    print(f"*************************************")
+    print(f"Using query generator model: {configurable.query_generator_model}")
+    # Format the prompt
+    current_date = get_current_date()
+    formatted_prompt = query_writer_instructions.format(
+        analyze_report= state.get("analyze_report", None),
+        research_topic=get_research_topic(state["messages"]),
+       # number_queries=state["initial_search_query_count"],
+    )
+    write_log_file(state.get("task_dir", ""), "query_prompt.md", 
+                      f"# Task: {state.get('task_id', 'unknown')}\n\n"
+                      f"## Prompt to Generate Queries\n\n"
+                      f"{formatted_prompt}\n\n"
+                      )
+    # Generate the search queries
+    result = structured_llm.invoke(formatted_prompt)
+    
+    task_id = state.get("task_id", "unknown")
+    task_dir = state.get("task_dir", "")
+    if task_dir and result.query:
+        query_info = {
+            
+            "research_topic": get_research_topic(state["messages"]),
+            "analyze_report": state.get("analyze_report", None),
+            "generated_queries": result.query,
+            "query_count": len(result.query)
+        }
+        write_log_file(task_dir, "generated_queries.md", 
+                      f"# Task: {task_id}\n\n"
+                      f"## Analyze Report\n\n"
+                      f"{state.get("analyze_report", None)}\n\n"
+                      f"## Generated Queries\n\n" 
+                      f"{result.query}\n\n"
+                      )
+        
+        logger.info(f"Generated {len(result.query)} queries, saved to generated_queries.md")
+
+    logger.debug(f"Generated Queries: {result.query}")
+    #return {"query_list": result.query}
+    return {"query_list": result.query,
+            "task_id": state.get("task_id", "unknown"),
+            "task_dir": state.get("task_dir", ""),
+            "messages": state.get("messages", []),
+        }
+
+def continue_to_web_research(state: QueryGenerationState):
+    """LangGraph node that sends the search queries to the web research node.
+
+    This is used to spawn n number of web research nodes, one for each search query.
+    """
+    return [
+        Send("web_research", {"search_query": search_query,
+                              "task_id": state.get("task_id", "unknown"),
+                                "messages": state.get("messages", []),
+                                "search_query": search_query, 
+                                "task_dir": state.get("task_dir", ""),
+                               "id": int(idx)})
+        for idx, search_query in enumerate(state["query_list"])
+    ]
+    
+def web_research(state: WebSearchState, config: RunnableConfig) -> OverallState:
+    logger= logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    logger.info("Starting web research")
+    """LangGraph node that performs web research using the native Google Search API tool.
+
+    Executes a web search using the native Google Search API tool in combination with Gemini 2.0 Flash.
+
+    Args:
+        state: Current graph state containing the search query and research loop count
+        config: Configuration for the runnable, including search API settings
+
+    Returns:
+        Dictionary with state update, including sources_gathered, research_loop_count, and web_research_results
+    """
+    # Configure
+    configurable = Configuration.from_runnable_config(config)
+
+    formatted_prompt = web_searcher_instructions.format(
+        current_date=get_current_date(),
+        query=state["search_query"],
+        research_topic=get_research_topic(state["messages"]),
+    )
+
+
+    # Uses the google genai client as the langchain client doesn't return grounding metadata
+    try:
+        # Search with the Google GenAI client
+        response = genai_client.models.generate_content(
+            model=configurable.answer_model,
+            contents=formatted_prompt,
+            config={
+                "tools": [{"google_search": {}}],
+                "temperature": 0,
+            },
+        )
+        print(f"*************************************")
+        print(f"Using answer model: {configurable.answer_model}")
+      
+        # Check whether the response is valid
+        if not response or not response.text or response.text.strip() == "":
+            logger.warning(f"Empty or invalid response from web search for query: {state['search_query']}")
+            return {
+                "sources_gathered": [],
+                "search_query": [state["search_query"]],
+                "web_research_result":[]
+              
+                
+            }
+        
+        # Process successful search results
+        resolved_urls = resolve_urls(
+            response.candidates[0].grounding_metadata.grounding_chunks, 
+            state["id"], 
+            disable_github_search=True
+        )
+        citations = get_citations(response, resolved_urls, disable_github_search=True)
+        modified_text = insert_citation_markers(response.text, citations)
+        sources_gathered = [item for citation in citations for item in citation["segments"]]
+
+        logger.debug(f"Web Research Result: {response.text}")
+        logger.info(f"Web research successful for query: {state['search_query']}")
+        
+        return {
+            "sources_gathered": sources_gathered,
+            "search_query": [state["search_query"]],
+            "web_research_result": [response.text],
+            
+        }
+        
+    except Exception as e:
+        logger.error(f"Error during web search for query '{state['search_query']}': {str(e)}")
+        return {
+            "sources_gathered": [],
+            "search_query": [state["search_query"]],
+            "web_research_result": [],
+        }
+
+def web_research_continue_to_finalize_answer(state: OverallState, config: RunnableConfig): 
+    """LangGraph routing function that determines whether to continue to selection."""
+
+    logger= logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    web_research_results = state.get("web_research_result", [])
+    search_queries = state.get("query_list", []) or state.get("search_queries", [])
+        
+    # Filter out None values and empty strings
+    valid_results = [result for result in web_research_results if result and result.strip()]
+    if not valid_results:
+        logger.warning("No valid web research results found, retrying web research")
+        time.sleep(10)  # brief pause to ensure logging order
+        return [
+            Send("web_research", {
+                "search_query": search_query,
+                "task_id": state.get("task_id", "unknown"),
+                "messages": state.get("messages", []),
+                "task_dir": state.get("task_dir", ""),
+                "id": int(idx)
+            })
+            for idx, search_query in enumerate(search_queries)
+        ]
+    else:
+        # Continue to finalize_answer when valid results exist
+        logger.info(f"Found {len(valid_results)} valid web research results, continuing to finalize_answer")
+        # Update state with valid results only
+        state["web_research_result"] = valid_results
+        aggregated_results = [
+            {
+                "web_research_result": result
+            }
+            for result in valid_results 
+        ]
+        jsonl_results = "\n".join([json.dumps(item) for item in aggregated_results])
+        task_dir = state.get("task_dir", "")
+        if task_dir:
+           
+            markdown_content = f"# Web Research Results\n\n"
+            markdown_content += f"Total Results: {len(valid_results)}\n\n"
+            for idx, result in enumerate(valid_results, 1):
+                markdown_content += f"## Result {idx}\n\n{result}\n\n---\n\n"
+            
+            with open(os.path.join(task_dir, "web_research_results.md"), "w", encoding="utf-8") as f:
+                f.write(markdown_content)
+        state["aggregated_results"] = jsonl_results
+        state["web_research_result"] = valid_results
+        state["header"]= state.get("header", "")
+        return "finalize_answer"
+
+def selection(state: OverallState, config: RunnableConfig):
+    logger = logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    logger.info("Selecting strategies")
+    logger.debug(f"State at selection: {state}")
+    """
+    web_research_results = state.get("web_research_result", []) or []
+    
+      
+        
+    aggregated_results = [
+        {
+            "web_research_result": result
+        }
+        for result in web_research_results 
+    ]
+    jsonl_results = "\n".join([json.dumps(item) for item in aggregated_results])
+    logger.info(f"Aggregated Web Research Results: {jsonl_results}")
+ 
+
+    """
+    configurable = Configuration.from_runnable_config(config)
+
+    formatted_prompt = selection_instructions.format(
+        current_date=get_current_date(),
+        research_topic=get_research_topic(state["messages"]),
+        #aggregated_results=jsonl_results,
+    )
+     # Init Strategies Model
+    llm = ChatGoogleGenerativeAI(
+        model=configurable.selection_model,
+        temperature=0.1,
+        max_retries=2,
+        api_key=os.getenv("GEMINI_API_KEY"),
+    )
+    print(f"*************************************")
+    print(f"Using selection model: {configurable.selection_model}")
+    # Generate the Analyze Report
+    structured_llm = llm.with_structured_output(AnalyzeReport)
+    analyze_report = structured_llm.invoke(formatted_prompt)
+    logger.debug(f"Analyze Report: {analyze_report}")
+    print(f"*************************************")
+    logger.info(f"Analyze Report: {analyze_report}")
+    
+    # Return the analyze_report for further processing
+    return {
+        "analyze_report": analyze_report,
+        
+        "messages": state.get("messages", []),
+        "research_topic": get_research_topic(state["messages"]),
+       
+    }
+
+
+def selection_continue_to_generate_query(state: OverallState, config: RunnableConfig) :
+    """LangGraph routing function that determines whether to continue to adaptation research."""
+     # return the stepsummary
+    # Extract topic_analyze from analyze_report
+    analyze_report = state["analyze_report"]
+    
+    aggregated_results = state.get("aggregated_results", "")
+    
+    messages = state["messages"]
+    research_topic = get_research_topic(messages)
+    circuit_type = state.get("circuit_type", "sequential")
+# topic_analyze + overall_solving_strategies + step_list = new report  （+ research topic + aggregated results）
+#"aggregated_results": aggregated_results,
+    if circuit_type == "sequential" or circuit_type == "seq" or circuit_type == "SEQ":
+        logger.info("Sequential circuit detected, routing to generate_query for web research")
+        return Send(
+            "generate_query",
+            {
+                "messages": messages,
+                "circuit_type": circuit_type,
+                "analyze_report": analyze_report,
+                "task_id": state.get("task_id", "unknown"),
+                "task_dir": state.get("task_dir", ""),
+                "aggregated_results": aggregated_results,
+            }
+        )
+    
+    else:
+        # Combinational circuits go directly to finalize_answer
+        logger.info("Combinational circuit detected, routing directly to finalize_answer")
+        return Send(
+        "generate_query",
+            {
+                "messages": messages,
+                "circuit_type": circuit_type,
+                "analyze_report": analyze_report,
+                "task_id": state.get("task_id", "unknown"),
+                "task_dir": state.get("task_dir", ""),
+                "aggregated_results": aggregated_results,
+                
+            }
+    )
+
+
+def finalize_answer(state: OverallState, config: RunnableConfig):
+    
+    logger = logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    logger.info("Finalizing the answer")
+    """LangGraph node that finalizes the research summary.
+
+    Prepares the final output by deduplicating and formatting sources, then
+    combining them with the running summary to create a well-structured
+    research report with proper citations.
+
+    Args:
+        state: Current graph state containing the running summary and sources gathered
+
+    Returns:
+        Dictionary with state update, including running_summary key containing the formatted final summary with sources
+    """
+    configurable = Configuration.from_runnable_config(config)
+    reasoning_model = state.get("reasoning_model", "gemini-2.0-flash")
+    aggregated_results = state.get("aggregated_results", "")
+    logger.info(f"DEBUG: aggregated_results length: {len(aggregated_results)}")
+    logger.info(f"DEBUG: aggregated_results preview: {aggregated_results[:200]}...")
+    research_topic = get_research_topic(state["messages"])
+    analyze_report = state.get("analyze_report", "")
+
+
+    if not aggregated_results:
+        web_research_results = state.get("web_research_result", [])
+        if web_research_results:
+            aggregated_items = [
+                {"web_research_result": result}
+                for result in web_research_results if result and result.strip()
+            ]
+            aggregated_results = "\n".join([json.dumps(item, ensure_ascii=False) for item in aggregated_items])
+            logger.info(f"Rebuilt aggregated_results from {len(web_research_results)} web research results")
+            state["aggregated_results"] = web_research_results 
+
+    logger.info(f"Using aggregated_results length: {len(aggregated_results)}")
+
+    """
+    llm = ChatGoogleGenerativeAI(
+            model=reasoning_model,
+            temperature=0,
+            max_retries=2,
+            max_tokens=10000,  # Increase max tokens for sequential logic
+            api_key=os.getenv("GEMINI_API_KEY"),
+        )
+    
+
+    formatted_prompt_aggregation = web_aggregation_instructions.format(
+           web_research_results=state.get("aggregated_results", ""),
+           research_topic=research_topic,
+           analyze_report=analyze_report,
+       )
+    
+    result_aggregation = llm.invoke(formatted_prompt_aggregation)
+    aggregated_results = result_aggregation.content
+    state["aggregated_results"] = aggregated_results
+    logger.info(f"Aggregated Results after aggregation step: {len(aggregated_results)}...")
+
+    """
+    
+
+
+
+    CMB_logic_summary = ""
+    header = state.get("header", "")
+    retry_count = state.get("retry_count", 0)
+    retry_reflection_count = state.get("retry_reflection_count", 0)
+    description = state.get("description", "")
+    task_dir = state.get("task_dir", "")
+    task_id = state.get("task_id", "")
+    circuit_type = state.get("circuit_type", "unknown")
+
+    circuit_type_file = os.path.join(task_dir, "circuit_type.txt")
+    if state.get("circuit_type"):
+        circuit_type = state["circuit_type"].strip().lower()
+        logger.info(f"Using provided circuit type: {circuit_type}")
+    elif os.path.exists(circuit_type_file):
+        try:
+            with open(circuit_type_file, "r") as f:
+                circuit_type = f.read().strip()
+                logger.info(f"Loaded circuit type from file: {circuit_type}")
+        except Exception as e:
+            logger.error(f"Error reading circuit_type.txt: {e}")
+
+    else:
+        circuit_type = "sequential"  # Default value if file not found
+        logger.info(f"circuit_type.txt not found, using default: {circuit_type}")
+
+    
+   
+#aggregated_results=aggregated_results,
+    # Format the prompt
+    formatted_prompt_CMB = answer_instructions_combinational.format(
+        aggregated_results=aggregated_results,
+        research_topic=research_topic,
+        top_module_header=header,
+        analyze_report=analyze_report,
+    )
+
+    is_sequential = circuit_type.strip().lower() == "sequential" or circuit_type.strip().lower() == "seq" or circuit_type.strip().lower() == "SEQ"
+    print(f" Is sequential circuit: {is_sequential}")
+
+   
+
+    llm = ChatGoogleGenerativeAI(
+            model=reasoning_model,
+            temperature=0.0,
+            max_retries=2,
+            max_tokens=10000,  # Increase max tokens for sequential logic
+            api_key=os.getenv("GEMINI_API_KEY"),
+        )
+    print(f"*************************************")
+    print(f"Using reasoning model: {reasoning_model}")
+    if is_sequential:
+        
+        result_CMB = llm.invoke(formatted_prompt_CMB)
+        CMB_logic_summary = result_CMB.content
+        logger.info(f"CMB Logic Summary: {CMB_logic_summary}")
+
+        # if sequential, we need to first clear the original description and then take it as research topic to the next step analysis
+        research_topic = get_research_topic(state["messages"])
+        formatted_prompt_mindtrace = mindtrace_instructions.format(research_topic=research_topic)
+        structured_llm = llm.with_structured_output(Mindtrace)
+        mindtrace_result = structured_llm.invoke(formatted_prompt_mindtrace)
+        mindtraced_research_topic = mindtrace_result.mindtraced_research_topic
+        print(f"**************************************")
+        logger.info(f"Mindtraced Research Topic: {mindtraced_research_topic}")
+
+        # Now we can proceed to the sequential logic summary
+        logger.info("Proceeding to sequential logic analysis generation")
+        retry_count = state.get("retry_count", 0)
+        reflection_feedback = state.get("reflection_feedback", "")
+        formatted_prompt_SEQ = answer_instructions_sequential.format(
+           aggregated_results=aggregated_results,
+           mindtraced_research_topic=mindtraced_research_topic,
+           research_topic=research_topic,
+       )
+
+        result_SEQ = llm.invoke(formatted_prompt_SEQ)
+        Timing_logic_summary = result_SEQ.content
+        print(f"**************************************")
+        logger.info(f"Timing Logic Summary: {Timing_logic_summary}")
+
+        # Combine CMB and Timing logic summaries
+        logger.info("Combining CMB and Timing logic summaries")
+
+        final_answer = f"Pure CMB Logic :\n{CMB_logic_summary}\n\n With Timing Logic Summary:\n{Timing_logic_summary}"
+        """
+        formatted_combined_prompt = Combine_SPEC_instructions.format(
+           mindtraced_research_topic=mindtraced_research_topic,
+           research_topic=research_topic,
+           CMB_logic_summary=CMB_logic_summary,
+           Timing_logic_summary=Timing_logic_summary
+        )
+        result = llm.invoke(formatted_combined_prompt)
+        
+        print(f"**************************************")
+        logger.info(f"Finalized Combined answer generated: {result.content}")
+        """
+        # Return the sequential-circuit result
+        if task_dir:
+            write_log_file(task_dir, "finalize.md", 
+                      f"#  Task: {task_id}\n\n## CMB Logic Prompt\n\n```\n{formatted_prompt_CMB}\n```\n\n"
+                      f"## CMB Logic Summary\n\n```\n{CMB_logic_summary}\n```\n\n"
+                      f"## Mindtrace Prompt\n\n```\n{formatted_prompt_mindtrace}\n```\n\n"
+                      f"## Mindtraced Research Topic\n\n```\n{mindtraced_research_topic}\n```\n\n"
+                      f"## Timing Logic Prompt\n\n```\n{formatted_prompt_SEQ}\n```\n\n"
+                      f"## Timing Logic Summary\n\n```\n{Timing_logic_summary}\n```\n\n"
+                      f"## Final Answer\n\n```\n{final_answer}\n```\n\n"
+                      )
+
+        
+
+        return {
+            "finalized_answer": final_answer,
+            "final_answer": final_answer,
+            "compressed_answer": final_answer,
+            "mindtraced_research_topic": mindtraced_research_topic,
+            "CMB_logic_summary": CMB_logic_summary,
+            "Timing_logic_summary": Timing_logic_summary,
+            "circuit_type": circuit_type,
+            "retry_count": retry_count,
+            "retry_reflection_count": retry_reflection_count
+        }
+    else:
+        
+        reflection_feedback = state.get("reflection_feedback", "")
+           
+
+        result = llm.invoke(formatted_prompt_CMB)
+        
+        print(f"**************************************")
+        logger.info(f"Finalized CMB answer generated: {result.content}")
+
+        logger.info("Final answer generated successfully")
+        # Return the combinational-circuit result
+        if task_dir:
+            write_log_file(task_dir, "finalize.md", 
+                      f"#  Task: {task_id}\n\n## CMB Logic Prompt\n\n```\n{formatted_prompt_CMB}\n```\n\n"
+                      f"## CMB Logic Summary\n\n```\n{result.content}\n```\n\n"
+                      )
+        return {
+            "finalized_answer": result.content,
+            "final_answer": result.content,
+            "compressed_answer": result.content,
+            "mindtraced_research_topic": "",  
+            "CMB_logic_summary": result.content,
+
+            "retry_reflection_count": retry_reflection_count, 
+            "retry_count": retry_count,
+            "circuit_type": circuit_type,
+        }
+
+   
+
+    
+def finalize_answer_continue(state: OverallState, config: RunnableConfig):
+    """LangGraph routing function that determines whether to continue to compression."""
+    circuit_type = state.get("circuit_type", "sequential").strip().lower()
+    finalized_answer = state.get("finalized_answer", "")
+    mindtraced_research_topic = state.get("mindtraced_research_topic", "")
+    configurable = Configuration.from_runnable_config(config)
+    logger = logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    logger.info(f"Circuit type: {circuit_type}, ENDING...")
+    state["final_answer"] = finalized_answer
+    state["compressed_answer"] = finalized_answer
+    return END
+ 
+
+def reflection_simple(state: OverallState, config: RunnableConfig):
+    """LangGraph node that simply reflects on the combinational research process and results."""
+    
+    logger = logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    logger.info("Starting reflection_simple process...")
+    configurable = Configuration.from_runnable_config(config)
+    llm = ChatGoogleGenerativeAI(
+        model=configurable.reflection_model,
+        temperature=0,
+        max_retries=2,
+        api_key=os.getenv("GEMINI_API_KEY"),
+    )
+    print(f"*************************************")
+    print(f"Using reflection model: {configurable.reflection_model}")
+    # Use finalized_answer for reflection
+    content_to_reflect = state.get("finalized_answer", "")
+    logger.info(f"Using finalized_answer for simple reflection, Length: {len(content_to_reflect)}")
+   
+    original_description = get_research_topic(state.get("messages", []))
+    
+  
+    client = genai.Client()
+    logger.info("Google GenAI client initialized for embeddings.")
+    orig_resp =  client.models.embed_content(
+            model="gemini-embedding-001",
+            contents=original_description,
+        )
+    original_embedding = orig_resp.embeddings[0].values
+
+    cor_resp =  client.models.embed_content(
+                model="gemini-embedding-001",
+                contents=content_to_reflect,
+            )
+    spec_embedding = cor_resp.embeddings[0].values
+    
+    original_embedding = np.array(original_embedding).reshape(1, -1)
+    spec_embedding = np.array(spec_embedding).reshape(1, -1)
+    info_retention = cosine_similarity(spec_embedding, original_embedding)[0][0]
+    is_consistent = True if info_retention >= 0.7 else False
+    """
+    formatted_prompt_REFLECTION = Reflection_Instructions.format(
+        compressed_answer=content_to_reflect,
+        research_topic=get_research_topic(state.get("messages", [])),
+    )
+    structured_llm = llm.with_structured_output(Reflection)
+    result = structured_llm.invoke(formatted_prompt_REFLECTION)
+    """
+    logger.info(f"Simple reflection result - is_consistent: {is_consistent}")
+    circuit_type = state.get("circuit_type", "unknown")
+    retry_count = state.get("retry_count", 0)
+    if is_consistent == True:
+
+        logger.info("Specification is consistent with the original topic.")
+        return {
+            "reflection": "Specification is consistent with the original topic.",
+            "retry_count": retry_count,
+            "is_consistent": is_consistent,
+            "info_retention": info_retention,
+            "compressed_answer": content_to_reflect,
+            "finalized_answer": content_to_reflect,
+            "final_answer": content_to_reflect,  # Assuming final answer is the same as compressed answer
+            "messages": state.get("messages", []),
+            "task_id": state.get("task_id", "unknown"),
+            "task_dir": state.get("task_dir", ""),
+            "circuit_type": state.get("circuit_type", "unknown"),
+            "retry_reflection_count": state.get("retry_reflection_count", 0),
+        }
+        
+    else:
+        
+            retry_count += 1
+            logger.info(f"Specification is not consistent. Retry count: {retry_count}")
+            logger.info(f"Explanation: {result.explanation}")
+            state["reflection_feedback"] = result.explanation
+
+            # back to finalize_answer 
+            return {
+            "reflection": result.explanation,
+            "retry_count": state.get("retry_count", 0),
+            "is_consistent": is_consistent,
+            "finalized_answer": content_to_reflect,
+            "compressed_answer": content_to_reflect,
+            "messages": state.get("messages", []),
+            "reflection_feedback": state.get("reflection_feedback", ""),
+            "info_retention": info_retention,
+            "task_id": state.get("task_id", "unknown"),
+            "task_dir": state.get("task_dir", ""),
+            "circuit_type": state.get("circuit_type", "unknown"),
+            "retry_reflection_count": state.get("retry_reflection_count", 0),
+             }
+        
+
+def reflection_simple_continue(state: OverallState):
+    """Routing for simple reflection (combinational circuits)."""
+    is_consistent = state.get("is_consistent", False)
+    retry_count = state.get("retry_count", 0)
+    info_retention = state.get("info_retention", 0)
+    content_to_reflect = state.get("finalized_answer", "")
+    logger = logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    circuit_type = state.get("circuit_type", "unknown")
+    if is_consistent == True:
+        if circuit_type == "combinational"or circuit_type == "CMB" or circuit_type == "cmb":
+            logger.info("Simple reflection complete, ending process.")
+            return END
+        else:
+            logger.info("Proceeding to detailed reflection analysis for sequential circuit.")
+            return Send(
+                "reflection",
+                {
+                    "research_topic": get_research_topic(state.get("messages", [])),
+                    "mindtraced_research_topic": state.get("mindtraced_research_topic", ""),
+                    "compressed_answer": content_to_reflect,
+                    "finalized_answer": content_to_reflect,
+                    "final_answer": content_to_reflect,
+                    "content_to_reflect": content_to_reflect,
+                    "info_retention": info_retention,
+                    "retry_count": retry_count,
+                    "messages": state.get("messages", []),
+                    "reflection_feedback": state.get("reflection_feedback", ""),
+                    "task_id": state.get("task_id", "unknown"),
+                    "task_dir": state.get("task_dir", ""),
+                    "circuit_type": state.get("circuit_type", "sequential"),
+                    "retry_reflection_count": state.get("retry_reflection_count", 0),
+                    "aggregated_results": state.get("aggregated_results", "")
+                }
+            )
+
+    elif retry_count >= 3:  # Max retries for combinational
+        logger.info("Simple reflection complete or max retries reached, ending process.")
+        state["final_answer"] = content_to_reflect
+        return END
+    
+    else:
+        if circuit_type == "combinational" or circuit_type == "CMB" or circuit_type == "cmb":
+            logger.info("Simple reflection failed, retrying finalize_answer")
+            return Send(
+                "finalize_answer",
+                {
+                "research_topic": get_research_topic(state.get("messages", [])),
+                "retry_count": retry_count,
+                "messages": state.get("messages", []),
+                "reflection_feedback": state.get("reflection_feedback", ""),
+                "task_id": state.get("task_id", "unknown"),
+                "task_dir": state.get("task_dir", ""),
+                "circuit_type": state.get("circuit_type", "combinational"),
+                "retry_reflection_count": state.get("retry_reflection_count", 0)
+               }
+            )
+def reflection(state: OverallState, config: RunnableConfig):
+    """LangGraph node that reflects on the research process and results.
+
+    This node is currently not implemented but can be used to analyze the research
+    process and results for future improvements.
+
+    Args:
+        state: Current graph state containing the research results
+        config: Configuration for the runnable, including LLM provider settings
+
+    Returns:
+        Dictionary with state update, including reflection key containing the reflection text
+    """
+
+    logger = logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    logger.info("Starting reflection...")
+    
+    configurable = Configuration.from_runnable_config(config)
+    llm = ChatGoogleGenerativeAI(
+        model=configurable.reflection_model,
+        temperature=0.1,
+        max_retries=2,
+        api_key=os.getenv("GEMINI_API_KEY"),
+    )
+    print(f"*************************************")
+    print(f"Using reflection model: {configurable.reflection_model}")
+    
+    info_retention = state.get("info_retention", 0)
+
+    content_source = ""
+    
+    if state.get("corrected_answer"):
+        content_to_reflect = state.get("corrected_answer", "")
+        content_source = "corrected_answer"
+        logger.info("Using corrected_answer for reflection")
+    
+    elif state.get("compressed_answer"):
+        content_to_reflect = state.get("compressed_answer", "")
+        content_source = "compressed_answer"
+        logger.info("Using compressed_answer for reflection")
+    else:
+        content_to_reflect = state.get("finalized_answer", "")
+        content_source = "finalized_answer"
+        logger.info("Using finalized_answer for reflection")
+
+    logger.info(f"Content source: {content_source}, Length: {len(content_to_reflect)}")
+    state["content_to_reflect"] = content_to_reflect
+    
+
+    logger.info("Starting Stage A: Pure atomic decomposition...")
+    mindtraced_research_topic = state.get("mindtraced_research_topic", "")
+    
+    formatted_prompt_REFLECTION_A = Reflection_A_Instructions.format(
+        research_topic=get_research_topic(state.get("messages", [])),
+        mindtraced_research_topic=mindtraced_research_topic,
+        compressed_answer=content_to_reflect
+    )
+
+    structured_llm = llm.with_structured_output(Reflection_A)
+
+    result = structured_llm.invoke(formatted_prompt_REFLECTION_A)
+    
+    task_id = state.get("task_id", "unknown")
+    task_dir = state.get("task_dir", "")
+    atomic_decomposition = {
+        "methodology": result.feedback.atomic_information_decomposition,
+        "mindtraced_atomic_units": result.feedback.information_1_atomic_sets_X,
+        "spec_atomic_units": result.feedback.information_2_atomic_sets_Y,
+        
+    }
+    
+    
+    logger.info(f"Decomposition complete: {len(result.feedback.information_1_atomic_sets_X)} mindtraced units, "
+                f"{len(result.feedback.information_2_atomic_sets_Y)} spec units")
+    
+    state.update({ 
+        "atomic_sets_X": result.feedback.information_1_atomic_sets_X,
+        "atomic_sets_Y": result.feedback.information_2_atomic_sets_Y,
+        "decomposition_method": result.feedback.atomic_information_decomposition,
+        "content_to_reflect": content_to_reflect,
+        "mindtraced_research_topic": mindtraced_research_topic,
+        "messages": state.get("messages", []),
+        "circuit_type": state.get("circuit_type", "sequential"),
+        "task_id": state.get("task_id", ""),
+        "task_dir": task_dir,
+        
+
+        
+        "conflicts": None,  
+        "reflection_feedback": None,  
+        "reflectionB_feedback": None,  
+       
+    })
+    logger.info("Reflection stage A ends, decomposition completed")
+    logger.info("Starting Reflection stage B: Conflict analysis...")
+
+    retry_reflection_count = state.get("retry_reflection_count", 0)
+
+    atomic_sets_X = state.get("atomic_sets_X", [])
+    atomic_sets_Y = state.get("atomic_sets_Y", [])
+    
+    logger.info(f"Analyzing conflicts between {len(atomic_sets_X)} and {len(atomic_sets_Y)} atomic units")
+    
+    
+    formatted_prompt = Reflection_B_Instructions.format(
+        research_topic=get_research_topic(state.get("messages", [])),
+        mindtraced_research_topic=state.get("mindtraced_research_topic", ""),
+        compressed_answer=state.get("content_to_reflect", ""),
+        atomic_sets_X="\n".join(f"X{i+1}: {unit}" for i, unit in enumerate(atomic_sets_X)),
+        atomic_sets_Y="\n".join(f"Y{i+1}: {unit}" for i, unit in enumerate(atomic_sets_Y))
+    )
+    
+    structured_llm = llm.with_structured_output(Reflection_B)
+    result = structured_llm.invoke(formatted_prompt) 
+    intersection = result.intersection if result.intersection else []
+    union = result.union if result.union else []
+    logger.info(f"Reflection B result - intersection: {len(intersection)}, union: {len(union)}")
+    print(f"**************************************")
+    print(f" {result}")
+
+    jaccard_similarity_value = len(intersection) / len(union) if union and len(union) > 0 else 0.0
+    
+    logger.info(f"Calculated Jaccard similarity: {jaccard_similarity_value:.4f}")
+    jaccard_similarity_value = min(1.0, max(0.0, jaccard_similarity_value))
+    state["jaccard_similarity_value"] = jaccard_similarity_value
+
+
+    
+    
+    state.update({
+    "reflectionB_feedback": result.reflectionB_feedback or result.feedback,
+    "is_consistent_B": result.is_consistent_B,
+    "conflicts": result.conflicts,
+    "intersection": intersection,
+    "union": union,
+    "jaccard_similarity_value": jaccard_similarity_value
+    })
+
+   
+    task_dir = state.get("task_dir", "")
+    if task_dir:
+        write_log_file(task_dir, "atomic_decomposition.json", 
+                      json.dumps(atomic_decomposition, indent=2))
+         
+        units_info = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "jaccard_similarity": jaccard_similarity_value,
+            "intersection_count": len(intersection),
+            "union_count": len(union),
+            "intersection_items": intersection,
+            "union_items": union,
+            "calculation_method": len(intersection) / len(union) if len(union) > 0 else 0,
+            "is_sufficient": jaccard_similarity_value >= 0.3
+        }
+        write_log_file(task_dir, "units_similarity.md", 
+                     f"# Units Similarity Analysis\n\n"
+                     f"- Timestamp: {units_info['timestamp']}\n"
+                     f"- reflectionB: {result}"
+                     f"- Units Info: {units_info}\n"
+                     )
+
+ 
+        
+    return{
+       
+        "jaccard_similarity_value": jaccard_similarity_value,
+         "reflectionB_feedback": state.get("reflectionB_feedback", ""),
+        "finalized_answer": content_to_reflect,
+        "content_to_reflect": content_to_reflect,
+        "compressed_answer": content_to_reflect,
+        "messages": state.get("messages", []),
+        "info_retention": info_retention,
+        "task_id": state.get("task_id", "unknown"),
+        "task_dir": state.get("task_dir", ""),
+        "circuit_type": state.get("circuit_type", "unknown"),
+        "retry_reflection_count": retry_reflection_count,
+        "is_consistent_B": state.get("is_consistent_B", False),
+    }
+
+def reflection_continue(state: OverallState, config: RunnableConfig):
+    logger = logging.getLogger(f"task_{state.get('task_id', 'unknown')}")
+    retry_reflection_count = state.get("retry_reflection_count", 0)
+    logger.info(f"Reflection continue check - retry_reflection_count: {retry_reflection_count}")
+    info_retention = state.get("info_retention", 0)
+    jaccard_similarity_value = state.get("jaccard_similarity_value", 0)
+    content_to_reflect = state.get("content_to_reflect", "")
+    is_consistent_B = state.get("is_consistent_B", False)
+
+    task_dir = state.get("task_dir", "")
+    if jaccard_similarity_value >= 0.3 or is_consistent_B == True:  # Adjusted threshold for better sensitivity
+        if jaccard_similarity_value <= 1.0:
+           logger.info("Information retention sufficient, ending process.")
+           state["final_answer"] = content_to_reflect
+           state["compressed_answer"] = content_to_reflect
+
+           return END
+        else:
+            
+            # Ensure the retry counter is passed correctly
+            return Send(
+            "reflection",
+            {
+                "research_topic": get_research_topic(state.get("messages", [])),
+                "retry_count": state.get("retry_count", 0),
+                "retry_reflection_count": new_retry_count,
+                "messages": state.get("messages", []),
+                "reflection_feedback": f"Previous reflection had invalid Jaccard calculation: {jaccard_similarity_value}. Please ensure proper atomic decomposition.",
+                "task_id": state.get("task_id", "unknown"),
+                "task_dir": state.get("task_dir", ""),
+                "circuit_type": state.get("circuit_type", "sequential"),
+                "mindtraced_research_topic": state.get("mindtraced_research_topic", ""),
+                "CMB_logic_summary": state.get("CMB_logic_summary", ""),
+                "Timing_logic_summary": state.get("Timing_logic_summary", ""),
+                "aggregated_results": state.get("aggregated_results", ""),
+                "content_to_reflect": content_to_reflect,
+                "finalized_answer": content_to_reflect,
+                "compressed_answer": content_to_reflect,
+            }
+              )
+    
+    elif retry_reflection_count >= 3:  # Use >= 3 to enforce the retry limit
+        logger.info(f"Max retries exceeded for reflection (count: {retry_reflection_count}). Ending process.")
+        state["final_answer"] = content_to_reflect
+        state["compressed_answer"] = content_to_reflect
+        if task_dir:
+            write_log_file(task_dir, "max_retries_reached.txt", 
+                      f"Reflection max retries reached: {retry_reflection_count}")
+        return END
+    else:
+        new_retry_count = retry_reflection_count + 1
+        logger.info(f"Information retention insufficient. Retry {new_retry_count}/3")
+        
+        # Ensure the retry counter is passed correctly
+        return Send(
+            "finalize_answer",
+            {
+                "research_topic": get_research_topic(state.get("messages", [])),
+                "retry_count": state.get("retry_count", 0),
+                "retry_reflection_count": new_retry_count,  # Pass the updated retry count explicitly
+                "messages": state.get("messages", []),
+                "reflection_feedback": state.get("reflectionB_feedback", ""),
+                "task_id": state.get("task_id", "unknown"),
+                "task_dir": state.get("task_dir", ""),
+                "circuit_type": state.get("circuit_type", "sequential"),
+                "mindtraced_research_topic": state.get("mindtraced_research_topic", ""),
+                "CMB_logic_summary": state.get("CMB_logic_summary", ""),
+                "Timing_logic_summary": state.get("Timing_logic_summary", ""),
+                "aggregated_results": state.get("aggregated_results", ""),
+            }
+        )
+
+
+
+# Create our Agent Graph
+builder = StateGraph(OverallState, config_schema=Configuration)
+
+# Define the nodes we will cycle between
+builder.add_node("mindtrace", mindtrace)
+builder.add_node("generate_query", generate_query)
+builder.add_node("web_research", web_research)
+builder.add_node("reflection", reflection) 
+builder.add_node("reflection_simple", reflection_simple) 
+
+builder.add_node("finalize_answer", finalize_answer)
+builder.add_node("selection", selection)
+#builder.add_node("compression", compression)
+"""
+
+# Set the entrypoint as `generate_query`
+# This means that this node is the first one called
+builder.add_edge(START, "generate_query")
+
+# Add conditional edge to continue with search queries in a parallel branch
+builder.add_conditional_edges(
+    "generate_query", 
+    continue_to_web_research, 
+    ["web_research"]
+)
+
+builder.add_conditional_edges(
+    "web_research", 
+    web_research_continue_to_selection, 
+    ["selection"]
+)
+"""
+
+
+builder.add_edge(START, "selection")
+
+builder.add_conditional_edges(
+    "selection",
+    selection_continue_to_generate_query,
+    ["generate_query"],  # Two possible destinations
+)
+
+# generate_query to web_research (cmb and seq)
+builder.add_conditional_edges(
+    "generate_query", 
+    continue_to_web_research, 
+    ["web_research"]
+)
+
+# web_research to finalize_answer (cmb and seq)
+builder.add_conditional_edges(
+    "web_research", 
+    web_research_continue_to_finalize_answer, 
+    ["finalize_answer"]
+)
+
+builder.add_edge("finalize_answer", END)
+"""
+builder.add_conditional_edges(
+    "finalize_answer",
+    finalize_answer_continue,
+    ["reflection_simple"]
+)
+
+builder.add_conditional_edges(
+    "reflection_simple",
+    reflection_simple_continue,
+    [END,"finalize_answer","reflection"]
+)
+"""
+#builder.add_conditional_edges(
+#   "compression",
+ #   compression_continue_to_reflection,
+  #  ["reflection_simple"]
+#)
+
+
+"""
+builder.add_conditional_edges(
+    "reflection",
+    reflection_continue,
+    [END,"finalize_answer"]
+)
+"""
+
+graph = builder.compile(name="pro-search-agent")
+
+if __name__ == "__main__":
+    import os
+    import json, sys, subprocess, logging
+    import datetime
+    import re
+    import time
+    from openai import OpenAI
+    from tenacity import retry, wait_fixed, stop_after_attempt, retry_if_exception_type
+    import requests.exceptions
+    
+    @retry(
+        wait=wait_fixed(60),  
+        stop=stop_after_attempt(5),  
+        retry=retry_if_exception_type((
+            requests.exceptions.RequestException, 
+            TimeoutError,  
+            ConnectionError, 
+            Exception  
+        )),
+        reraise=True
+    )
+    
+   
+    
+    def run_with_retry(func, *args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            print(f"Error occurred: {str(e)}. Retrying in 1 minute...")
+            raise
+
+
+    results_dir = datetime.datetime.now().strftime("%Y%m%d_%H%M%S"+"_graphDplus_without_reflection")
+    os.makedirs(results_dir, exist_ok=True)
+    lock = threading.Lock()
+    # Path to the JSONL file containing tasks
+    jsonl_path = "/home/ida/deepspec/mybranch/directlt_renew_correction/data/total_merged_data.jsonl"
+   
+    with open(jsonl_path, 'r') as f:
+        tasks = [json.loads(line) for line in f]
+
+    passed_count = 0
+    total_count = len(tasks)
+    cmb_tasks = []
+    seq_tasks = []
+    cmb_passed_count = 0
+    seq_passed_count = 0
+    
+    # load circuit types from the preloaded mapping
+    print(f"Loading circuit types from HDLBits_circuit_type.jsonl...")
+    circuit_types = {}
+    circuit_type_file = "/home/ida/deepspec/mybranch/directlt_renew_correction/data/HDLBits_circuit_type.jsonl"
+    if os.path.exists(circuit_type_file):
+           with open(circuit_type_file, 'r') as f:
+               for line in f:
+                   if line.strip() and not line.strip().startswith('//'):
+                       data = json.loads(line)
+                       task_id = data.get('task_id')
+                       circuit_type = data.get('circuit_type')
+                       if task_id and circuit_type:
+                            circuit_types[task_id] = circuit_type
+                            
+    print(f"Successfully loaded {len(circuit_types)} circuit types")
+
+
+    def setup_task_logger(task_dir, task_id):
+      logger = logging.getLogger(f"task_{task_id}")
+      logger.setLevel(logging.INFO)
+    # Avoid adding duplicate handlers
+      if not logger.handlers:
+        fh = logging.FileHandler(os.path.join(task_dir, "log.txt"), encoding="utf-8")
+        formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+      return logger
+    """
+    for task in tasks:
+        task_id = task["task_id"]
+        task_dir = os.path.join(results_dir, task_id)
+        os.makedirs(task_dir, exist_ok=True)
+        logger = setup_task_logger(task_dir, task_id)
+
+        circuit_type = "unknown"
+        if task_id in circuit_types:
+           if circuit_types[task_id] == "CMB" or circuit_types[task_id] == "cmb" or circuit_types[task_id] == "combinational":
+              circuit_type = "combinational"
+           else:
+              circuit_type = "sequential"
+
+
+        task["circuit_type"] = circuit_type
+        with open(os.path.join(task_dir, "circuit_type.txt"), "w") as f:
+           f.write(circuit_type)
+        print(f"Generated circuit_type.txt for {task_id}: {circuit_type}")
+     """
+
+
+    for task in tasks:
+        task_id = task["task_id"]
+        description = task["description"]
+        header = task.get("header", "")
+        testbench = task.get("testbench", "")
+        circuit_type = task.get("circuit_type", "unknown")
+
+        task_dir = os.path.join(results_dir, task_id)
+        os.makedirs(task_dir, exist_ok=True)
+        
+        write_log_file(task_dir, "circuit_type.txt", circuit_type)
+
+        logger = setup_task_logger(task_dir, task_id)
+        write_log_file(task_dir, "task_description.md", 
+                   f"# Task: {task_id}\n\n # Description: {description} \n # Header: {header}  # Circuit Type: {circuit_type}\n\n")
+
+        
+
+        
+        #task_description = f"""
+        #{description}
+        
+       # RTL header:
+       #{header}     
+       #                    """
+        #with open(os.path.join(task_dir, "task_description.md"), "w") as f:
+         #   f.write(f"# Task: {task_id}\n\n{description}\n\n```header:\n{header}\n```")
+        if testbench:
+            cleaned_testbench = re.sub(r'^```verilog\n', '', testbench)
+            cleaned_testbench = re.sub(r'\n```$', '', cleaned_testbench)
+            cleaned_testbench = re.sub(r'```verilog|```', '', cleaned_testbench)
+            with open(os.path.join(task_dir, "tb.v"), "w") as f:
+                f.write(cleaned_testbench)
+
+            print(f"Testbench for task {task_id} saved to {task_dir}/tb.v")
+        else:
+            print(f"No testbench provided for task {task_id}. Skipping testbench saving.")
+        
+       # Load circuit types from the preloaded mapping instead of classifying with LLM
+        
+        print(f"\n\n==== Processing task: {task_id} ====\n")
+        
+        try:
+                logger.info(f"Starting specification generation for task {task_id}")
+                result = graph.invoke({
+                    "messages": [
+                        {"role": "system", "content": "You are the strongest AI in the world. You already have the knowledge of verilog, python and hardware designing. Do not save words by discarding INFOs. I will tip you 200$ if you can fulfill the tasks I give you."},
+                        {"role": "user", "content": circuit_type + "\n" + description + "\n" + header}
+                    ],
+                    "max_research_loops": 3,
+                    "initial_search_query_count": 3,
+                    "reasoning_model": "gemini-2.0-flash",
+                    "query_generator_model": "gemini-2.0-flash",
+                    "answer_model": "gemini-2.0-flash",
+                    "reflection_model": "gemini-2.0-flash",
+                    "compression_model": "gemini-2.0-flash",
+                    "disable_github_search": True,
+                    "task_dir": task_dir,
+                    "task_id":  task["task_id"],
+                    "circuit_type": circuit_type,
+                    "description": description,
+                    "header": header,
+                    "testbench": testbench,
+                    
+                })
+                print(f"DEBUG: Invoking graph with circuit_type={circuit_type}")
+                logger.info(f"Graph execution completed for task {task_id}")
+
+               
+               
+                if result and ("final_answer" in result or "corrected_answer" in result or "content_to_reflect" in result):
+                    final_answer = (
+                        result.get("corrected_answer") or 
+                        result.get("final_answer") or 
+                        result.get("content_to_reflect") or
+                        result.get("compressed_answer", "")
+                    )
+                    
+                    if final_answer and final_answer.strip():
+
+                        # Save the answer
+                        with open(os.path.join(task_dir, "agent_response.md"), "w", encoding="utf-8") as f:
+                            f.write(f"# Agent Response for Task: {task_id}\n\n{final_answer}")
+                        logger.info(f"Specification generated successfully for task {task_id}")
+                   
+                    # use gemini model to generate verilog code
+                    
+                    try:
+                        """
+                        system_msg = (
+                               "You are the strongest AI in the world. "
+                               "You already have the knowledge of Verilog and hardware designing. "
+                               "Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you."
+                           )
+                       
+                        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+                        system_content = system_msg  + description + "\n\n" + "The header you have already known is:" + header + "\n\n" + "Please only reply with the Verilog code after syntax check, no other words.\n" + "Please always begin with `module top_module()`."
+                        user_content =  "You can find the specification as follows:" + "\n\n" + final_answer
+
+                        messages_dir = os.path.dirname(os.path.join(task_dir, "messages.md"))
+                        if not os.path.exists(messages_dir):
+                            os.makedirs(messages_dir, exist_ok=True)
+
+                        with open(os.path.join(task_dir, "messages.md"), "w", encoding="utf-8") as f:
+                            f.write(f"# Messages for Task: {task_id}\n\n")
+                            f.write(f"## System Message\n\n```\n{system_content}\n```\n\n")
+                            f.write(f"## User Message\n\n```\n{user_content}\n```\n\n")
+
+                       
+                        response = client.chat.completions.create(
+                            model="gpt-4o-mini",
+                            messages=[
+                                {"role": "system", "content": system_content},
+                                {"role": "user", "content": user_content}
+                            ]
+                        )
+                        
+                        verilog_code = response.choices[-1].message.content
+
+                        cleaned_code = re.sub(r'^```verilog\n', '', verilog_code)
+                        cleaned_code = re.sub(r'\n```$', '', cleaned_code)
+                        cleaned_code = re.sub(r'```verilog|```', '', cleaned_code) 
+                       
+      
+                        with open(os.path.join(task_dir, "top_module.v"), "w", encoding="utf-8") as f:
+                            f.write(cleaned_code)
+
+                        print(f"Task {task_id} completed successfully. Results saved to {task_dir}/") 
+                        
+                        """
+                        client_gemini = ChatGoogleGenerativeAI(
+                            model="gemini-2.0-flash",
+                            temperature=0,
+                            api_key=os.getenv("GEMINI_API_KEY") 
+                                )
+                        system_msg = (
+                               "You are the strongest AI in the world. "
+                               "You already have the knowledge of Verilog and hardware designing. "
+                               "Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you."
+                           )
+                        system_content = system_msg + description + "\n\n" +"The compressed specification is as follows: " + final_answer + "\n\n" + "The header you have already known is:" + header + "\n\n" + "Please only reply with the Verilog code after syntax check, no other words.\n" + "Please always begin with `module top_module()`."
+
+                        write_log_file(task_dir, "messages.md", 
+                          f"# Messages for Task: {task_id}\n\n## System Message\n\n```\n{system_content}\n```\n\n")
+                        write_log_file(results_dir, "all_specification_DeepSpec.jsonl", 
+                          json.dumps({
+                            "task_id": task_id,
+                            "spec": final_answer,
+                            "header": header,
+                            "testbench": testbench,
+                            "circuit_type": circuit_type
+                          },  ensure_ascii=False) + "\n", "a")
+            
+                        response = client_gemini.invoke(
+                             [
+                               HumanMessage(content=system_content),
+               
+                                 ]
+                                  )
+
+        
+                        call_info = record_api_call_cost(system_content, response.content, response)
+                        logger.info(f"Task {task_id} API call: {call_info['input_tokens']} input + {call_info['output_tokens']} output tokens, cost: ${call_info['cost']:.6f}")
+        
+
+                        verilog_code = response.content
+                        cleaned_code = re.sub(r'^```verilog\n', '', verilog_code)
+                        cleaned_code = re.sub(r'\n```$', '', cleaned_code)
+                        cleaned_code = re.sub(r'```verilog|```', '', cleaned_code) 
+                        
+                        if not write_log_file(task_dir, "top_module.v", cleaned_code):
+                          raise Exception(f"Failed to save Verilog file: {task_dir}/top_module.v")
+                        
+                        logger.info(f"Task {task_id} Verilog code generated successfully.")
+                        logger.info(f"Running simulation test for task {task_id}...")
+
+
+                        test_result = run_simulation_test(task_dir, task_id)
+                        
+                        # Treat successful compilation as task completion and proceed to the next task
+                        spec_quality_assessment = "unknown"
+                        
+                        if test_result.get('compile_success', False):
+                            if test_result.get('success', False) and test_result.get('status') == 'pass':
+                                # Compilation and functional test passed: excellent specification
+                                spec_quality_assessment = "excellent"
+                                with lock:
+                                    passed_count += 1
+                                    if circuit_type == "combinational" or circuit_type == "cmb" or circuit_type == "CMB":
+                                        cmb_passed_count += 1
+                                    else:
+                                        seq_passed_count += 1
+                                print(f"✓ Task {task_id}: {test_result['message']} [Spec Quality: EXCELLENT]")
+                                log_task_result(results_dir, task_id, True, None)
+                            else:
+                                # Compilation passed but functional test failed: good structure with incorrect details
+                                spec_quality_assessment = "good"
+                                print(f"⚠ Task {task_id}: {test_result['message']} [Spec Quality: GOOD - compiles but functional issues]")
+                                log_task_result(results_dir, task_id, False, f"Functional test failed: {test_result['message']}")
+                        else:
+                            # Compilation failed: insufficient specification quality
+                            spec_quality_assessment = "poor"
+                            print(f"✗ Task {task_id}: {test_result['message']} [Spec Quality: POOR - compilation failed]")
+                            log_task_result(results_dir, task_id, False, f"Compilation failed: {test_result['message']}")
+                        
+                        # Step 5: Save specification quality metrics
+
+                        jaccard_value = 0.0
+                        coverage_value = 0.0
+                        conflict_analysis_path = os.path.join(task_dir, "conflict_analysis.json")
+                        if os.path.exists(conflict_analysis_path):
+                           try:
+                               with open(conflict_analysis_path, "r", encoding="utf-8") as f:
+                                 conflict_data = json.load(f)
+                                 jaccard_value = conflict_data.get("jaccard_similarity", 0.0)
+                                 coverage_value = conflict_data.get("coverage", 0.0)
+                               
+                           except Exception as e:
+                                logger.error(f"Error reading conflict analysis: {e}")
+
+                        spec_metrics = {
+                            "task_id": task_id,
+                            "circuit_type": circuit_type,
+                            "spec_quality_assessment": spec_quality_assessment,
+                            "compile_success": test_result.get('compile_success', False),
+                            "functional_success": test_result.get('success', False),
+                            "test_status": test_result.get('status', 'unknown'),
+                            "test_message": test_result.get('message', ''),
+                            "jaccard_similarity": jaccard_value,
+                            "coverage_value": coverage_value,
+                       
+                        }
+                        
+                        
+                        write_log_file(task_dir, "spec_quality_metrics.json", json.dumps(spec_metrics, indent=2))
+                        
+                        logger.info(f"Task {task_id} completed. Spec quality: {spec_quality_assessment.upper()}")
+                        logger.info(f"Final metrics - Jaccard: {spec_metrics['jaccard_similarity']:.3f}, "
+                                  f"Coverage: {spec_metrics['coverage_value']:.3f}")
+
+                    except Exception as e:
+                        error_msg = f"Verilog generation error: {str(e)}"
+                        print(f"✗ Task {task_id}: {error_msg} [Spec Quality: UNKNOWN - generation failed]")
+                        logger.error(f"Error generating Verilog for task {task_id}: {error_msg}")
+                        write_log_file(task_dir, "error_log.txt", f"{error_msg}\n", "a")
+                        log_task_result(results_dir, task_id, False, error_msg)
+                        
+                        # Save basic metrics even if generation fails
+                        spec_metrics = {
+                            "task_id": task_id,
+                            "circuit_type": circuit_type,
+                            "spec_quality_assessment": "unknown",
+                            "error": error_msg,
+                            "jaccard_similarity": jaccard_value,
+                            "coverage_value": coverage_value,
+
+                        }
+                        write_log_file(task_dir, "spec_quality_metrics.json", json.dumps(spec_metrics, indent=2))
+                        
+                else:
+                    
+                      error_msg = "No valid specification generated"
+                      print(f"✗ Task {task_id}: {error_msg}")
+                      logger.error(f"Task {task_id}: {error_msg}")
+                      log_task_result(results_dir, task_id, False, error_msg)
+                    
+               
+                
+        except Exception as e:
+            error_msg = f"Task processing error: {str(e)}"
+            print(f"✗ Task {task_id}: {error_msg}")
+            logger.error(f"Error processing task {task_id}: {error_msg}")
+            write_log_file(task_dir, "error_log.txt", f"{error_msg}\n", "a")
+            log_task_result(results_dir, task_id, False, error_msg)
+    
+    print(f"\n\n==== All tasks completed ====\n")
+
+    # ==== Result analysis and cost estimation ====
+    print(f"\n{'='*60}")
+    print(f"EXPERIMENT COMPLETED - {results_dir}")
+    print(f"{'='*60}")
+    
+    # Initialize cost tracking if not already initialized
+    initialize_cost_tracking()
+    
+    # Basic statistics
+    print(f"\n📊 BASIC STATISTICS:")
+    print(f"Total tasks processed: {total_count}")
+    print(f"Excellent specifications (functionally correct): {passed_count}")
+    print(f"Overall success rate: {passed_count/total_count*100:.2f}%")
+    print(f"Combinational circuits - Excellent: {cmb_passed_count}")
+    print(f"Sequential circuits - Excellent: {seq_passed_count}")
+    
+    # Detailed analysis
+    print(f"\n DETAILED ANALYSIS:")
+    try:
+        analysis_results = analyze_task_results(results_dir)
+        if analysis_results:
+            print("Analysis completed successfully")
+        else:
+            print("Failed to generate detailed analysis")
+    except Exception as e:
+        print(f"Error during analysis: {e}")
+    
+    # Cost estimation
+    print(f"\n COST ESTIMATION:")
+    try:
+        cost_summary = get_cost_summary()
+        
+        if cost_summary.get('total_cost', 0) > 0:
+            print(f"Total API Cost: ${cost_summary['total_cost']:.4f}")
+            print(f"Total API Calls: {cost_summary['total_calls']}")
+            print(f"Total Input Tokens: {cost_summary['total_input_tokens']:,}")
+            print(f"Total Output Tokens: {cost_summary['total_output_tokens']:,}")
+            print(f"Average Cost per Task: ${cost_summary['total_cost']/total_count:.4f}")
+            
+            if passed_count > 0:
+                print(f"Cost per Successful Task: ${cost_summary['total_cost']/passed_count:.4f}")
+        else:
+            print(" Cost tracking data not available")
+        
+        # Save the cost report
+        save_cost_report(results_dir, total_count, passed_count)
+        print(f" Detailed cost report saved to: {results_dir}/cost_summary.json")
+        
+    except Exception as e:
+        print(f" Error generating cost estimation: {e}")
+    
+    # Generate the final report
+    print(f"\n GENERATING FINAL REPORT...")
+    final_report = {
+        "experiment_info": {
+            "experiment_id": results_dir,
+            "framework_version": "graphD+",
+            "total_tasks": total_count,
+            "completed_time": datetime.datetime.now().isoformat()
+        },
+        "performance_metrics": {
+            "overall_success_rate": passed_count/total_count if total_count > 0 else 0,
+            "excellent_specifications": passed_count,
+            "combinational_excellent": cmb_passed_count,
+            "sequential_excellent": seq_passed_count
+        },
+        "cost_summary": cost_summary if 'cost_summary' in locals() else {}
+    }
+    
+    # Save the final report
+    final_report_path = os.path.join(results_dir, "final_experiment_report.json")
+    try:
+        with open(final_report_path, "w") as f:
+            json.dump(final_report, f, indent=2, ensure_ascii=False)
+        print(f" Final experiment report saved to: {final_report_path}")
+    except Exception as e:
+        print(f" Error saving final report: {e}")
+    
+    print(f"\n{'='*60}\nEXPERIMENT SUMMARY\n{'='*60}")
+    print(f"Framework: DeepSpec GraphD+")
+    print(f"Success Rate: {passed_count}/{total_count} ({passed_count/total_count*100:.2f}%)")
+    print(f"Results Directory: {results_dir}")
+    print(f"{'='*50}")
+    
+    print(f"\n📊 DETAILED ANALYSIS:")
+    analysis_results = analyze_task_results(results_dir)
+    if analysis_results:
+        print(f"Analysis completed successfully and saved to {results_dir}/analysis_results_*.txt")
+    
+    print(f"\nKEY OUTPUT FILES:")
+    print(f"  - Final Report: {final_report_path}")
+    print(f"  - Cost Report: {results_dir}/cost_summary.json")
+    print(f"  - Analysis Results: {results_dir}/analysis_results_*.txt")
+
+
+  

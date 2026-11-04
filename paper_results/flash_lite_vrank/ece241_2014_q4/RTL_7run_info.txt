@@ -1,0 +1,15 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:22: error: q_xor is not a valid l-value in testbench.DUT.
+top_module.v:8:      : q_xor is declared here as wire.
+top_module.v:26: error: q_and is not a valid l-value in testbench.DUT.
+top_module.v:8:      : q_and is declared here as wire.
+top_module.v:30: error: q_or is not a valid l-value in testbench.DUT.
+top_module.v:8:      : q_or is declared here as wire.
+3 error(s) during elaboration.
+

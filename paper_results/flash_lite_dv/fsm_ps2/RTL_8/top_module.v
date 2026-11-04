@@ -1,0 +1,52 @@
+module top_module(
+    input clk,
+    input [7:0] in,
+    input reset,
+    output reg done
+);
+
+    // Define states
+    localparam IDLE = 2'b00;
+    localparam BYTE1 = 2'b01;
+    localparam BYTE2 = 2'b10;
+    localparam BYTE3 = 2'b11;
+
+    // State register
+    reg [1:0] state;
+
+    // Synchronous logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= IDLE;
+            done <= 1'b0;
+        end else begin
+            case (state)
+                IDLE: begin
+                    done <= 1'b0;
+                    if (in[3]) begin
+                        state <= BYTE1;
+                    end else begin
+                        state <= IDLE;
+                    end
+                end
+                BYTE1: begin
+                    done <= 1'b0;
+                    state <= BYTE2;
+                end
+                BYTE2: begin
+                    done <= 1'b0;
+                    state <= BYTE3;
+                end
+                BYTE3: begin
+                    done <= 1'b1;
+                    state <= IDLE;
+                end
+                default: begin
+                    state <= IDLE;
+                    done <= 1'b0;
+                end
+            endcase
+        end
+    end
+
+endmodule

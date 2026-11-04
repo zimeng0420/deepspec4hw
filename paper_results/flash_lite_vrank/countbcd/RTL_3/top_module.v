@@ -1,0 +1,66 @@
+module top_module(
+	input clk,
+	input reset,
+	output [3:1] ena,
+	output reg [15:0] q
+);
+
+  reg [3:0] ones;
+  reg [3:0] tens;
+  reg [3:0] hundreds;
+  reg [3:0] thousands;
+
+  assign ena[1] = (ones == 9);
+  assign ena[2] = (tens == 9) & (ones == 9);
+  assign ena[3] = (hundreds == 9) & (tens == 9) & (ones == 9);
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      ones <= 4'b0000;
+      tens <= 4'b0000;
+      hundreds <= 4'b0000;
+      thousands <= 4'b0000;
+    end else begin
+      // Ones digit increment
+      if (ones == 9) begin
+        ones <= 4'b0000;
+      end else begin
+        ones <= ones + 1'b1;
+      end
+
+      // Tens digit increment
+      if (ena[1]) begin
+        if (tens == 9) begin
+          tens <= 4'b0000;
+        end else begin
+          tens <= tens + 1'b1;
+        end
+      end
+
+      // Hundreds digit increment
+      if (ena[2]) begin
+        if (hundreds == 9) begin
+          hundreds <= 4'b0000;
+        end else begin
+          hundreds <= hundreds + 1'b1;
+        end
+      end
+
+      // Thousands digit increment
+      if (ena[3]) begin
+        if (thousands == 9) begin
+          thousands <= 4'b0000;
+        end else begin
+          thousands <= thousands + 1'b1;
+        end
+      end
+    end
+  end
+
+  always @(*) begin
+    q[3:0] = ones;
+    q[7:4] = tens;
+    q[11:8] = hundreds;
+    q[15:12] = thousands;
+  end
+endmodule

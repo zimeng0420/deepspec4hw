@@ -1,0 +1,21 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:14: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:17: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:23: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:26: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:32: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:35: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:41: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:44: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:50: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:53: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:58: error: Could not find variable ``y_next'' in ``testbench.DUT''
+top_module.v:69: error: Unable to bind wire/reg/memory `y_next' in `testbench.DUT'
+12 error(s) during elaboration.
+

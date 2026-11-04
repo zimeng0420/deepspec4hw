@@ -1,0 +1,36 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units by identifying individual requirements, features, behaviors, and constraints. Each atomic unit was designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement. This involved breaking down complex sentences into simpler, more manageable statements that capture a single aspect of the design or functionality.",
+  "mindtraced_atomic_units": [
+    "Create 8 D flip-flops",
+    "Active high synchronous reset",
+    "Reset to 0x34",
+    "Negative edge triggered",
+    "8-bit register",
+    "Input clk",
+    "Input [7:0] d",
+    "Input reset",
+    "Output reg [7:0] q"
+  ],
+  "spec_atomic_units": [
+    "Module top_module interface defined with clk, d, reset, and q",
+    "d is an 8-bit data input",
+    "reset is an active-high synchronous reset signal",
+    "q is an 8-bit output register",
+    "Combinational logic generates D input based on reset and d",
+    "If reset is asserted, D input is set to reset_value (0x34)",
+    "If reset is not asserted, D input is set to d",
+    "D[i] = (reset) ? reset_value[i] : d[i]",
+    "reset_value = 8'b00110100",
+    "Combinational logic can be viewed as eight 2-to-1 multiplexers",
+    "D[i] = (reset & reset_value[i]) | (!reset & d[i])",
+    "q updates on the negative edge of clk",
+    "When reset is high, q is synchronously reset to 0x34 on the next negative edge of clk",
+    "When reset is low, q takes the value of d on the next negative edge of clk",
+    "d must be stable before the negative edge of clk",
+    "reset must be stable before the negative edge of clk",
+    "Flip-flops are negative edge-triggered",
+    "reset is synchronous and active high",
+    "register is initialized to 0x34 when reset is asserted",
+    "Update of q is implemented using non-blocking assignments within an always @(negedge clk) block"
+  ]
+}

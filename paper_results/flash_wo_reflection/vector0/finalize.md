@@ -1,0 +1,87 @@
+#  Task: vector0
+
+## CMB Logic Prompt
+
+```
+Generate a high-quality technical specification for a combinational logic circuit based on the provided summaries.
+
+Instructions:
+
+- Your goal is to focus exclusively on the combinational logic aspects of the task and generate a comprehensive technical specification for a pure combinational logic design.
+- Your report should serve as a comprehensive technical specification for pure combinational logic implementation.
+- No words about sequential logic or timing analysis.
+- No words about resource utilization or optimization.
+- No words about clock frequencies or timing constraints.
+- Do not include any code implementation details or formal verification steps in your response.
+Available Information:
+
+- RTL Top Module Header: module top_module(
+	input [2:0] vec, 
+	output [2:0] outv,
+	output o2,
+	output o1,
+	output o0
+);
+
+- Analyze Report: Top_Analyze="Analyze the module header, ports (input 'vec', outputs 'outv', 'o2', 'o1', 'o0'), and overall behavior. Focus on how the 3-bit input vector 'vec' is both directly output as 'outv' and split into individual 1-bit outputs 'o2', 'o1', and 'o0'. Highlight the connection between 'vec[0]' and 'o0', 'vec[1]' and 'o1', and 'vec[2]' and 'o2'." Topic_Analyze='Provide a structured analysis of the research topic by addressing the following queries: 1) "Verilog 3-bit vector assignment to individual outputs" to understand how to split a vector into individual bits; 2) "Verilog assign statement for vector and scalar outputs" to learn the syntax for assigning a vector to another vector and to individual scalar outputs; 3) "Verilog direct assignment of input to output" to confirm the simplest way to pass an input signal directly to an output signal; 4) "Verilog 3-bit vector to 3 single-bit outputs example" to find a similar example and adapt it; and 5) "Verilog syntax for connecting vector bits to scalar outputs" to ensure correct syntax. Synthesize the findings from these queries to form a comprehensive understanding. Consider the date September 12, 2025 for the latest information.' Solving_Strategies="Outline the overall reasoning strategies and methodology: 1) Understand the module's input and output structure. 2) Implement a direct assignment from the input vector 'vec' to the output vector 'outv'. 3) Implement individual assignments from bits of 'vec' to the corresponding single-bit outputs 'o0', 'o1', and 'o2'. 4) Verify the correctness of the assignments by ensuring that 'o0' is connected to 'vec[0]', 'o1' to 'vec[1]', and 'o2' to 'vec[2]'. Each step relates to the top-level module by directly implementing the required functionality of assigning the input vector to both a vector output and individual bit outputs."
+- Original Task Description: User: CMB
+Build a circuit that has one 3-bit input, then outputs the same vector, and also splits it into three separate 1-bit outputs. Connect output o0 to the input vector's position 0, o1 to position 1, etc.
+module top_module(
+	input [2:0] vec, 
+	output [2:0] outv,
+	output o2,
+	output o1,
+	output o0
+);
+
+
+- Others:{"web_research_result": "In Verilog, you can assign a 3-bit vector to individual 1-bit outputs by using bit-selects. This involves assigning a specific bit of the input vector to a corresponding output. The `assign` statement is used for continuous assignment, ensuring that the output updates whenever the input changes.\n\nTo assign a 3-bit input vector `vec` to a 3-bit output vector `outv` and also split it into three separate 1-bit outputs `o2`, `o1`, and `o0`, you can use the following Verilog module structure:\n\n```verilog\nmodule top_module(\n    input [2:0] vec,\n    output [2:0] outv,\n    output o2,\n    output o1,\n    output o0\n);\n\nassign outv = vec;\nassign o2 = vec[2];\nassign o1 = vec[1];\nassign o0 = vec[0];\n\nendmodule\n```\n\nIn this module:\n- `vec` is a 3-bit input vector.\n- `outv` is a 3-bit output vector that mirrors the input vector.\n- `o2`, `o1`, and `o0` are individual 1-bit outputs.\n\nThe `assign` statements continuously drive the values to the outputs. `outv` is assigned the entire 3-bit vector `vec`. Then, each individual output `o2`, `o1`, and `o0` is assigned the corresponding bit from the input vector `vec`. Specifically, `o2` is assigned `vec[2]`, `o1` is assigned `vec[1]`, and `o0` is assigned `vec[0]`.\n"}
+
+Output Format:
+Format your response as a JSON object with the following structure:
+
+```json
+{
+  "header": "The top module header definition from module top_module(
+	input [2:0] vec, 
+	output [2:0] outv,
+	output o2,
+	output o1,
+	output o0
+);
+, including the interface definition and their behavior.",
+
+  "combinational_logic_function": "Describe how outputs derive from inputs (e.g., Boolean expressions, truth table patterns). Provide a systematic breakdown of the combinational logic structure optimized for performance and area. Include: logic organization with clear functional boundaries, signal flow optimization and critical path identification, operator sharing and resource utilization strategies, logic level balancing and delay equalization techniques, output multiplexing and selection logic organization.",
+
+  "enhanced_combinational_description": "Comprehensive combinational logic specification derived from User: CMB
+Build a circuit that has one 3-bit input, then outputs the same vector, and also splits it into three separate 1-bit outputs. Connect output o0 to the input vector's position 0, o1 to position 1, etc.
+module top_module(
+	input [2:0] vec, 
+	output [2:0] outv,
+	output o2,
+	output o1,
+	output o0
+);
+
+. All details must be comprehensive and tailored for LLM models."
+}
+
+
+
+
+
+
+```
+
+## CMB Logic Summary
+
+```
+```json
+{
+  "header": "The top module header definition is:\n\n```verilog\nmodule top_module(\n input [2:0] vec,\n output [2:0] outv,\n output o2,\n output o1,\n output o0\n);\n```\n\nThis module defines a combinational logic circuit with a 3-bit input vector `vec` and four outputs: a 3-bit output vector `outv` and three single-bit outputs `o2`, `o1`, and `o0`. The module's behavior is to directly output the input vector `vec` as `outv`, and also to split the input vector into three separate 1-bit outputs, where `o0` corresponds to `vec[0]`, `o1` corresponds to `vec[1]`, and `o2` corresponds to `vec[2]`.",
+  "combinational_logic_function": "The combinational logic function of this circuit is defined by the following relationships:\n\n*   `outv[2:0] = vec[2:0]`\n*   `o2 = vec[2]`\n*   `o1 = vec[1]`\n*   `o0 = vec[0]`\n\nThis represents a direct assignment of the input vector to the output vector and individual bit assignments from the input vector to the single-bit outputs. There are no complex Boolean expressions or truth table patterns involved. The logic organization is a simple fan-out of the input signals to the corresponding outputs. Signal flow is direct, from input `vec` to outputs `outv`, `o2`, `o1`, and `o0`. There is no operator sharing or resource utilization optimization needed due to the simplicity of the logic. Logic level balancing and delay equalization are not applicable in this scenario. Output multiplexing and selection logic are not required.",
+  "enhanced_combinational_description": "This combinational logic circuit takes a 3-bit input vector, `vec[2:0]`, and produces four outputs: a 3-bit output vector, `outv[2:0]`, and three individual 1-bit outputs, `o2`, `o1`, and `o0`. The primary function of the circuit is to replicate the input vector `vec` onto the output vector `outv` and simultaneously extract each bit of `vec` and assign it to a corresponding single-bit output. Specifically:\n\n1.  The entire 3-bit input vector `vec[2:0]` is directly assigned to the 3-bit output vector `outv[2:0]`. This means that `outv[2]` will have the same value as `vec[2]`, `outv[1]` will have the same value as `vec[1]`, and `outv[0]` will have the same value as `vec[0]`.\n\n2.  The most significant bit (MSB) of the input vector, `vec[2]`, is assigned to the output `o2`. Therefore, the value of `o2` will always be equal to the value of `vec[2]`.\n\n3.  The middle bit of the input vector, `vec[1]`, is assigned to the output `o1`. Consequently, the value of `o1` will always be equal to the value of `vec[1]`.\n\n4.  The least significant bit (LSB) of the input vector, `vec[0]`, is assigned to the output `o0`. Hence, the value of `o0` will always be equal to the value of `vec[0]`.\n\nIn essence, the circuit performs a simple replication and bit-extraction operation. The output `outv` mirrors the input `vec`, while `o2`, `o1`, and `o0` provide individual access to the bits of `vec`. The circuit is purely combinational, meaning the outputs respond instantaneously to changes in the input, without any memory or state-holding elements."
+}
+```
+```
+

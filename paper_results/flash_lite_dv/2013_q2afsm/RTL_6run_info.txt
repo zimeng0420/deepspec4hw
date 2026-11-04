@@ -1,0 +1,45 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:21: error: g['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd1] is declared here as wire.
+top_module.v:22: error: g['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd2] is declared here as wire.
+top_module.v:23: error: g['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd3] is declared here as wire.
+top_module.v:24: error: g['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd1] is declared here as wire.
+top_module.v:24: error: g['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd2] is declared here as wire.
+top_module.v:24: error: g['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd3] is declared here as wire.
+top_module.v:27: error: g['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd1] is declared here as wire.
+top_module.v:28: error: g['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd2] is declared here as wire.
+top_module.v:28: error: g['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd3] is declared here as wire.
+top_module.v:31: error: g['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd2] is declared here as wire.
+top_module.v:32: error: g['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd1] is declared here as wire.
+top_module.v:32: error: g['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd3] is declared here as wire.
+top_module.v:35: error: g['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd3] is declared here as wire.
+top_module.v:36: error: g['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd1] is declared here as wire.
+top_module.v:36: error: g['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd2] is declared here as wire.
+top_module.v:39: error: g['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd1] is declared here as wire.
+top_module.v:39: error: g['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd2] is declared here as wire.
+top_module.v:39: error: g['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:5:      : g['sd3] is declared here as wire.
+18 error(s) during elaboration.
+

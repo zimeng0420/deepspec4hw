@@ -1,0 +1,34 @@
+# Messages for Task: ringer
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Suppose you are designing a circuit to control a cellphone's ringer and vibration motor. Whenever the phone needs to ring from an incoming call (input ring), your circuit must either turn on the ringer (output ringer = 1) or the motor (output motor = 1), but not both. If the phone is in vibrate mode (input vibrate_mode = 1), turn on the motor. Otherwise, turn on the ringer.The header you have already known is:module top_module(
+	input ring, 
+	input vibrate_mode,
+	output ringer,
+	output motor
+);
+
+```
+
+## User Message
+
+```
+
+
+You can use the technical specification as follows:```json
+{
+  "header": "The top module header definition from module top_module(\n\tinput ring, \n\tinput vibrate_mode,\n\toutput ringer,\n\toutput motor\n);\n, including the interface definition and their behavior.",
+  
+  "combinational_logic_function": "The outputs 'ringer' and 'motor' are derived from the inputs 'ring' and 'vibrate_mode' using combinational logic. The logic can be expressed through the following Boolean expressions: \n\n1. ringer = ring AND NOT vibrate_mode \n2. motor = ring AND vibrate_mode \n\nThis ensures that when 'vibrate_mode' is active (1), the 'motor' is turned on, and when it is inactive (0), the 'ringer' is activated if 'ring' is also active (1). The outputs are mutually exclusive, meaning that only one can be high at any given time. \n\nThe truth table for the circuit is as follows:\n\n| ring | vibrate_mode | ringer | motor |\n|------|--------------|--------|-------|\n|  0   |      0       |   0    |   0   |\n|  0   |      1       |   0    |   0   |\n|  1   |      0       |   1    |   0   |\n|  1   |      1       |   0    |   1   |\n\nThis truth table outlines the output states based on the input combinations, ensuring that the outputs are activated correctly based on the user's selected mode. The logic organization is straightforward, with clear functional boundaries defined by the conditions of the inputs. Signal flow is optimized by directly linking the inputs to the outputs through simple AND and NOT operations, minimizing the complexity of the circuit. The critical path is defined by the direct connections from inputs to outputs, ensuring minimal delay in signal propagation. The design avoids unnecessary operator sharing and maintains a balanced logic level to prevent excessive delays. The output selection logic is organized to ensure that only one output is active at any time, adhering to the mutually exclusive requirement.",
+  
+  "enhanced_combinational_description": "Comprehensive combinational logic specification derived from User: CMB\nSuppose you are designing a circuit to control a cellphone's ringer and vibration motor. Whenever the phone needs to ring from an incoming call (input ring), your circuit must either turn on the ringer (output ringer = 1) or the motor (output motor = 1), but not both. If the phone is in vibrate mode (input vibrate_mode = 1), turn on the motor. Otherwise, turn on the ringer.\nmodule top_module(\n\tinput ring, \n\tinput vibrate_mode,\n\toutput ringer,\n\toutput motor\n);\n\nThe combinational logic circuit is designed to ensure that the outputs 'ringer' and 'motor' are controlled based on the inputs 'ring' and 'vibrate_mode'. The circuit operates under the following conditions:\n\n- When 'ring' is 0, both outputs 'ringer' and 'motor' are 0, indicating no incoming call.\n- When 'ring' is 1 and 'vibrate_mode' is 0, 'ringer' is set to 1, activating the ringer for an incoming call.\n- When 'ring' is 1 and 'vibrate_mode' is 1, 'motor' is set to 1, activating the vibration motor instead of the ringer.\n\nThe design ensures that the outputs are mutually exclusive, preventing both 'ringer' and 'motor' from being active simultaneously. The logic is implemented using basic combinational gates, specifically AND and NOT gates, to derive the outputs from the inputs. The truth table and Boolean expressions provide a clear framework for understanding the circuit's operation, ensuring that it meets the functional requirements for mobile device control."
+}
+```
+
+Please only reply with the Verilog code, no other words.
+
+Please always begin with `module top_module()`. 
+```
+

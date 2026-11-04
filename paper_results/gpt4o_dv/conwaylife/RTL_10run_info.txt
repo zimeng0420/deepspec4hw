@@ -1,0 +1,11 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:26: error: neighbor_count[(x)+((y)*('sd16))] is not a valid l-value in testbench.DUT.$unm_blk_9.$unm_blk_11.
+top_module.v:7:      : neighbor_count[(x)+((y)*('sd16))] is declared here as wire.
+1 error(s) during elaboration.
+

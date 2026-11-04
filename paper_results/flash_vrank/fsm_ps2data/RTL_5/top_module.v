@@ -1,0 +1,52 @@
+module top_module (
+    input clk,
+    input [7:0] in,
+    input reset,
+    output [23:0] out_bytes,
+    output done
+);
+
+    reg [2:0] state;
+    reg [23:0] out_bytes_r;
+    reg done_r;
+
+    localparam IDLE = 3'b000;
+    localparam BYTE1 = 3'b001;
+    localparam BYTE2 = 3'b010;
+    localparam BYTE3 = 3'b011;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= IDLE;
+            out_bytes_r <= 0;
+            done_r <= 0;
+        end else begin
+            case (state)
+                IDLE: begin
+                    done_r <= 0;
+                    if (in[3]) begin
+                        out_bytes_r[23:16] <= in;
+                        state <= BYTE1;
+                    end
+                end
+                BYTE1: begin
+                    out_bytes_r[15:8] <= in;
+                    state <= BYTE2;
+                end
+                BYTE2: begin
+                    out_bytes_r[7:0] <= in;
+                    state <= BYTE3;
+                end
+                BYTE3: begin
+                    state <= IDLE;
+                    done_r <= 1;
+                end
+                default: state <= IDLE;
+            endcase
+        end
+    end
+
+    assign out_bytes = out_bytes_r;
+    assign done = done_r;
+
+endmodule

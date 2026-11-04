@@ -1,0 +1,28 @@
+# Messages for Task: conditional
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Given four unsigned numbers, find the minimum. Unsigned numbers can be compared with standard comparison operators (a < b). 
+
+The compressed specification is as follows: ```json
+{
+  "header": "module top_module (\n\tinput [7:0] a,\n\tinput [7:0] b,\n\tinput [7:0] c,\n\tinput [7:0] d,\n\toutput reg [7:0] min\n);",
+  "combinational_logic_function": "The combinational logic function determines the minimum of four 8-bit unsigned numbers (a, b, c, d). This is achieved through a series of pairwise comparisons. First, 'a' and 'b' are compared, and the smaller of the two is selected. Then, 'c' and 'd' are compared, and the smaller of these two is selected. Finally, the two intermediate minimums are compared, and the smaller of these is assigned to the output 'min'. The comparisons are performed using standard unsigned comparison operators. The selection of the minimum value at each stage is implemented using multiplexer-like logic, where the comparison result acts as the select signal. The final output 'min' represents the smallest value among the four inputs.",
+  "enhanced_combinational_description": "This combinational logic circuit identifies the minimum value among four 8-bit unsigned input numbers: a, b, c, and d. The core functionality relies on a series of cascaded comparison operations. Initially, 'a' and 'b' are compared. If 'a' is less than 'b', 'a' is selected as the intermediate minimum; otherwise, 'b' is selected. Concurrently, 'c' and 'd' are compared using the same logic: if 'c' is less than 'd', 'c' is selected; otherwise, 'd' is selected. These two intermediate minimum values are then compared. The smaller of these two values is assigned to the output 'min'. The comparison operations are based on standard unsigned comparison operators, ensuring correct behavior for unsigned numbers. The selection of the minimum value at each stage is effectively a 2-to-1 multiplexer, controlled by the result of the comparison. The final 'min' output represents the absolute minimum value among the four input numbers. The circuit's behavior is purely combinational; the output 'min' is a direct function of the current input values of a, b, c, and d. There are no internal memory elements or feedback paths. The circuit's function can be described by the following pseudo-code:\n\nif (a < b) {\n  min_ab = a;\n} else {\n  min_ab = b;\n}\n\nif (c < d) {\n  min_cd = c;\n} else {\n  min_cd = d;\n}\n\nif (min_ab < min_cd) {\n  min = min_ab;\n} else {\n  min = min_cd;\n}"
+}
+```
+
+The header you have already known is:module top_module (
+	input [7:0] a,
+	input [7:0] b,
+	input [7:0] c,
+	input [7:0] d,
+	output reg [7:0] min
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

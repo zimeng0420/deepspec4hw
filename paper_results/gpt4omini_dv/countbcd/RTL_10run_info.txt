@@ -1,0 +1,21 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp top_module.v tb.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:15: error: ena['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:4:      : ena['sd1] is declared here as wire.
+top_module.v:18: error: ena['sd1] is not a valid l-value in testbench.DUT.
+top_module.v:4:      : ena['sd1] is declared here as wire.
+top_module.v:24: error: ena['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:4:      : ena['sd2] is declared here as wire.
+top_module.v:27: error: ena['sd2] is not a valid l-value in testbench.DUT.
+top_module.v:4:      : ena['sd2] is declared here as wire.
+top_module.v:33: error: ena['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:4:      : ena['sd3] is declared here as wire.
+top_module.v:36: error: ena['sd3] is not a valid l-value in testbench.DUT.
+top_module.v:4:      : ena['sd3] is declared here as wire.
+6 error(s) during elaboration.
+

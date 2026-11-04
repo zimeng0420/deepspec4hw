@@ -1,0 +1,40 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units by identifying individual requirements, features, behaviors, and constraints. Each atomic unit was designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement. This involved breaking down complex sentences into simpler, more manageable statements, and ensuring each statement focused on a single aspect of the design or functionality.",
+  "mindtraced_atomic_units": [
+    "Design a 32-bit global history shift register.",
+    "Support rollback on mispredictions.",
+    "Update register on branch prediction (predict_valid = 1).",
+    "Shift in predict_taken from LSB to update branch history.",
+    "predict_history[0] is the direction of the youngest branch.",
+    "On branch misprediction (train_mispredicted = 1), load register with history after mispredicted branch.",
+    "History is before mispredicted branch (train_history) concatenated with actual result (train_taken).",
+    "Misprediction takes precedence if prediction and misprediction occur simultaneously.",
+    "areset is a positive edge triggered asynchronous reset.",
+    "areset resets history counter to zero.",
+    "Module has clk, areset, predict_valid, predict_taken, predict_history, train_mispredicted, train_taken, train_history ports."
+  ],
+  "spec_atomic_units": [
+    "Implements a 32-bit global history shift register with misprediction rollback.",
+    "predict_history output reflects the current state of the register.",
+    "predict_valid and predict_taken update history on prediction.",
+    "train_mispredicted, train_taken, and train_history correct history on misprediction.",
+    "areset is an asynchronous reset.",
+    "areset has the highest priority.",
+    "If areset is asserted, predict_history is forced to all zeros.",
+    "If train_mispredicted is asserted, predict_history is assigned {train_history[30:0], train_taken}.",
+    "If predict_valid is asserted and train_mispredicted is not asserted, predict_history is a shifted version with predict_taken shifted in.",
+    "predict_history output is derived from inputs through combinational logic.",
+    "areset overrides all other inputs and forces predict_history to 32'b0.",
+    "If train_mispredicted is asserted, predict_history is updated with corrected history.",
+    "If predict_valid is asserted, predict_history is updated by shifting and inserting predict_taken.",
+    "Priority is areset > train_mispredicted > predict_valid.",
+    "predict_history updates on rising edge of clk.",
+    "When areset is asserted high, predict_history is asynchronously reset to zero.",
+    "If predict_valid is high, predict_taken is shifted into predict_history on rising edge of clk.",
+    "If train_mispredicted is high, train_history concatenated with train_taken is loaded into predict_history on rising edge of clk.",
+    "If both predict_valid and train_mispredicted are high, train_mispredicted takes precedence.",
+    "Register updates on the positive edge of clk.",
+    "Updates are implemented using non-blocking assignments within an always_ff block.",
+    "Register is initialized to zero by the asynchronous reset."
+  ]
+}

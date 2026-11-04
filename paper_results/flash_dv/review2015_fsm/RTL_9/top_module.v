@@ -1,0 +1,136 @@
+module top_module(
+    input clk,
+    input reset,
+    input data,
+    input done_counting,
+    input ack,
+    output reg shift_ena,
+    output reg counting,
+    output reg done
+);
+
+  // Define the states of the FSM
+  typedef enum logic [2:0] {
+    IDLE,
+    SHIFT,
+    COUNTING,
+    DONE
+  } state_t;
+
+  reg state;
+  reg next_state;
+  reg [1:0] shift_count;
+  reg [3:0] pattern_buffer;
+
+  // Pattern Detection Logic
+  always @(posedge clk) begin
+    if (reset) begin
+      pattern_buffer <= 4'b0000;
+    end else begin
+      pattern_buffer <= {pattern_buffer[2:0], data};
+    end
+  end
+
+  wire pattern_detected = (pattern_buffer == 4'b1101);
+
+  // Next State Logic
+  always @(*) begin
+    case (state)
+      IDLE: begin
+        if (pattern_detected) begin
+          next_state = SHIFT;
+        } else begin
+          next_state = IDLE;
+        end
+      end
+      SHIFT: begin
+        if (shift_count == 2'b11) begin
+          next_state = COUNTING;
+        } else begin
+          next_state = SHIFT;
+        end
+      end
+      COUNTING: begin
+        if (done_counting) begin
+          next_state = DONE;
+        } else begin
+          next_state = COUNTING;
+        end
+      end
+      DONE: begin
+        if (ack) begin
+          next_state = IDLE;
+        } else begin
+          next_state = DONE;
+        end
+      end
+      default: next_state = IDLE;
+    endcase
+  end
+
+  // State Update Logic
+  always @(posedge clk) begin
+    if (reset) begin
+      state <= IDLE;
+    end else begin
+      state <= next_state;
+    end
+  end
+
+  // Shift Count Logic
+  always @(posedge clk) begin
+    if (reset) begin
+      shift_count <= 2'b00;
+    end else if (state == SHIFT) begin
+      if (shift_count < 2'b11) begin
+        shift_count <= shift_count + 1'b1;
+      end else begin
+        shift_count <= 2'b00;
+      end
+    end else begin
+      shift_count <= 2'b00;
+    end
+  end
+
+  // Output Logic
+  always @(posedge clk) begin
+    if (reset) begin
+      shift_ena <= 0;
+      counting <= 0;
+      done <= 0;
+    end else begin
+      case (state)
+        IDLE: begin
+          shift_ena <= 0;
+          counting <= 0;
+          done <= 0;
+        end
+        SHIFT: begin
+          if (shift_count < 2'b10) begin
+            shift_ena <= 1;
+          end else begin
+            shift_ena <= 0;
+          end
+          counting <= 0;
+          done <= 0;
+        end
+        COUNTING: begin
+          shift_ena <= 0;
+          counting <= 1;
+          done <= 0;
+        end
+        DONE: begin
+          shift_ena <= 0;
+          counting <= 0;
+          done <= 1;
+        end
+        default: begin
+          shift_ena <= 0;
+          counting <= 0;
+          done <= 0;
+        end
+      endcase
+    end
+  end
+
+endmodule

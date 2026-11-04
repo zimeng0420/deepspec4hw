@@ -1,0 +1,39 @@
+# Messages for Task: 2012_q1g
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Consider the function f shown in the Karnaugh map below. Implement this function.
+//        x[1]x[2]
+// x[3]x[4]   00 01 11 10
+//  00 | 1 | 0 | 0 | 1 |
+//  01 | 0 | 0 | 0 | 0 |
+//  11 | 1 | 1 | 1 | 0 |
+//  10 | 1 | 1 | 0 | 1 |
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+
+## User Message
+
+```
+The header you have already known is:module top_module (
+	input [4:1] x,
+	output logic f
+);
+
+
+You can use the technical specification as follows:
+
+```json
+{
+  "header": "The top module header definition from module top_module ( input [4:1] x, output logic f );, including the interface definition and their behavior.",
+  
+  "combinational_logic_function": "The output f is derived from the 4-bit binary input x[4:1] based on the values represented in the Karnaugh map. The function f can be expressed as a Boolean expression derived from the minterms identified in the K-map. The K-map indicates the output for each combination of inputs x[1] to x[4]. The minterms corresponding to the output value of 1 are: m0 (x[3]=0, x[4]=0, x[1]=0, x[2]=0), m3 (x[3]=0, x[4]=0, x[1]=1, x[2]=0), m7 (x[3]=1, x[4]=1, x[1]=1, x[2]=0), m8 (x[3]=1, x[4]=0, x[1]=0, x[2]=0), m9 (x[3]=1, x[4]=0, x[1]=1, x[2]=0), m10 (x[3]=0, x[4]=1, x[1]=1, x[2]=0). The simplified Boolean expression for f can be derived as f = x[1]x[4] + x[2]x[3] + x[3]x[4]. The combinational logic structure is organized to ensure that each input signal flows through the appropriate logic gates to produce the output f. The design will utilize AND, OR, and NOT gates to implement the derived Boolean expression, ensuring that the signal flow is optimized for minimal propagation delay and balanced logic levels.",
+  
+  "enhanced_combinational_description": "Comprehensive combinational logic specification derived from User: CMB Consider the function f shown in the Karnaugh map below. Implement this function. //        x[1]x[2] // x[3]x[4]   00 01 11 10 //  00 | 1 | 0 | 0 | 1 | //  01 | 0 | 0 | 0 | 0 | //  11 | 1 | 1 | 1 | 0 | //  10 | 1 | 1 | 0 | 1 | module top_module ( input [4:1] x, output logic f ); The K-map indicates the output for each combination of inputs x[1] to x[4]. The function f is derived from the minterms where the output is 1. The K-map groups the 1s into the following combinations: Group 1: (x[3]=0, x[4]=0) covering minterms m0 and m3; Group 2: (x[3]=1, x[4]=1) covering minterms m7; Group 3: (x[3]=1, x[4]=0) covering minterms m8, m9, and m10. The minimized expression for f can be represented as f = x[1]x[4] + x[2]x[3] + x[3]x[4]. The combinational logic circuit will be structured with clear functional boundaries, where each group of minterms corresponds to a specific logic gate configuration. Signal flow will be optimized by ensuring that the outputs of the AND gates are directly fed into the OR gate that produces the final output f. The design will also incorporate techniques for logic level balancing to ensure that all paths to the output have similar delays, thus minimizing the risk of glitches. The output selection logic will be organized to ensure that the correct output is produced based on the input combinations, with multiplexing techniques applied where necessary to streamline the logic."
+}
+```
+```
+

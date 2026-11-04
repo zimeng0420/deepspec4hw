@@ -1,0 +1,36 @@
+# Messages for Task: conditional
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Given four unsigned numbers, find the minimum. Unsigned numbers can be compared with standard comparison operators (a < b). 
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+
+## User Message
+
+```
+The header you have already known is:module top_module (
+	input [7:0] a,
+	input [7:0] b,
+	input [7:0] c,
+	input [7:0] d,
+	output reg [7:0] min
+);
+
+
+You can use the technical specification as follows:
+
+```json
+{
+  "header": "The top module header definition from module top_module ( input [7:0] a, input [7:0] b, input [7:0] c, input [7:0] d, output reg [7:0] min );, including the interface definition and their behavior.",
+  
+  "combinational_logic_function": "The output 'min' is derived from the inputs 'a', 'b', 'c', and 'd' through a series of comparisons using standard comparison operators. The logic structure can be described as follows: 1. Initialize 'min' to 'a'. 2. Compare 'b' with 'min'; if 'b' is less than 'min', update 'min' to 'b'. 3. Compare 'c' with 'min'; if 'c' is less than 'min', update 'min' to 'c'. 4. Compare 'd' with 'min'; if 'd' is less than 'min', update 'min' to 'd'. This results in a combinational logic circuit that effectively implements a series of conditional checks to determine the minimum value among the four inputs. The logic organization is structured with clear functional boundaries, where each comparison is a distinct operation that feeds into the next. Signal flow is optimized by ensuring that each comparison only occurs if necessary, minimizing unnecessary evaluations. The critical path is identified as the longest sequence of dependent comparisons, which in this case is linear due to the sequential nature of the comparisons. Operator sharing is utilized by reusing the 'min' variable across comparisons, reducing the need for additional storage elements. Logic level balancing is achieved by ensuring that each comparison has similar propagation delays, thus equalizing the overall delay across the circuit. Output multiplexing is organized such that the final output 'min' reflects the smallest value determined through the series of comparisons.",
+  
+  "enhanced_combinational_description": "Comprehensive combinational logic specification derived from User: CMB Given four unsigned numbers, find the minimum. Unsigned numbers can be compared with standard comparison operators (a < b). module top_module ( input [7:0] a, input [7:0] b, input [7:0] c, input [7:0] d, output reg [7:0] min ); The combinational logic circuit is designed to find the minimum value among four 8-bit unsigned integers. The inputs 'a', 'b', 'c', and 'd' are compared using a series of conditional statements that utilize the less-than operator (<). The logic flow begins by assuming 'a' is the minimum value. Each subsequent comparison checks if the next input is less than the current minimum, updating the minimum value accordingly. This process ensures that by the end of the comparisons, 'min' holds the smallest value among the four inputs. The circuit is structured to minimize the number of comparisons by leveraging the results of previous comparisons, thus optimizing the overall logic design. The output 'min' is updated in a manner that reflects the smallest input value, ensuring accurate and efficient operation."
+}
+```
+```
+

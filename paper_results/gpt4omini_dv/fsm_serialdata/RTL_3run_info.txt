@@ -1,0 +1,17 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp top_module.v tb.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:24: error: Enumeration name DATA_RECEIVE_6 has an inferred value that overflowed.
+top_module.v:24: error: Enumeration name DATA_RECEIVE_6 and IDLE have the same value: 3'd0
+top_module.v:24: error: Enumeration name DATA_RECEIVE_7 has an inferred value that overflowed.
+top_module.v:24: error: Enumeration name DATA_RECEIVE_7 and START_BIT have the same value: 3'd1
+top_module.v:24: error: Enumeration name STOP_BIT has an inferred value that overflowed.
+top_module.v:24: error: Enumeration name STOP_BIT and DATA_RECEIVE_0 have the same value: 3'd2
+top_module.v:24: error: Enumeration name ERROR has an inferred value that overflowed.
+top_module.v:24: error: Enumeration name ERROR and DATA_RECEIVE_1 have the same value: 3'd3
+9 error(s) during elaboration.
+

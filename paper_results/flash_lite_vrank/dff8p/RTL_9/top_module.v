@@ -1,0 +1,18 @@
+module top_module(
+	input clk,
+	input [7:0] d,
+	input reset,
+	output reg [7:0] q
+);
+
+	integer i;
+
+	always @(negedge clk) begin
+		if (reset) begin
+			q <= 8'b00110100; // 0x34
+		end else begin
+			q <= d;
+		end
+	end
+
+endmodule

@@ -1,0 +1,22 @@
+module top_module(
+    input clk, 
+    input load, 
+    input [9:0] data, 
+    output reg tc
+);
+
+    reg [9:0] counter;
+
+    always @(posedge clk) begin
+        if (load) begin
+            counter <= data; // Load new value
+        end else if (counter > 0) begin
+            counter <= counter - 1; // Decrement
+        end
+    end
+
+    always @(*) begin
+        tc = (counter == 0); // Terminal count signal
+    end
+
+endmodule

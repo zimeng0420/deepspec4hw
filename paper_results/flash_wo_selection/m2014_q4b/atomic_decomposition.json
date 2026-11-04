@@ -1,0 +1,32 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units by identifying individual requirements, features, behaviors, and constraints. Each atomic unit is designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement.  This involves breaking down complex sentences into their core components and representing each component as a separate atomic unit.",
+  "mindtraced_atomic_units": [
+    "Implement a D flip-flop",
+    "Positive edge triggered",
+    "Asynchronous reset (ar)",
+    "ar is active high",
+    "When ar is high, q is immediately set to 0",
+    "When ar is low, flip-flop behaves as standard D flip-flop",
+    "On rising edge of clk, value of d is copied to q"
+  ],
+  "spec_atomic_units": [
+    "Module implements a D flip-flop",
+    "Clock input clk",
+    "Data input d",
+    "Asynchronous reset input ar",
+    "Output q",
+    "q is a register",
+    "When ar is high, q is immediately set to 0",
+    "ar overrides clock and data inputs",
+    "When ar is low, on rising edge of clk, q takes the value of d",
+    "q depends on ar asynchronously",
+    "When ar is low, q depends on d at rising edge of clk",
+    "Sequential circuit",
+    "Contains one register q",
+    "Register q updated on positive edge of clk when ar is low",
+    "Reset ar is asynchronous and active-high",
+    "When ar is high, q is immediately reset to 0",
+    "Register q declared as output logic q",
+    "Implemented using non-blocking assignment within an always_ff block"
+  ]
+}

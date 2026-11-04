@@ -1,0 +1,37 @@
+{
+  "methodology": "The original research topic and the generated technical specification were decomposed into atomic units based on individual requirements, features, behaviors, and constraints. Each atomic unit is designed to be independent, self-contained, technically specific, unambiguous, and implementable as a single requirement. This ensures a granular comparison between the two information sources.",
+  "mindtraced_atomic_units": [
+    "Design a 32-bit global history shift register.",
+    "Support rollback on mispredictions.",
+    "Update register on branch prediction (predict_valid = 1).",
+    "Shift in predict_taken from LSB to update branch history.",
+    "predict_history[0] is the direction of the youngest branch.",
+    "On misprediction (train_mispredicted = 1), load register with history after mispredicted branch.",
+    "History is train_history concatenated with train_taken.",
+    "Misprediction takes precedence if both prediction and misprediction occur.",
+    "areset is a positive edge triggered asynchronous reset.",
+    "areset resets history counter to zero.",
+    "Module has clk, areset, predict_valid, predict_taken, predict_history, train_mispredicted, train_taken, train_history inputs/outputs."
+  ],
+  "spec_atomic_units": [
+    "predict_history output is determined by multiplexing scheme based on train_mispredicted and predict_valid.",
+    "If train_mispredicted is asserted, predict_history = train_history concatenated with train_taken.",
+    "If train_mispredicted is not asserted and predict_valid is asserted, predict_history is shifted left with predict_taken inserted into LSB.",
+    "If both train_mispredicted and predict_valid are deasserted, predict_history retains its previous value.",
+    "areset is not part of the combinational logic function.",
+    "Misprediction Handling: When train_mispredicted is asserted, predict_history is updated with corrected history (train_taken concatenated with train_history).",
+    "Prediction Handling: When train_mispredicted is deasserted and predict_valid is asserted, predict_history is shifted left and predict_taken is inserted into LSB.",
+    "Priority: If both train_mispredicted and predict_valid are asserted, misprediction takes precedence.",
+    "No Change: If both train_mispredicted and predict_valid are deasserted, predict_history retains its current value.",
+    "predict_history updates on rising edge of clk based on predict_valid, predict_taken, train_mispredicted, train_taken, and train_history.",
+    "When areset is asserted high, predict_history is asynchronously reset to zero.",
+    "If train_mispredicted is asserted high, predict_history is updated with train_history concatenated with train_taken on rising edge of clk.",
+    "If predict_valid is asserted high and train_mispredicted is low, predict_history is shifted, with predict_taken being shifted in on rising edge of clk.",
+    "Critical path involves the update of predict_history on the rising edge of clk.",
+    "areset has no timing dependency with respect to clk other than its pulse width requirement.",
+    "Circuit is a sequential circuit with one 32-bit register, predict_history.",
+    "Register is updated on the positive edge of clk using non-blocking assignments.",
+    "areset asynchronously resets the register.",
+    "Priority of updates: 1. Asynchronous reset. 2. Misprediction update. 3. Prediction update."
+  ]
+}

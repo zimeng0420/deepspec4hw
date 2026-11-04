@@ -1,0 +1,33 @@
+# Messages for Task: vector3
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.Given several input vectors, concatenate them together then split them up into several output vectors. There are six 5-bit input vectors: a, b, c, d, e, and f, for a total of 30 bits of input. There are four 8-bit output vectors: w, x, y, and z, for 32 bits of output. The output should be a concatenation of the input vectors followed by two 1 bits (the two 1 bits should be in the LSB positions).
+
+The compressed specification is as follows: ```json
+{
+  "header": "The top module header definition from module top_module (\n\tinput [4:0] a,\n\tinput [4:0] b,\n\tinput [4:0] c,\n\tinput [4:0] d,\n\tinput [4:0] e,\n\tinput [4:0] f,\n\toutput [7:0] w,\n\toutput [7:0] x,\n\toutput [7:0] y,\n\toutput [7:0] z\n);\n, including the interface definition and their behavior.",
+  "combinational_logic_function": "The combinational logic function performs a concatenation and splitting operation. Six 5-bit input vectors (a, b, c, d, e, f) are concatenated to form a 30-bit vector. Two '1' bits (represented as 2'b11) are appended to the least significant bit (LSB) positions of this 30-bit vector, resulting in a 32-bit vector. This 32-bit vector is then split into four 8-bit output vectors (w, x, y, z). The output 'w' represents bits [7:0] of the concatenated vector, 'x' represents bits [15:8], 'y' represents bits [23:16], and 'z' represents bits [31:24]. The logic organization consists of a single concatenation operation followed by bit slicing for output assignment. Signal flow is directly from inputs to the concatenation, and then to the outputs via bit selection. There is no operator sharing or resource utilization optimization in this purely combinational implementation. Logic level balancing and delay equalization techniques are not applicable. There is no output multiplexing or selection logic beyond the bit slicing inherent in the output assignment.",
+  "enhanced_combinational_description": "Comprehensive combinational logic specification derived from User: CMB\nGiven several input vectors, concatenate them together then split them up into several output vectors. There are six 5-bit input vectors: a, b, c, d, e, and f, for a total of 30 bits of input. There are four 8-bit output vectors: w, x, y, and z, for 32 bits of output. The output should be a concatenation of the input vectors followed by two 1 bits (the two 1 bits should be in the LSB positions).\n\nThe combinational logic circuit takes six 5-bit inputs: a[4:0], b[4:0], c[4:0], d[4:0], e[4:0], and f[4:0]. These inputs are treated as unsigned integers. The circuit produces four 8-bit outputs: w[7:0], x[7:0], y[7:0], and z[7:0].\n\nThe core functionality involves concatenating the six input vectors in the order a, b, c, d, e, f. This creates a 30-bit intermediate vector. Then, the 2-bit value '11' (binary) is appended to the *least significant bits* of the 30-bit vector, resulting in a 32-bit vector. This 32-bit vector is then partitioned into four 8-bit segments, which are assigned to the output vectors w, x, y, and z, respectively.\n\nThe assignment of bits to the output vectors is as follows:\n\n*   w[7:0] = bits [7:0] of the 32-bit concatenated vector (LSB).\n*   x[7:0] = bits [15:8] of the 32-bit concatenated vector.\n*   y[7:0] = bits [23:16] of the 32-bit concatenated vector.\n*   z[7:0] = bits [31:24] of the 32-bit concatenated vector (MSB).\n\nTherefore, 'z' contains the most significant bits of the concatenated input vectors, and 'w' contains the least significant bits of the input vectors, followed by the two appended '1' bits.\n\nmodule top_module (\n\tinput [4:0] a,\n\tinput [4:0] b,\n\tinput [4:0] c,\n\tinput [4:0] d,\n\tinput [4:0] e,\n\tinput [4:0] f,\n\toutput [7:0] w,\n\toutput [7:0] x,\n\toutput [7:0] y,\n\toutput [7:0] z\n);\n"
+}
+```
+
+The header you have already known is:module top_module (
+	input [4:0] a,
+	input [4:0] b,
+	input [4:0] c,
+	input [4:0] d,
+	input [4:0] e,
+	input [4:0] f,
+	output [7:0] w,
+	output [7:0] x,
+	output [7:0] y,
+	output [7:0] z
+);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

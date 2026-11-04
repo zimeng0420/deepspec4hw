@@ -1,0 +1,22 @@
+# Messages for Task: step_one
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.
+```
+
+## User Message
+```
+
+```
+Build a circuit with no inputs and one output. That output should always drive 1 (or logic high).
+
+The header you have already known is:module top_module(
+	output one);
+
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

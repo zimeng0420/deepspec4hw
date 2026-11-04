@@ -1,0 +1,21 @@
+{
+  "methodology": "The decomposition process involved identifying distinct requirements, behaviors, and constraints from the provided information, ensuring each unit is self-contained and implementable.",
+  "mindtraced_atomic_units": [
+    "FSM remains in state A while resetn is asserted.",
+    "FSM sets f to 1 for one clock cycle after resetn is de-asserted.",
+    "FSM monitors x for the sequence 1, 0, 1 in three consecutive clock cycles.",
+    "FSM sets g to 1 upon detecting the sequence in x.",
+    "FSM monitors y for a value of 1 within two clock cycles after g is set to 1.",
+    "If y equals 1 within two cycles, g remains 1 until resetn is asserted.",
+    "If y does not equal 1 within two cycles, g is set to 0 until resetn is asserted."
+  ],
+  "spec_atomic_units": [
+    "FSM transitions to state A when resetn is asserted.",
+    "FSM sets f to 1 for one clock cycle after resetn is de-asserted.",
+    "FSM monitors x for the sequence 1, 0, 1 in three consecutive clock cycles.",
+    "FSM sets g to 1 upon detecting the sequence in x.",
+    "FSM monitors y for a value of 1 within two clock cycles after g is set to 1.",
+    "If y equals 1 within two cycles, g remains 1 until resetn is asserted.",
+    "If y does not equal 1 within two cycles, g is set to 0 until resetn is asserted."
+  ]
+}

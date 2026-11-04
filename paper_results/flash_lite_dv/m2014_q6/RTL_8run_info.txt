@@ -1,0 +1,23 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:22: error: z is not a valid l-value in testbench.DUT.
+top_module.v:5:      : z is declared here as wire.
+top_module.v:23: error: z is not a valid l-value in testbench.DUT.
+top_module.v:5:      : z is declared here as wire.
+top_module.v:24: error: z is not a valid l-value in testbench.DUT.
+top_module.v:5:      : z is declared here as wire.
+top_module.v:25: error: z is not a valid l-value in testbench.DUT.
+top_module.v:5:      : z is declared here as wire.
+top_module.v:26: error: z is not a valid l-value in testbench.DUT.
+top_module.v:5:      : z is declared here as wire.
+top_module.v:27: error: z is not a valid l-value in testbench.DUT.
+top_module.v:5:      : z is declared here as wire.
+top_module.v:28: error: z is not a valid l-value in testbench.DUT.
+top_module.v:5:      : z is declared here as wire.
+7 error(s) during elaboration.
+

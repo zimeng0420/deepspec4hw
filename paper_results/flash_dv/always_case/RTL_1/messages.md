@@ -1,0 +1,24 @@
+# Messages for Task: always_case
+
+## System Message
+
+```
+You are the strongest AI in the world. You already have the knowledge of Verilog and hardware designing. Generate Verilog code for the given task. I will tip you $200 if you can fulfill the tasks I give you.
+
+Create a 6-to-1 multiplexer. When sel is between 0 and 5, choose the corresponding data input. Otherwise, output 0. The data inputs and outputs are all 4 bits wide.
+
+The specification is as follows:
+# Agent Response for Task: always_case
+
+```json
+{
+  "header": "The top module header definition from module top_module (\n\tinput [2:0] sel,\n\tinput [3:0] data0,\n\tinput [3:0] data1,\n\tinput [3:0] data2,\n\tinput [3:0] data3,\n\tinput [3:0] data4,\n\tinput [3:0] data5,\n\toutput reg [3:0] out\n);\n, including the interface definition and their behavior.",
+  "combinational_logic_function": "The output 'out' is a 4-bit value derived from the inputs 'sel', 'data0', 'data1', 'data2', 'data3', 'data4', and 'data5'. The 'sel' input, a 3-bit signal, acts as a selector. When 'sel' has a value between 0 (3'b000) and 5 (3'b101), the corresponding 'data' input is routed to the 'out' output. Specifically:\n\n- If sel = 0, then out = data0\n- If sel = 1, then out = data1\n- If sel = 2, then out = data2\n- If sel = 3, then out = data3\n- If sel = 4, then out = data4\n- If sel = 5, then out = data5\n\nIf 'sel' has a value outside the range of 0 to 5 (i.e., 6 (3'b110) or 7 (3'b111)), then the 'out' output is forced to a 4-bit zero value (4'b0000). This behavior can be implemented using a case statement or equivalent logic that checks the value of 'sel' and selects the appropriate 'data' input or forces the output to zero.",
+  "enhanced_combinational_description": "Comprehensive combinational logic specification derived from User: CMB\nCreate a 6-to-1 multiplexer. When sel is between 0 and 5, choose the corresponding data input. Otherwise, output 0. The data inputs and outputs are all 4 bits wide.\nmodule top_module (\n\tinput [2:0] sel,\n\tinput [3:0] data0,\n\tinput [3:0] data1,\n\tinput [3:0] data2,\n\tinput [3:0] data3,\n\tinput [3:0] data4,\n\tinput [3:0] data5,\n\toutput reg [3:0] out\n);\n\nThe module `top_module` implements a 6-to-1 multiplexer. The multiplexer selects one of six 4-bit data inputs (`data0` through `data5`) based on the value of the 3-bit select input `sel`. The selected data input is then routed to the 4-bit output `out`.\n\nThe selection logic operates as follows:\n\n*   If `sel` is equal to 0 (3'b000), then `out` is assigned the value of `data0`.\n*   If `sel` is equal to 1 (3'b001), then `out` is assigned the value of `data1`.\n*   If `sel` is equal to 2 (3'b010), then `out` is assigned the value of `data2`.\n*   If `sel` is equal to 3 (3'b011), then `out` is assigned the value of `data3`.\n*   If `sel` is equal to 4 (3'b100), then `out` is assigned the value of `data4`.\n*   If `sel` is equal to 5 (3'b101), then `out` is assigned the value of `data5`.\n\nIn the event that `sel` is outside the valid range of 0 to 5 (i.e., `sel` is equal to 6 (3'b110) or 7 (3'b111)), the output `out` is forced to a 4-bit zero value (4'b0000). This ensures that the multiplexer has a defined output even when the select input is invalid.\n\nThe data inputs (`data0` through `data5`) and the output (`out`) are all 4 bits wide, allowing for the selection and routing of 4-bit data values. The `sel` input is 3 bits wide, which is sufficient to select one of the six data inputs (2^3 = 8 possible values, of which 6 are used for data selection and 2 for the default-zero condition).\n"
+}
+```
+
+Please only reply with the Verilog code after syntax check, no other words.
+Please always begin with `module top_module()`.
+```
+

@@ -1,0 +1,9 @@
+# Task: vector100r
+
+ # Description: Given a 100-bit input vector [99:0], reverse its bit ordering. 
+ # Header: module top_module (
+	input [99:0] in,
+	output reg [99:0] out
+);
+  # Circuit Type: CMB
+

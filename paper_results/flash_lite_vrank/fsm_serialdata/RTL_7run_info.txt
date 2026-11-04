@@ -1,0 +1,23 @@
+iverilog simulation failed!
+
+iverilog cmd 1:
+/usr/bin/iverilog -g2012 -o run.vvp tb.v top_module.v 
+iverilog cmd 1 output:
+
+iverilog cmd 1 error:
+top_module.v:28: error: out_byte is not a valid l-value in testbench.DUT.
+top_module.v:5:      : out_byte is declared here as wire.
+top_module.v:31: error: done is not a valid l-value in testbench.DUT.
+top_module.v:6:      : done is declared here as wire.
+top_module.v:37: error: done is not a valid l-value in testbench.DUT.
+top_module.v:6:      : done is declared here as wire.
+top_module.v:42: error: done is not a valid l-value in testbench.DUT.
+top_module.v:6:      : done is declared here as wire.
+top_module.v:50: error: done is not a valid l-value in testbench.DUT.
+top_module.v:6:      : done is declared here as wire.
+top_module.v:58: error: done is not a valid l-value in testbench.DUT.
+top_module.v:6:      : done is declared here as wire.
+top_module.v:65: error: done is not a valid l-value in testbench.DUT.
+top_module.v:6:      : done is declared here as wire.
+7 error(s) during elaboration.
+
